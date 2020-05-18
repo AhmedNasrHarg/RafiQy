@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "258805771184",
+    "firebase_url": "https://cbtproject-55d7a.firebaseio.com",
+    "project_id": "cbtproject-55d7a",
+    "storage_bucket": "cbtproject-55d7a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258805771184:android:8fb3082d433619c6974475",
+        "android_client_info": {
+          "package_name": "com.cbtteam.cbtproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258805771184-vasbjtptracv56qm1s83c6sdl3bqpp08.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cbtteam.cbtproject",
+            "certificate_hash": "bf2dab540107246645a3b590b9450c387a45fe30"
+          }
+        },
+        {
+          "client_id": "258805771184-e3jhoubq40bmba3mrnj1jpi6bvcda9i9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnsWz0xya-j041rNn3qbuLI8J8_Sa-Dzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258805771184-e3jhoubq40bmba3mrnj1jpi6bvcda9i9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

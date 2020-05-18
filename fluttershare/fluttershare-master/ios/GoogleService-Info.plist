@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>258805771184-mi1outfou9afd8tn2ikp2g8rf9g89eq6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.258805771184-mi1outfou9afd8tn2ikp2g8rf9g89eq6</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>258805771184-vasbjtptracv56qm1s83c6sdl3bqpp08.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBI2kj8mnwkfdlbHRQgM76T9sueotiBrH8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>258805771184</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.cbtteam.cbtproject</string>
+	<key>PROJECT_ID</key>
+	<string>cbtproject-55d7a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cbtproject-55d7a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:258805771184:ios:5b06d124010c3cfc974475</string>
+	<key>DATABASE_URL</key>
+	<string>https://cbtproject-55d7a.firebaseio.com</string>
+</dict>
+</plist>
