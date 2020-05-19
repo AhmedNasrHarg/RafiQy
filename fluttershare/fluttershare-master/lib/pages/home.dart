@@ -1,13 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/pages/community.dart';
+import 'package:fluttershare/pages/create_account.dart';
 import 'package:fluttershare/pages/learn.dart';
-import 'package:fluttershare/pages/profile.dart';
 import 'package:fluttershare/pages/storyline.dart';
 import 'package:fluttershare/pages/chillzone.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
+final userRef = Firestore.instance.collection("users");
+final DateTime timestamp = DateTime.now();
+
 
 class Home extends StatefulWidget {
   @override
@@ -40,7 +44,7 @@ class _HomeState extends State<Home> {
 
   handelSignIn(GoogleSignInAccount account){
     if(account != null){
-        print('user signes in!: $account');
+        createUserInFirestore();
         setState(() {
           isAuth = true;
         });
@@ -49,6 +53,31 @@ class _HomeState extends State<Home> {
           isAuth = false;
         });
       }
+  }
+
+  createUserInFirestore() async{
+    // 1) check if user exists in users collection in database (according to their id)
+    final GoogleSignInAccount user =  googleSignIn.currentUser;
+    final DocumentSnapshot doc =  await userRef.document(user.id).get();
+
+    // 2) if the user dosn't exist, then we want to take them to the create account page
+    if (!doc.exists){
+      final username = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccount()));
+    
+  
+    // 3) get username from create account, use it to make new user document in users collection
+
+    userRef.document(user.id).setData({
+      "id" : user.id,
+      "username": username,
+      "photoUrl": user.photoUrl,
+      "email": user.email,
+      "displayName": user.displayName,
+      "bio": "",
+      "timestamp": timestamp
+    });
+    
+    }
   }
 
   @override
@@ -83,7 +112,11 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: PageView(
         children: <Widget>[
-          Profile(),
+          // Profile(),
+          RaisedButton(
+            child: Text('Logout'),
+            onPressed: logout,
+          ),
           Learn(),
           ChillZone(),
           StoryLine(),
