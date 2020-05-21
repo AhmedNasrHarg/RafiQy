@@ -34,6 +34,11 @@ dependencies:
   timeago: 2.0.17
   cached_network_image:
   flutter_svg:
+  flutter_localizations:
+    sdk: flutter
+
+  shared_preferences: 0.5.7+2
+  youtube_player_flutter: 6.1.1
 
 dev_dependencies:
   flutter_test:
@@ -51,3 +56,5 @@ flutter:
         - asset: assets/fonts/Signatra.ttf
   assets:
     - assets/images/google_signin_button.png
+    - lib/lang/en.json
+    - lib/lang/ar.json
