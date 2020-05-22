@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "258805771184-oitp000r02hj155n245u960pq5b651fp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cbtteam.cbtproject",
+            "certificate_hash": "48829ba772d36ad0678777e05a785902ba701282"
+          }
+        },
+        {
+          "client_id": "258805771184-deil797rf830v3khrna2cnjjn39in1ma.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cbtteam.cbtproject",
+            "certificate_hash": "78bb275f10448c9abd2685dfb86371b7d133af18"
+          }
+        },
+        {
           "client_id": "258805771184-vasbjtptracv56qm1s83c6sdl3bqpp08.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -38,6 +54,13 @@
             {
               "client_id": "258805771184-e3jhoubq40bmba3mrnj1jpi6bvcda9i9.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "258805771184-mi1outfou9afd8tn2ikp2g8rf9g89eq6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cbtteam.cbtproject"
+              }
             }
           ]
         }
