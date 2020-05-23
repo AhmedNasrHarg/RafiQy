@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "258805771184-60uorqc7ne0vcb6k8u874vlvgvfjuirv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cbtteam.cbtproject",
+            "certificate_hash": "973183aafe2c8a8ed1c6a89c116e1bee04191b08"
+          }
+        },
+        {
           "client_id": "258805771184-oitp000r02hj155n245u960pq5b651fp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
