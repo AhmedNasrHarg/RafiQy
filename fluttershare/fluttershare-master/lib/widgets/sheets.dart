@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Sheets extends StatefulWidget {
@@ -45,13 +46,11 @@ class SheetRow extends StatelessWidget {
             subtitle: Text(desc),
             trailing: Icon(Icons.expand_more),
             onTap: () {
-              Fluttertoast.showToast(
-                  msg: "we should nvigte",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyHomePage(title: 'Bot')),
+              );
             },
           ),
           Divider(color: Colors.black),
