@@ -1,17 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/community.dart';
 import 'package:fluttershare/pages/create_account.dart';
-import 'package:fluttershare/pages/learn.dart';
+import 'package:fluttershare/pages/learn_page.dart';
+import 'package:fluttershare/pages/profile.dart';
 import 'package:fluttershare/pages/storyline.dart';
 import 'package:fluttershare/pages/chillzone.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
+final StorageReference storageRef =  FirebaseStorage.instance.ref();
 final userRef = Firestore.instance.collection("users");
+final postRef = Firestore.instance.collection("posts");
 final DateTime timestamp = DateTime.now();
-
+User currentUser;
 
 class Home extends StatefulWidget {
   @override
@@ -42,9 +47,9 @@ class _HomeState extends State<Home> {
      });
   }
 
-  handelSignIn(GoogleSignInAccount account){
+  handelSignIn(GoogleSignInAccount account)async{
     if(account != null){
-        createUserInFirestore();
+        await createUserInFirestore();
         setState(() {
           isAuth = true;
         });
@@ -58,7 +63,7 @@ class _HomeState extends State<Home> {
   createUserInFirestore() async{
     // 1) check if user exists in users collection in database (according to their id)
     final GoogleSignInAccount user =  googleSignIn.currentUser;
-    final DocumentSnapshot doc =  await userRef.document(user.id).get();
+    DocumentSnapshot doc =  await userRef.document(user.id).get();
 
     // 2) if the user dosn't exist, then we want to take them to the create account page
     if (!doc.exists){
@@ -74,10 +79,15 @@ class _HomeState extends State<Home> {
       "email": user.email,
       "displayName": user.displayName,
       "bio": "",
-      "timestamp": timestamp
+      "timestamp": timestamp,
+      "isAdmin": false,
     });
-    
+    doc = await userRef.document(user.id).get();
     }
+    currentUser = User.fromDocument(doc);
+    print(currentUser);
+    print(currentUser.username);
+
   }
 
   @override
@@ -92,6 +102,9 @@ class _HomeState extends State<Home> {
 
   logout() {  
     googleSignIn.signOut();
+    setState(() {
+      pageIndex = 0;
+    });
   }
 
   onPageChanged(int pageIndex) {
@@ -112,12 +125,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: PageView(
         children: <Widget>[
-          // Profile(),
-          RaisedButton(
-            child: Text('Logout'),
-            onPressed: logout,
-          ),
-          Learn(),
+          Profile(profileId: currentUser.id,),
+          LearnPage(),
           ChillZone(),
           StoryLine(),
           Community(),
@@ -143,6 +152,7 @@ class _HomeState extends State<Home> {
     //   child: Text('Logout'),
     //   onPressed: logout,
     // );
+
   }
 
   Widget buildUnAuthScreen(){
@@ -163,7 +173,7 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text('CBTTeam',
+            Text('RafiQ',
             style: TextStyle(
               fontFamily: "Signatra",
               fontSize: 90.0,

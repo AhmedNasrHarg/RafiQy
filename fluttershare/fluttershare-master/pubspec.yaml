@@ -43,6 +43,9 @@ dependencies:
   youtube_player_flutter: 6.1.1
   flutter_local_notifications: ^1.4.3
   rxdart: ^0.24.1
+  lottie: 0.3.6
+  connectivity: 0.4.8+6
+  video_player: 0.10.11+1
 
 dev_dependencies:
   flutter_test:
@@ -62,3 +65,29 @@ flutter:
     - assets/images/google_signin_button.png
     - lib/lang/en.json
     - lib/lang/ar.json
+    - assets/images/search.svg
+    - assets/images/upload.svg
+    - assets/images/pencil.png
+    - assets/images/title.png
+    - assets/images/cbt.png
+    - assets/images/depr.jpg
+    - assets/images/foc.png
+    - assets/images/hear.png
+    - assets/images/help.png
+    - assets/images/nerv.jpg
+    - assets/images/over.png
+    - assets/images/guide.jpeg
+    - assets/images/social-anexity.png
+    - assets/images/self-regular.png
+    - assets/animations/12833-planta-3.json
+    - assets/images/1.png
+    - assets/images/2.png
+    - assets/images/3.png
+    - assets/images/4.png
+    - assets/images/5.png
+    - assets/images/6.png
+    - assets/images/7.png
+    - assets/images/8.png
+    - assets/images/9.png
+    - assets/images/10.png
+    - assets/images/11.png

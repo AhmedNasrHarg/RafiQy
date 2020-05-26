@@ -5,6 +5,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttershare/localization/demo_localiztion.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
+import 'package:fluttershare/pages/home.dart';
+import 'package:fluttershare/pages/profile.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:fluttershare/widgets/sheets.dart';
 import 'package:fluttershare/routes/custom_router.dart';
@@ -213,7 +215,7 @@ class _MyAppState extends State<MyApp> {
             accentColor: Colors.teal // secondryColor
             ),
 
-        home: Sheets(),
+        home: Home(),
         locale: _locale,
         supportedLocales: [Locale('en', 'US'), Locale('ar', 'SA')],
         localizationsDelegates: [
