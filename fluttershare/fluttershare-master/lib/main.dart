@@ -3,6 +3,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttershare/localization/demo_localiztion.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/home.dart';
+import 'package:fluttershare/widgets/chat_bubble.dart';
+import 'package:fluttershare/widgets/sheet_chat.dart';
+import 'package:fluttershare/widgets/sheets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttershare/routes/custom_router.dart';
 
 void main() {
@@ -10,35 +16,33 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  static void setLocale (BuildContext context,Locale locale)
-  {
-    _MyAppState state =context.findAncestorStateOfType<_MyAppState>();
+  static void setLocale(BuildContext context, Locale locale) {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
     state.setLocal(locale);
   }
+
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-   Locale _locale;
+  Locale _locale;
 
-  void setLocal(Locale locale)
-  {
+  void setLocal(Locale locale) {
     setState(() {
-      _locale=locale;
+      _locale = locale;
     });
   }
 
   @override
   void didChangeDependencies() {
-getLocale().then((locale){
-  setState(() {
-    this._locale=locale;
-  });
-});
-super.didChangeDependencies();
-
-}
+    getLocale().then((locale) {
+      setState(() {
+        this._locale = locale;
+      });
+    });
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,21 +52,18 @@ super.didChangeDependencies();
           child: CircularProgressIndicator(),
         ),
       );
-    }
-    else{
-    return MaterialApp(
-      title: 'FlutterShare',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        accentColor: Colors.teal // secondryColor
-      ),
-      home: Home(),
-       locale: _locale,
-        supportedLocales: [
-          Locale('en', 'US'),
-          Locale('ar', 'SA')
-        ],
+    } else {
+      return MaterialApp(
+        title: 'FlutterShare',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            primarySwatch: Colors.deepPurple,
+            accentColor: Colors.teal // secondryColor
+            ),
+
+        home: Sheets(),
+        locale: _locale,
+        supportedLocales: [Locale('en', 'US'), Locale('ar', 'SA')],
         localizationsDelegates: [
           DemoLocalization.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -72,8 +73,7 @@ super.didChangeDependencies();
         localeResolutionCallback: (deviceLocale, supportLocales) {
           for (var locale in supportLocales) {
             if (locale.languageCode == deviceLocale.languageCode &&
-                locale.countryCode == deviceLocale.countryCode
-            ) {
+                locale.countryCode == deviceLocale.countryCode) {
               return deviceLocale;
             }
           }
@@ -81,7 +81,7 @@ super.didChangeDependencies();
         },
         onGenerateRoute: CustomRouter.allRoutes,
         // initialRoute: homeRoute,
-    );
-  }
+      );
+    }
   }
 }

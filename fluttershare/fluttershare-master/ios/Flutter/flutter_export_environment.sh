@@ -1,5 +1,10 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
+export "FLUTTER_ROOT=C:\Users\AhmedNasr\Downloads\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\AhmedNasr\Documents\Flutter\cbt_app\cbt_app\fluttershare\fluttershare-master"
+export "FLUTTER_ROOT=C:\src\flutter"
+export "FLUTTER_APPLICATION_PATH=H:\cbt_app\fluttershare\fluttershare-master"
+export "FLUTTER_TARGET=lib\main.dart"
 export "FLUTTER_ROOT=/Volumes/W/NadeenITI/Flutter/flutter"
 export "FLUTTER_APPLICATION_PATH=/Volumes/W/NadeenITI/Graduation_project/cbt_app/fluttershare/fluttershare-master"
 export "FLUTTER_TARGET=/Volumes/W/NadeenITI/Graduation_project/cbt_app/fluttershare/fluttershare-master/lib/main.dart"
