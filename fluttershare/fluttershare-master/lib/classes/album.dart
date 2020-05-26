@@ -1,8 +1,8 @@
 List <String>albumImages =[
-  "assets/cbt.png",
-    "assets/guide.jpeg",
-    "assets/social-anexity.png",
-    "assets/self-regular.png"
+  "assets/images/cbt.png",
+    "assets/images/guide.jpeg",
+    "assets/images/social-anexity.png",
+    "assets/images/self-regular.png"
 ];
 
 List <String>albumTitle =[
