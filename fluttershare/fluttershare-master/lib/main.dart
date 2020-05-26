@@ -5,13 +5,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttershare/localization/demo_localiztion.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
-import 'package:fluttershare/pages/home.dart';
-import 'package:fluttershare/widgets/chat_bubble.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:fluttershare/widgets/sheets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttershare/routes/custom_router.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -65,7 +60,10 @@ Future<void> main() async {
     }
     selectNotificationSubject.add(payload);
   });
-  runApp(MyApp());
+  runApp(MaterialApp(
+    title: 'Navigation Basics',
+    home: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -156,7 +154,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   showDailyNotification() async {
-    var time = Time(16, 38, 0);
+    var time = Time(18, 13, 0);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'repeatDailyAtTime channel id',
         'repeatDailyAtTime channel name',
@@ -178,7 +176,7 @@ class _MyAppState extends State<MyApp> {
     }
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MyHomePage()),
+      MaterialPageRoute(builder: (context) => MyHomePage(title: 'Bot')),
     );
   }
 
