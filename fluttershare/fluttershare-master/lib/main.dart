@@ -64,6 +64,7 @@ Future<void> main() async {
   });
   runApp(MaterialApp(
     title: 'Navigation Basics',
+    debugShowCheckedModeBanner: false,
     home: MyApp(),
   ));
 }
