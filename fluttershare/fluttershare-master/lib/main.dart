@@ -156,7 +156,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   showDailyNotification() async {
-    var time = Time(18, 13, 0);
+    var time = Time(21, 40, 0);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'repeatDailyAtTime channel id',
         'repeatDailyAtTime channel name',
