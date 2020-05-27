@@ -160,3 +160,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+class ChatText extends StatelessWidget {
+  final String text;
+  ChatText(@required this.text);
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
