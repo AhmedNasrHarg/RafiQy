@@ -181,11 +181,13 @@ class _ProfileState extends State<Profile> {
                    child: Column(
                      children: <Widget>[
                         buildCountRow(user.isAdmin),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            buildProfileButton(),
-                          ],
+                        FittedBox(
+                                                  child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              buildProfileButton(),
+                            ],
+                          ),
                         )
                      ],
                    ),
