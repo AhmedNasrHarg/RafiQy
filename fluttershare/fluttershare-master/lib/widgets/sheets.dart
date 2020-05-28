@@ -8,7 +8,7 @@ class Sheets extends StatefulWidget {
 }
 
 class _SheetsState extends State<Sheets> {
-  var sheets = ['first', 'second', 'third', 'forth', 'fifth'];
+  var sheets = ['Sheet1', 'Sheet2', 'Sheet3', 'Sheet4', 'Sheet5'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +22,7 @@ class _SheetsState extends State<Sheets> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: sheets
-                    .map((name) => SheetRow(name, 'here is the description'))
+                    .map((name) => SheetRow(title: name, desc: 'here is the description',))
                     .toList()),
           ),
         ));
@@ -32,7 +32,7 @@ class _SheetsState extends State<Sheets> {
 class SheetRow extends StatelessWidget {
   final String title;
   final String desc;
-  SheetRow(@required this.title, @required this.desc);
+  SheetRow({@required this.title, @required this.desc});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,7 +49,7 @@ class SheetRow extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MyHomePage(title: 'Bot')),
+                    builder: (context) => MyHomePage(title: title)),
               );
             },
           ),

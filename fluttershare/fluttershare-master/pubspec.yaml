@@ -38,6 +38,8 @@ dependencies:
   flutter_svg:
   flutter_localizations:
     sdk: flutter
+  chewie: ^0.9.10
+  provider: ^4.1.2
 
   shared_preferences: 0.5.7+2
   youtube_player_flutter: 6.1.1
