@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fluttershare/classes/video_provider.dart';
 import 'package:fluttershare/models/question.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/widgets/chat_bubble.dart';
-import 'package:fluttershare/widgets/message_builder.dart';
 import 'package:fluttershare/widgets/progress.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttershare/models/message.dart';
-import 'dart:convert';
 
-import 'package:provider/provider.dart';
 // class MyHomePage extends StatefulWidget {
 //   MyHomePage({Key key, this.title}) : super(key: key);
 
