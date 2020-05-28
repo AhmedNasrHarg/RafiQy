@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
-import 'package:fluttershare/classes/video_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class BubbleVideo extends StatefulWidget {

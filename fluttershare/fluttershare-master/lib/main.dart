@@ -1,4 +1,5 @@
-  import 'package:flutter/cupertino.dart';
+  import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -6,10 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttershare/localization/demo_localiztion.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/home.dart';
-import 'package:fluttershare/pages/profile.dart';
-import 'package:fluttershare/widgets/chat_buttons.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
-import 'package:fluttershare/widgets/sheets.dart';
 import 'package:fluttershare/routes/custom_router.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -36,6 +34,12 @@ class ReceivedNotification {
 }
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firestore.instance.settings(timestampsInSnapshotsEnabled: true).then((_) {
+    print("Timestamps enabled in snapshots\n");
+  }, onError: (_) {
+    print("Error enabling timestamps in snapshots\n");
+  });
   // needed if you intend to initialize in the `main` function
   WidgetsFlutterBinding.ensureInitialized();
 

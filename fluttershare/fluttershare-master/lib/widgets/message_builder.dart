@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttershare/classes/video_provider.dart';
 import 'package:fluttershare/models/question.dart';
 import 'package:fluttershare/widgets/chat_bubble_typing.dart';
 import 'package:fluttershare/widgets/chat_bubble_video.dart';
 import 'package:fluttershare/widgets/chat_buttons.dart';
 import 'package:fluttershare/widgets/check_list.dart';
-import 'package:provider/provider.dart';
 
 class QuesMsgBuilder extends StatelessWidget {
   final Question question;

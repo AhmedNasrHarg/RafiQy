@@ -1,10 +1,15 @@
+import 'dart:async';
+import 'package:animator/animator.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/models/post.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/home.dart';
+import 'package:fluttershare/widgets/custom_image.dart';
 import 'package:fluttershare/widgets/header.dart';
 import 'package:fluttershare/widgets/progress.dart';
+import 'package:fluttershare/pages/comments.dart';
 
 
 class Article extends StatefulWidget {
@@ -21,7 +26,7 @@ class Article extends StatefulWidget {
     int count = 0;
     // if the key is explicitly set to true, add a like
     likes.values.forEach((val){
-      if(val = true){
+      if(val == true){
         count += 1;
       }
     });
@@ -33,9 +38,12 @@ class Article extends StatefulWidget {
 
 class _ArticleState extends State<Article> {
 
+  final String currentUserId = currentUser.id;
   final Post post;
   int likesCount;
   Map likes;
+  bool isLiked;
+  bool showHeart = false;
   _ArticleState({this.post,this.likes,this.likesCount});
 
   buildPostHeader(){
@@ -71,13 +79,53 @@ class _ArticleState extends State<Article> {
     );
   }
 
+  handleLikeArticle(){
+    bool _isLiked = likes[currentUserId] == true;
+    if(_isLiked){
+      postRef.document(post.postId).updateData({'likes.$currentUserId' : false});
+      setState(() {
+        likesCount -= 1;
+        isLiked = false;
+        likes[currentUserId] = false;
+      });
+    } else if(!_isLiked) {
+      postRef.document(post.postId).updateData({'likes.$currentUserId' : true});
+      setState(() {
+        likesCount += 1;
+        isLiked = true;
+        likes[currentUserId] = true;
+        showHeart = true;
+      });     
+      Timer(Duration(milliseconds: 500),(){
+        setState(() {
+          showHeart = false;
+        });
+      });
+    }
+  }
+
   buildPostImage(){
     return GestureDetector(
-      onDoubleTap: () => print("liking post"),
+      onDoubleTap: () => handleLikeArticle(),
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          Image.network(post.mediaUrl),
+          cachedNetworkImage(post.mediaUrl),
+          showHeart ? Animator(
+              duration: Duration(milliseconds: 300),
+              tween: Tween(begin: 0.8, end: 1.4),
+              curve: Curves.elasticOut,
+              cycles: 0,
+              builder: (context,anim,child) => Transform.scale(
+                scale: anim.value,
+                child: Icon(
+                  Icons.favorite,
+                  size: 80.0,
+                  color: Colors.red,
+                ),
+              ),
+            )
+          : Text(""), 
         ],
       ),
     );
@@ -91,16 +139,16 @@ class _ArticleState extends State<Article> {
           children: <Widget>[
             Padding(padding: EdgeInsets.only(top: 40.0, left: 20.0),),
             GestureDetector(
-              onTap: () => print("liking post"),
+              onTap: () =>handleLikeArticle(),
               child: Icon(
-                Icons.favorite_border,
+                isLiked ? Icons.favorite : Icons.favorite_border,
                 size: 28.0,
                 color: Colors.pink,
               ),
             ),
             Padding(padding: EdgeInsets.only(right: 20.0),),
             GestureDetector(
-              onTap: () => print("showing comments"),
+              onTap: () => showComments(context,post: post),
               child: Icon(
                 Icons.chat,
                 size: 28.0,
@@ -111,18 +159,18 @@ class _ArticleState extends State<Article> {
             Visibility(
               visible: widget.isProfile ? true : false,
               child: GestureDetector(
-              onTap: () => print("Go to article"),
-              child: Text(
-                post.title,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Article(post: post,isProfile: false,))),
+              child: SizedBox(
+                width: 270.0,
+                height: 25.0,
+                child: AutoSizeText(
+                  post.title,
+                  style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.bold),
+                  maxLines: 2,
                 ),
               ),
             ),
-            ),
-               
+          ),
           ],
         ),
         Row(
@@ -160,6 +208,7 @@ class _ArticleState extends State<Article> {
 
   @override
   Widget build(BuildContext context) {
+    isLiked = (likes[currentUserId] == true);
     return Card(
       child: SingleChildScrollView(
         child: Column(
@@ -180,4 +229,10 @@ class _ArticleState extends State<Article> {
     ),
     );
   }
+}
+
+showComments(BuildContext context,{Post post}){
+  Navigator.push(context, MaterialPageRoute(builder: (context){
+    return Comments(post: post);
+  }));
 }
