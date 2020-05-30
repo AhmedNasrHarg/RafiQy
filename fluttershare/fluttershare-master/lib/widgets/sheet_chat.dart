@@ -338,6 +338,7 @@ class _MyHomePageState extends State<MyHomePage> {
             question: br,
             f1: functionBuilder(br.btnOne),
             f2: functionBuilder(br.btnTwo),
+            isPressed: true,
           ));
           oldChat[j].forEach((m) {
             userMessage(m.toString());

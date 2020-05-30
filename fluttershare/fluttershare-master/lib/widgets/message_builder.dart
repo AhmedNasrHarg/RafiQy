@@ -9,7 +9,8 @@ class QuesMsgBuilder extends StatelessWidget {
   final Question question;
   final Function f1;
   final Function f2;
-  QuesMsgBuilder({this.question, this.f1, this.f2});
+  final bool isPressed;
+  QuesMsgBuilder({this.question, this.f1, this.f2,this.isPressed = false});
 
   // Function functionBuilder(str) {
   //   switch (str) {
@@ -105,6 +106,7 @@ class QuesMsgBuilder extends StatelessWidget {
                       btn2Title: question.btnTwo,
                       btn1Func: f1,
                       btn2Func: f2,
+                      isPressed: isPressed,
                     ),
                   )
                 : SizedBox(

@@ -14,8 +14,9 @@ class ChatBubble extends StatelessWidget {
   Question question;
   Function f1;
   Function f2;
+  bool isPressed;
 
-  ChatBubble({this.msg, this.question, this.f1, this.f2}) {
+  ChatBubble({this.msg, this.question, this.f1, this.f2,this.isPressed = false}) {
     isMe = this.question != null ? false : true;
     // print(DateTime.fromMillisecondsSinceEpoch(msg.timeStamp));
     // print(msg.message);
@@ -27,6 +28,7 @@ class ChatBubble extends StatelessWidget {
         question: question,
         f1: f1,
         f2: f2,
+        isPressed: isPressed,
       );
     } else {
       return Text(
