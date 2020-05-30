@@ -15,7 +15,7 @@ class _SheetsState extends State<Sheets> {
         appBar: AppBar(
           title: Text('Sheets'),
         ),
-        body: Container(
+        body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -37,25 +37,25 @@ class SheetRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        children: <Widget>[
-          ListTile(
-            title: Text(
-              title,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(desc),
-            trailing: Icon(Icons.expand_more),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyHomePage(title: title)),
-              );
-            },
-          ),
-          Divider(color: Colors.black),
-        ],
+          children: <Widget>[
+            ListTile(
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
       ),
+      subtitle: Text(desc),
+      trailing: Icon(Icons.expand_more),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MyHomePage(title: title)),
+        );
+      },
+            ),
+            Divider(color: Colors.black),
+          ],
+        ),
     );
   }
 }
