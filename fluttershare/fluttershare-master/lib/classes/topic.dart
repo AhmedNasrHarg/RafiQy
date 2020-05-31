@@ -1,40 +1,81 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
-class Topic
-{
-  Topic(this.topicName,this.videoURL,this.topicImage,this.topicColor);
+@HiveType()
+class Topic {
+  Topic(this.topicName, this.videoURL, this.topicImage, this.topicColor,
+      this.isDone);
+  @HiveField(0)
   String topicName;
+  @HiveField(1)
   String videoURL;
+  @HiveField(2)
   String topicImage;
-  Color topicColor;
-
-
-
-
- static List<Topic>learnTopics(){
-    return<Topic>[
-          Topic("CBT","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/images/1.png",Colors.deepPurple[200]),
-      Topic("Anexiety","https://firebasestorage.googleapis.com/v0/b/cbt-rafiq.appspot.com/o/100611130_243714416727254_6466625261914816512_n.mp4?alt=media&token=df6fe0ef-1218-4535-94f7-d46eea05ebb1","assets/images/2.png",Colors.teal[200]),
-      Topic("Worry","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/images/3.png",Colors.purple[200]),
-      Topic("Calm","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/images/4.png",Colors.teal[200]),
-      Topic("Need","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/images/5.png",Colors.green[200]),
-      Topic("Nervious","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/images/6.png",Colors.cyan[200]),
-      Topic("CBT","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/images/7.png",Colors.deepPurple[200]),
-      Topic("Anexiety","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/images/8.png",Colors.teal[200]),
-      Topic("Worry","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/images/9.png",Colors.purple[200]),
-      Topic("Calm","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/images/10.png",Colors.teal[200]),
-      Topic("Need","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/images/11.png",Colors.green[200]),
-      // Topic("Nervious","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/nerv.jpg",Colors.cyan[200]),
-      // Topic("CBT","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/depr.jpg",Colors.deepPurple[200]),
-      // Topic("Anexiety","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/foc.png",Colors.teal[200]),
-      // Topic("Worry","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/hear.png",Colors.purple[200]),
-      // Topic("Calm","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/over.png",Colors.teal[200]),
-      // Topic("Need","https://www.youtube.com/watch?v=9ZeJSOzd6fs"," assets/help.png",Colors.green[200]),
-      // Topic("Nervious","https://www.youtube.com/watch?v=9ZeJSOzd6fs","assets/nerv.jpg",Colors.cyan[200]),
-    ];
-  }
+  @HiveField(3)
+  int topicColor;
+  @HiveField(4)
+  bool isDone;
 }
 
- 
+//adapter
+class TopicAdapter extends TypeAdapter<Topic> {
+  @override
+  Topic read(BinaryReader reader) {
+    return Topic('g', 'g', 'g', 0, false)
+      ..topicName = reader.read()
+      ..videoURL = reader.read()
+      ..topicImage = reader.read()
+      ..topicColor = reader.read()
+      ..isDone = reader.read();
+  }
+
+  @override
+  void write(BinaryWriter writer, Topic obj) {
+    writer.write(obj.topicName);
+    writer.write(obj.videoURL);
+    writer.write(obj.topicImage);
+    writer.write(obj.topicColor);
+    writer.write(obj.isDone);
+  }
+
+  @override
+  // TODO: implement typeId
+  int get typeId => 0;
+}
+
+class DBManager {
+  DBManager() {
+    init();
+  }
+  Future<int> init() async {
+    final directory = await getApplicationDocumentsDirectory();
+    print('nasoooooor');
+    print(directory.path);
+    String path = await directory.path;
+    await Hive.init(path);
+    return 1;
+  }
+
+  Future<List<dynamic>> getLearnTopics() async {
+    final directory = await getApplicationDocumentsDirectory();
+    String path = await directory.path;
+    await Hive.init(path);
+    var box = await Hive.openBox('Learn');
+    var topics = box.get('LearnTopics');
+    return topics;
+  }
+
+  Future<void> saveTopics(List<Topic> topics) async {
+    final directory = await getApplicationDocumentsDirectory();
+    String path = await directory.path;
+    await Hive
+      ..init(path)
+      ..registerAdapter(TopicAdapter());
+    ;
+    var box = await Hive.openBox('Learn');
+    box.put('LearnTopics', topics);
+  }
+}

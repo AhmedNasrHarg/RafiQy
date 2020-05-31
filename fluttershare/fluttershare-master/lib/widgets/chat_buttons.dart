@@ -23,7 +23,7 @@ class ChatButtons extends StatelessWidget {
                 borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.zero,
-              bottomLeft: Radius.elliptical(0, 15),
+              bottomLeft: Radius.circular(20),
               bottomRight: Radius.zero,
             )),
           ),
@@ -38,9 +38,9 @@ class ChatButtons extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.zero,
-                      topRight: Radius.elliptical(0, 15),
+                      topRight: Radius.circular(20),
                       bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(25)))),
+                      bottomRight: Radius.circular(20)))),
         ),
       ]),
     );
