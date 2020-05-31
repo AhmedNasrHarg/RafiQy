@@ -1,8 +1,4 @@
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
 
 @HiveType()
 class Topic {
@@ -20,11 +16,12 @@ class Topic {
   bool isDone;
 }
 
+//userId -> topic[]
 //adapter
 class TopicAdapter extends TypeAdapter<Topic> {
   @override
   Topic read(BinaryReader reader) {
-    return Topic('g', 'g', 'g', 0, false)
+    return Topic('', '', '', 0, false)
       ..topicName = reader.read()
       ..videoURL = reader.read()
       ..topicImage = reader.read()
@@ -44,38 +41,4 @@ class TopicAdapter extends TypeAdapter<Topic> {
   @override
   // TODO: implement typeId
   int get typeId => 0;
-}
-
-class DBManager {
-  DBManager() {
-    init();
-  }
-  Future<int> init() async {
-    final directory = await getApplicationDocumentsDirectory();
-    print('nasoooooor');
-    print(directory.path);
-    String path = await directory.path;
-    await Hive.init(path);
-    return 1;
-  }
-
-  Future<List<dynamic>> getLearnTopics() async {
-    final directory = await getApplicationDocumentsDirectory();
-    String path = await directory.path;
-    await Hive.init(path);
-    var box = await Hive.openBox('Learn');
-    var topics = box.get('LearnTopics');
-    return topics;
-  }
-
-  Future<void> saveTopics(List<Topic> topics) async {
-    final directory = await getApplicationDocumentsDirectory();
-    String path = await directory.path;
-    await Hive
-      ..init(path)
-      ..registerAdapter(TopicAdapter());
-    ;
-    var box = await Hive.openBox('Learn');
-    box.put('LearnTopics', topics);
-  }
 }

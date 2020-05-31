@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/topic.dart';
+import 'package:fluttershare/dbs/db_manager.dart';
 
 class Learn extends StatefulWidget {
   @override
