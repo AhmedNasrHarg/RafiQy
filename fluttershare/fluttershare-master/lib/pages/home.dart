@@ -7,7 +7,7 @@ import 'package:fluttershare/pages/create_account.dart';
 import 'package:fluttershare/pages/learn_page.dart';
 import 'package:fluttershare/pages/profile.dart';
 import 'package:fluttershare/pages/chillzone.dart';
-import 'package:fluttershare/widgets/sheets.dart';
+import 'package:fluttershare/pages/sheets_entery_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -132,7 +132,7 @@ class _HomeState extends State<Home> {
           Profile(profileId: currentUser.id,),
           LearnPage(),
           ChillZone(),
-          Sheets(),
+          EnterySheets(),
           Community(),
         ],
         controller: pageController,

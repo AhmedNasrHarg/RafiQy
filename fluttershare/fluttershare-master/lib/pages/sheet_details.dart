@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttershare/classes/sheet.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -10,14 +9,14 @@ class SheetDetails extends StatefulWidget{
   @override
   _SheetDetailsState createState() => _SheetDetailsState(this.index);
 }
-var sheets=Sheet.sheets();
+// var sheets=Sheet.sheets();
+var sheets;
 
 class _SheetDetailsState extends State<SheetDetails> {
   int index;
   _SheetDetailsState(this.index);
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(appBar: AppBar(title: Text("Sheet"),),
     body: MaterialButton(child: Text("Done"),onPressed: ()
     {

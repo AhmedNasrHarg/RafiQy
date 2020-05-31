@@ -1,12 +1,14 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/models/question.dart';
 import 'package:fluttershare/pages/home.dart';
+import 'package:fluttershare/pages/sheets_entery_page.dart';
 import 'package:fluttershare/widgets/chat_bubble.dart';
 import 'package:fluttershare/widgets/progress.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fluttershare/models/message.dart';
+import 'package:lottie/lottie.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 // class MyHomePage extends StatefulWidget {
 //   MyHomePage({Key key, this.title}) : super(key: key);
@@ -48,13 +50,6 @@ import 'package:fluttershare/models/message.dart';
 //       });
 //       print('hhhhhhhhh');
 //     });
-//   }
-
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     getChat();
 //   }
 
 //   @override
@@ -258,12 +253,46 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  enableSending() {
-    print("enable Sending");
+  enableSending() async {
+    userMessage('المزيد');
+    await saveChat();
+    setState(() {
+      i++;
+      nextBotMessage();
+    });
   }
 
-  sheetDone() {
-    print("sheet done");
+  sheetDone() async {
+    // userMessage('انتهيت');
+
+    showDoneCongrats();
+    await saveChat(isDone: true);
+  }
+
+  showDoneCongrats() {
+    Alert(
+        context: context,
+        title: "أنت تقوم بعمل جيد",
+        content: Column(
+          children: <Widget>[
+            Lottie.asset(
+              'assets/animations/doing_well.json',
+              width: 300,
+              height: 300,
+              fit: BoxFit.fill,
+            ),
+          ],
+        ),
+        buttons: [
+          DialogButton(
+            onPressed: () {
+              // Navigator.of(context).pop(true);
+              // Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            child: Text("التالي"),
+          )
+        ]).show();
   }
 
   notFound() {
@@ -290,7 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       isLoading = true;
     });
-    await sheetsRef.document('bodyResponseSheet').get().then((value) {
+    await sheetsRef.document(widget.title).get().then((value) {
       value.data['questions'].forEach((e) {
         var q = Map<String, dynamic>.from(e);
         Question qst = Question.fromJson(q);
@@ -357,7 +386,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // print(oldChat[0] + oldChat[1]+ oldChat[3]);
   }
 
-  saveChat() async {
+  saveChat({isDone = false}) async {
     DocumentSnapshot sheetlog = await userRef
         .document(currentUser.id)
         .collection('completedSheets')
@@ -366,9 +395,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (sheetlog.exists) {
       if (sheetlog['answer$i'] == null)
-        sheetlog.reference.updateData({'answer$i': chatLog});
+        sheetlog.reference.updateData({'answer$i': chatLog, "isDone": isDone});
     } else {
-      sheetlog.reference.setData({'answer$i': chatLog});
+      sheetlog.reference.setData({'answer$i': chatLog, "isDone": isDone});
     }
     chatLog.clear();
     ++i;
@@ -622,11 +651,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class ChatText extends StatelessWidget {
-  final String text;
-  ChatText(@required this.text);
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
+// class ChatText extends StatelessWidget {
+//   final String text;
+//   ChatText(@required this.text);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
