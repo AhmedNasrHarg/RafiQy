@@ -186,6 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int i = 0;
   var bodyResponseSheet = <Question>[];
   List<Message> oldChat1 = [];
+  var isPressed = false;
   @override
   void initState() {
     super.initState();
@@ -348,11 +349,11 @@ class _MyHomePageState extends State<MyHomePage> {
       chatLog.clear();
     }
     var br = bodyResponseSheet[i];
-          childList.add(ChatBubble(
-            question: br,
-            f1: functionBuilder(br.btnOne),
-            f2: functionBuilder(br.btnTwo),
-          ));
+    childList.add(ChatBubble(
+      question: br,
+      f1: functionBuilder(br.btnOne),
+      f2: functionBuilder(br.btnTwo),
+    ));
     // print(oldChat[0] + oldChat[1]+ oldChat[3]);
   }
 
@@ -454,11 +455,7 @@ class _MyHomePageState extends State<MyHomePage> {
               f2: functionBuilder(m.btnTwo),
             ),
           );
-          // chatLog.add({
-          //   'message': m.message,
-          //   'isMe': m.isMe,
-          //   'timestamp': m.timeStamp,
-          // });
+          isPressed = false;
         }),
       );
       _scrollController.animateTo(_scrollController.position.minScrollExtent,
@@ -563,37 +560,32 @@ class _MyHomePageState extends State<MyHomePage> {
                                           // contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
                                           suffixIcon: IconButton(
                                             icon: Icon(Icons.send),
-                                            onPressed: () {
-                                              if (message.length > 0) {
-                                                // DO NOT FORGET TO CHECK ARRAY BOUNDARY
-                                                setState(() {
-                                                  if (message
-                                                          .toLowerCase()
-                                                          .compareTo('done') !=
-                                                      0) {
-                                                    userMessage(message);
-                                                  } else {
-                                                    nextBotMessage();
-                                                  }
-
-                                                  _text.text = '';
-                                                });
-                                                message = '';
-                                              } else {
-                                                Fluttertoast.showToast(
-                                                    msg:
-                                                        "please enter a message",
-                                                    toastLength:
-                                                        Toast.LENGTH_SHORT,
-                                                    gravity:
-                                                        ToastGravity.CENTER,
-                                                    timeInSecForIosWeb: 1,
-                                                    textColor: Colors.white,
-                                                    fontSize: 16.0);
-                                                print(chatLog);
-                                                // saveChat();
-                                              }
-                                            },
+                                            onPressed: isPressed
+                                                ? () {}
+                                                : () {
+                                                    if (message.length > 0) {
+                                                      // DO NOT FORGET TO CHECK ARRAY BOUNDARY
+                                                      setState(() {
+                                                        userMessage(message);
+                                                        _text.text = '';
+                                                      });
+                                                      message = '';
+                                                    } else {
+                                                      Fluttertoast.showToast(
+                                                          msg:
+                                                              "please enter a message",
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
+                                                          gravity: ToastGravity
+                                                              .CENTER,
+                                                          timeInSecForIosWeb: 1,
+                                                          textColor:
+                                                              Colors.white,
+                                                          fontSize: 16.0);
+                                                      print(chatLog);
+                                                      // saveChat();
+                                                    }
+                                                  },
                                           ),
                                           border: InputBorder.none,
                                           hintText: "Enter your message",
@@ -603,13 +595,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                     IconButton(
                                       icon: Icon(Icons.done_all),
                                       iconSize: 24.0,
-                                      onPressed: () async {
-                                        userMessage('تم');
-                                        await saveChat();
-                                        setState(() {
-                                          nextBotMessage();
-                                        });
-                                      },
+                                      onPressed: isPressed
+                                          ? () {}
+                                          : () async {
+                                              userMessage('تم');
+                                              await saveChat();
+                                              setState(() {
+                                                nextBotMessage();
+                                                isPressed = true;
+                                              });
+                                            },
                                     )
                                   ],
                                 ),
