@@ -186,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int i = 0;
   var bodyResponseSheet = <Question>[];
   List<Message> oldChat1 = [];
-  var isPressed = false;
+  var isBotTyping = false;
   @override
   void initState() {
     super.initState();
@@ -455,7 +455,7 @@ class _MyHomePageState extends State<MyHomePage> {
               f2: functionBuilder(m.btnTwo),
             ),
           );
-          isPressed = false;
+          isBotTyping = false;
         }),
       );
       _scrollController.animateTo(_scrollController.position.minScrollExtent,
@@ -560,7 +560,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           // contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
                                           suffixIcon: IconButton(
                                             icon: Icon(Icons.send),
-                                            onPressed: isPressed
+                                            onPressed: isBotTyping
                                                 ? () {}
                                                 : () {
                                                     if (message.length > 0) {
@@ -595,14 +595,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                     IconButton(
                                       icon: Icon(Icons.done_all),
                                       iconSize: 24.0,
-                                      onPressed: isPressed
+                                      onPressed: isBotTyping
                                           ? () {}
                                           : () async {
                                               userMessage('تم');
                                               await saveChat();
                                               setState(() {
                                                 nextBotMessage();
-                                                isPressed = true;
+                                                isBotTyping = true;
                                               });
                                             },
                                     )
