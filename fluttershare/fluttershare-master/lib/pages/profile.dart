@@ -9,6 +9,7 @@ import 'package:fluttershare/widgets/header.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/widgets/progress.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
@@ -246,8 +247,13 @@ class _ProfileState extends State<Profile> {
   }
 
   buildUserProfile() {
-    return Text("User Profile");
-  }
+    return Column(
+      children: <Widget>[
+        Text("Still Working on it",style: TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold,color: Colors.amber,)),
+        Lottie.network("https://assets5.lottiefiles.com/packages/lf20_DYkRIb.json"),
+      ],
+    );
+ }
 
   ListView buildProfile() {
     return ListView(
