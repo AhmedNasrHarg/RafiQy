@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttershare/classes/language.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/post.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/edit_profile.dart';
@@ -10,6 +12,8 @@ import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/widgets/progress.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
+
+import '../main.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
@@ -26,6 +30,12 @@ class _ProfileState extends State<Profile> {
   int postCount = 0;
   List<Article> posts = [];
   List<Article> temp;
+  void _changeLanguage(Language language) async
+  {
+    Locale _temp=await setLocale(language.languageCode);
+
+    MyApp.setLocale(context,_temp);
+  }
 
   @override
   void initState() {
@@ -267,8 +277,49 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(context) {
-    return Scaffold(
-        appBar: header(context, isAppTitle: true, removeBackButton: true),
-        body: buildProfile());
+    return Scaffold
+      (
+        appBar: AppBar(
+          title: Text(getTranslated(context, "project_name")??"CBTTeam" ,
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: "Signatra",
+              fontSize:50.0,
+
+            ),
+
+          ),
+//          (DemoLocalization.of(context).getTranslatedValues('home_page')),
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: DropdownButton(
+                onChanged: (Language language){
+                  _changeLanguage(language);
+                },
+                underline: SizedBox(),
+                icon: Icon(
+                  Icons.language,
+                  color: Colors.white,
+                ),
+                items: Language.languageList().map((lang)=>DropdownMenuItem(value: lang,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[Text(lang.flag),Text(lang.name,style: TextStyle(fontSize: 30),)],
+                  ),
+                ))
+                    .toList(),
+
+
+              ),
+
+            )
+          ],
+          centerTitle: true,
+          backgroundColor: Theme.of(context).accentColor,
+        )
+        ,body: buildProfile()
+
+    );
   }
 }
