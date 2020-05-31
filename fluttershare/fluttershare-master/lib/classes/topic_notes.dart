@@ -14,7 +14,7 @@ class Note {
 class NoteAdapter extends TypeAdapter<Note> {
   @override
   Note read(BinaryReader reader) {
-    return Note('g', 'g', 0)
+    return Note('', '', 0)
       ..noteTitle = reader.read()
       ..noteContent = reader.read()
       ..noteColor = reader.read();

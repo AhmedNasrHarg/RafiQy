@@ -9,6 +9,7 @@ class Learn extends StatefulWidget {
 
 class _LearnState extends State<Learn> {
   List<Topic> learnTopics;
+  String userId;
   DBManager db;
   @override
   void initState() {
@@ -42,6 +43,9 @@ class _LearnState extends State<Learn> {
       Topic("Need", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
           "assets/images/11.png", Colors.green[200].value, false),
     ];
+    // take care of null ya nasr [use async await if you need]
+    saveUserId('4823fdf4823948');
+    getUserId();
     saveToHive();
     getData(); // to get topics offline
   }
@@ -52,14 +56,26 @@ class _LearnState extends State<Learn> {
     db.saveTopics(learnTopics);
   }
 
+  void saveUserId(String id) {
+    db = DBManager();
+    db.saveUserId(id);
+  }
+
+  Future<String> getUserId() async {
+    db = await DBManager();
+    var id = db.getUserId();
+    await id.then((value) => userId = value);
+    print(userId);
+  }
+
   Future<void> getData() async {
     print(db);
     db = await DBManager();
     print(db);
     var topics = db.getLearnTopics();
     topics.then((value) {
-      for (int i = 0; i < value.length; i++) {
-        print(value[i].topicName);
+      for (int i = 0; i < value.length / 2; i++) {
+        print(value[i].topicName + ' ${value[i].isDone} ');
         learnTopics.add(value[i] as Topic);
       }
 //      print(value[0].name);
