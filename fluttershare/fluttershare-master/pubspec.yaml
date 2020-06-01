@@ -27,7 +27,7 @@ dependencies:
   geolocator: 5.0.1
   uuid: ^2.0.0
   image: ^2.0.7
-  animator: 0.1.4
+  animator: ^2.0.1
   cupertino_icons: ^0.1.2
   path_provider: ^1.6.9
   firebase_messaging: ^4.0.0+1
@@ -38,6 +38,9 @@ dependencies:
   flutter_svg:
   flutter_localizations:
     sdk: flutter
+  chewie: ^0.9.10
+  provider: ^4.1.2
+  auto_size_text: ^2.1.0
 
   shared_preferences: 0.5.7+2
   youtube_player_flutter: 6.1.1
@@ -48,6 +51,8 @@ dependencies:
   video_player: 0.10.11+1
   hive: ^1.4.1+1
   hive_flutter: ^0.3.0+2
+  rflutter_alert: ^1.0.3
+  photo_view: 0.9.2
 
 dev_dependencies:
   hive_generator: ^0.7.0
@@ -93,3 +98,16 @@ flutter:
     - assets/images/9.png
     - assets/images/10.png
     - assets/images/11.png
+    - assets/images/stairs.jpg
+    - assets/images/reward.png
+    - assets/images/lock.png
+    - assets/images/flower.png
+    - assets/images/hero.png
+    - assets/animations/12833-planta-3.json
+    - assets/animations/bar.json
+    - assets/animations/doing_well.json
+    - assets/animations/first_message.json
+    - assets/animations/first.json
+    - assets/animations/cant.json
+    - assets/animations/hero_bar.json
+    - assets/animations/hero_message.json

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/widgets/header.dart';
@@ -8,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
 import 'package:fluttershare/pages/home.dart';
+
 
 class PostForm extends StatefulWidget {
 
@@ -61,7 +61,8 @@ class _PostFormState extends State<PostForm> {
         "title" : title,
         "body" : body,
         "mediaUrl" : mediaUrl,
-        "likes" : {}
+        "likes" : {},
+        "timestamp" : timestamp,
       });
       _titleController.clear();
       _bodyController.clear();

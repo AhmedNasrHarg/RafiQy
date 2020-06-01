@@ -1,10 +1,44 @@
+
 import 'package:flutter/material.dart';
+import 'package:fluttershare/classes/video_provider.dart';
+import 'package:fluttershare/models/question.dart';
+import 'package:fluttershare/widgets/message_builder.dart';
+import 'package:provider/provider.dart';
+
+import 'chat_bubble_typing.dart';
+import 'package:fluttershare/models/message.dart';
 
 class ChatBubble extends StatelessWidget {
-  final bool isMe;
-  final String message;
+  bool isMe = false;
+  Message msg;
+  Question question;
+  Function f1;
+  Function f2;
+  bool isPressed;
 
-  ChatBubble({@required this.isMe, @required this.message});
+  ChatBubble({this.msg, this.question, this.f1, this.f2,this.isPressed = false}) {
+    isMe = this.question != null ? false : true;
+    // print(DateTime.fromMillisecondsSinceEpoch(msg.timeStamp));
+    // print(msg.message);
+  }
+
+  Widget msgWidget() {
+    if (question != null) {
+      return QuesMsgBuilder(
+        question: question,
+        f1: f1,
+        f2: f2,
+        isPressed: isPressed,
+      );
+    } else {
+      return Text(
+        msg.message,
+        style: TextStyle(
+          color: Colors.black,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +48,7 @@ class ChatBubble extends StatelessWidget {
       children: <Widget>[
         Container(
           padding: const EdgeInsets.all(8),
-          margin: const EdgeInsets.fromLTRB(8, 6, 0, 0),
+          margin: const EdgeInsets.fromLTRB(8, 3, 8, 0),
           decoration: BoxDecoration(
             color: isMe
                 ? Theme.of(context).primaryColor
@@ -29,16 +63,7 @@ class ChatBubble extends StatelessWidget {
           constraints: BoxConstraints(
               maxWidth: MediaQuery.of(context).size.width * 0.65,
               minHeight: 30),
-          child: Text(
-            message,
-            style: TextStyle(
-              color: isMe
-                  ? Colors.white
-                  : Theme.of(context).brightness == Brightness.light
-                      ? Colors.black
-                      : Colors.grey,
-            ),
-          ),
+          child: msgWidget(),
         ),
       ],
     );

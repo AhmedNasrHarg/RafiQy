@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Sheets extends StatefulWidget {
   @override
@@ -8,21 +7,21 @@ class Sheets extends StatefulWidget {
 }
 
 class _SheetsState extends State<Sheets> {
-  var sheets = ['first', 'second', 'third', 'forth', 'fifth'];
+  var sheets = ['Sheet1', 'Sheet2', 'Sheet3', 'Sheet4', 'Sheet5'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text('Sheets'),
         ),
-        body: Container(
+        body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: sheets
-                    .map((name) => SheetRow(name, 'here is the description'))
+                    .map((name) => SheetRow(title: name, desc: 'here is the description',))
                     .toList()),
           ),
         ));
@@ -32,30 +31,30 @@ class _SheetsState extends State<Sheets> {
 class SheetRow extends StatelessWidget {
   final String title;
   final String desc;
-  SheetRow(@required this.title, @required this.desc);
+  SheetRow({@required this.title, @required this.desc});
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        children: <Widget>[
-          ListTile(
-            title: Text(
-              title,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(desc),
-            trailing: Icon(Icons.expand_more),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyHomePage(title: 'Bot')),
-              );
-            },
-          ),
-          Divider(color: Colors.black),
-        ],
+          children: <Widget>[
+            ListTile(
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
       ),
+      subtitle: Text(desc),
+      trailing: Icon(Icons.expand_more),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MyHomePage(title: title)),
+        );
+      },
+            ),
+            Divider(color: Colors.black),
+          ],
+        ),
     );
   }
 }

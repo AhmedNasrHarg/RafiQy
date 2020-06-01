@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class ChillZone extends StatefulWidget {
   @override
-  _ChillZone createState() => _ChillZone();
+  _ChillZoneState createState() => _ChillZoneState();
 }
 
-class _ChillZone extends State<ChillZone> {
+class _ChillZoneState extends State<ChillZone> {
   @override
   Widget build(context) {
     return Text("Chell Zone");

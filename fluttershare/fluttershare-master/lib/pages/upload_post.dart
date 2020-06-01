@@ -36,7 +36,6 @@ class _UploadPostPhotoState extends State<UploadPostPhoto> {
      if(file!=null){
         Navigator.push(context, MaterialPageRoute(builder: (context) => PostForm(imgFile: file,)));
      }
- 
   }
 
   selectImage(parentContext) {

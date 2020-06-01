@@ -6,9 +6,8 @@ import 'package:fluttershare/pages/community.dart';
 import 'package:fluttershare/pages/create_account.dart';
 import 'package:fluttershare/pages/learn_page.dart';
 import 'package:fluttershare/pages/profile.dart';
-import 'package:fluttershare/pages/storyline.dart';
 import 'package:fluttershare/pages/chillzone.dart';
-import 'package:fluttershare/widgets/sheets.dart';
+import 'package:fluttershare/pages/sheets_entery_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -16,6 +15,10 @@ final GoogleSignIn googleSignIn = GoogleSignIn();
 final StorageReference storageRef =  FirebaseStorage.instance.ref();
 final userRef = Firestore.instance.collection("users");
 final postRef = Firestore.instance.collection("posts");
+final commentRef = Firestore.instance.collection("comments");
+final groupRef = Firestore.instance.collection("groups");
+final chatRef = Firestore.instance.collection("chats");
+final sheetsRef = Firestore.instance.collection("sheets");
 final DateTime timestamp = DateTime.now();
 User currentUser;
 
@@ -129,7 +132,7 @@ class _HomeState extends State<Home> {
           Profile(profileId: currentUser.id,),
           LearnPage(),
           ChillZone(),
-          Sheets(),
+          EnterySheets(),
           Community(),
         ],
         controller: pageController,
