@@ -4,76 +4,73 @@ import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/topic.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:video_player/video_player.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class LearnDetailsPage extends StatefulWidget {
-  int index;
-  LearnDetailsPage.learnIndex( int index){this.index=index;}
-  LearnDetailsPage({Key key,this.index}):super(key:key);
+  Topic index;
+  LearnDetailsPage.learnIndex(Topic index) {
+    this.index = index;
+  }
+  LearnDetailsPage({Key key, this.index}) : super(key: key);
 
   @override
   _LearnDetailsPageState createState() => _LearnDetailsPageState(index);
 }
-var learnTopics=Topic.learnTopics();
 
+var learnTopics;
 
 class _LearnDetailsPageState extends State<LearnDetailsPage> {
-  int index;
+  Topic index;
   _LearnDetailsPageState(this.index);
-YoutubePlayerController _controller;
-VideoPlayerController _videoPlayerController;
-var videoURL;
-  bool connetcting=true;
+  VideoPlayerController _videoPlayerController;
+  var videoURL;
+  bool connetcting = true;
 
-
-@override
-void initState() {
-  _checkInternetConnectivity();
-  videoURL =learnTopics[index].videoURL;
-
+  @override
+  void initState() {
+    
+    _checkInternetConnectivity();
+    // videoURL = learnTopics[index].videoURL;
+videoURL=index.videoURL;
 // _controller =YoutubePlayerController(initialVideoId: YoutubePlayer.convertUrlToId(videoURL));
 
-_videoPlayerController=VideoPlayerController.network(
-        videoURL)
+    _videoPlayerController = VideoPlayerController.network(videoURL)
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
       });
-super.initState();
-}
+    super.initState();
+  }
 
-@override
+  @override
   Widget build(BuildContext context) {
     print("index======");
     print(index);
     // TODO: implement build
-    if(connetcting==true)
-    {
+    if (connetcting == true) {
       print("conneting === $connetcting");
-    return Scaffold
-      (
-      appBar: AppBar(
-        title: Text(getTranslated(context, 'cbt')),
-      ),
-      // body:
-  // Container(
-  //         child: Column(
-  //           children: <Widget>[
-  //             Container(
-  //               padding: EdgeInsets.all(10.0),
-  //               child: 
-  //               YoutubePlayer(controller: _controller,),
-  //             ),
-  //             Container(
-  //               padding: EdgeInsets.all(10.0),
-  //               child: Text("Kaza kaza "),
-  //             ),
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(index.topicName),
+        ),
+        // body:
+        // Container(
+        //         child: Column(
+        //           children: <Widget>[
+        //             Container(
+        //               padding: EdgeInsets.all(10.0),
+        //               child:
+        //               YoutubePlayer(controller: _controller,),
+        //             ),
+        //             Container(
+        //               padding: EdgeInsets.all(10.0),
+        //               child: Text("Kaza kaza "),
+        //             ),
 
-  //           ],
-  //         ),
-  //   )
+        //           ],
+        //         ),
+        //   )
 
- body: Center(
+        body: Center(
           child: _videoPlayerController.value.initialized
               ? AspectRatio(
                   aspectRatio: _videoPlayerController.value.aspectRatio,
@@ -90,74 +87,60 @@ super.initState();
             });
           },
           child: Icon(
-            _videoPlayerController.value.isPlaying ? Icons.pause : Icons.play_arrow,
+            _videoPlayerController.value.isPlaying
+                ? Icons.pause
+                : Icons.play_arrow,
           ),
         ),
-      
-
-   ) ;
-    }
-    else if(connetcting==false){
+      );
+    } else if (connetcting == false) {
       print('elseeeee');
-       return Scaffold
-      (
-      appBar: AppBar(
-        title: Text(getTranslated(context, 'cbt')),
-      ),
-      body:
-       Container(
-                padding: EdgeInsets.all(10.0),
-                child: Text("Kaza kaza "),
-              ));
+      return Scaffold(
+          appBar: AppBar(
+            title: Text(index.topicName),
+          ),
+          body: Container(
+            padding: EdgeInsets.all(10.0),
+            child: Text("Kaza kaza "),
+          ));
     }
   }
 
-
-   _checkInternetConnectivity() async {
+  _checkInternetConnectivity() async {
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
       _showDialog(
-        'No internet', 
-        "You're not connected to a network to view video" 
-      );
-              connetcting=false;
-
-    } 
+          'No internet', "You're not connected to a network to view video");
+      connetcting = false;
+    }
     // else if (result == ConnectivityResult.mobile) {
     //   _showDialog(
     //     'Internet access',
     //     "You're connected over mobile data"
     //   );
-    // } 
-    else if (result == ConnectivityResult.wifi||result == ConnectivityResult.mobile) {
-      connetcting=true;
+    // }
+    else if (result == ConnectivityResult.wifi ||
+        result == ConnectivityResult.mobile) {
+      connetcting = true;
     }
   }
 
   _showDialog(title, text) {
     showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(text),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        );
-      }
-    );
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(text),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
   }
 }
-
-
-
-
-
-
-

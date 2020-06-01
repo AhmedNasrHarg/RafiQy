@@ -1,12 +1,20 @@
-  import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fluttershare/classes/learn_hive.dart';
 import 'package:fluttershare/localization/demo_localiztion.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/home.dart';
+
+import 'package:fluttershare/pages/learn.dart';
+import 'package:fluttershare/pages/learn_page.dart';
+import 'package:fluttershare/pages/profile.dart';
+import 'package:fluttershare/widgets/chat_buttons.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:fluttershare/routes/custom_router.dart';
 import 'package:rxdart/rxdart.dart';
@@ -85,12 +93,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   Locale _locale;
   final MethodChannel platform =
       MethodChannel('crossingthestreams.io/resourceResolver');
   @override
   void initState() {
     super.initState();
+    LearnHive();
+
+//    Firestore.instance.settings(persistenceEnabled: true);
     _requestIOSPermissions();
     _configureDidReceiveLocalNotificationSubject();
     _configureSelectNotificationSubject();
