@@ -1,7 +1,8 @@
-import 'package:cbtproject/classes/album.dart';
-import 'package:cbtproject/classes/card_scroll.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttershare/classes/album.dart';
+import 'package:fluttershare/classes/card_scroll.dart';
 
 class AlbumViewer extends StatefulWidget{
   @override

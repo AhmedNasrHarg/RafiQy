@@ -1,12 +1,9 @@
-import 'package:cbtproject/classes/album.dart';
-import 'package:cbtproject/classes/card_scroll.dart';
-import 'package:cbtproject/classes/topic.dart';
-import 'package:cbtproject/localization/localization_constants.dart';
-import 'package:cbtproject/pages/album_grid.dart';
-import 'package:cbtproject/pages/album_viewer.dart';
-import 'package:cbtproject/routes/route_names.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
+import 'package:fluttershare/pages/album_grid.dart';
+import 'package:fluttershare/pages/album_viewer.dart';
 
 class AlbumPage extends StatefulWidget {
   AlbumPage({Key key}) : super(key: key);
