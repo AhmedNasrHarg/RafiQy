@@ -6,16 +6,16 @@ class ChatButtons extends StatefulWidget {
   final Function btn1Func;
   final Function btn2Func;
   bool isPressed = false;
-  ChatButtons({
-    @required this.btn1Title,
-    @required this.btn2Title,
-    @required this.btn1Func,
-    @required this.btn2Func,
-    this.isPressed = false
-  });
+  ChatButtons(
+      {@required this.btn1Title,
+      @required this.btn2Title,
+      @required this.btn1Func,
+      @required this.btn2Func,
+      this.isPressed = false});
 
   @override
-  _ChatButtonsState createState() => _ChatButtonsState(isPressed: this.isPressed);
+  _ChatButtonsState createState() =>
+      _ChatButtonsState(isPressed: this.isPressed);
 }
 
 class _ChatButtonsState extends State<ChatButtons> {
@@ -28,7 +28,7 @@ class _ChatButtonsState extends State<ChatButtons> {
       child: Row(children: <Widget>[
         RaisedButton(
           onPressed: isPressed
-              ? (){}
+              ? () {}
               : () {
                   widget.btn1Func();
                   setState(() {
@@ -48,22 +48,9 @@ class _ChatButtonsState extends State<ChatButtons> {
             ),
           ),
         ),
-        ButtonTheme(
-          minWidth: 50,
-          child: RaisedButton(
-              onPressed: btn2Func,
-              child: Text(btn2Title),
-              color: Colors.redAccent,
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.zero,
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.zero,
-                      bottomRight: Radius.circular(20)))),
         RaisedButton(
           onPressed: isPressed
-              ? (){}
+              ? () {}
               : () {
                   widget.btn2Func();
                   setState(() {
