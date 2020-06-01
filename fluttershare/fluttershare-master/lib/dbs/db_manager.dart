@@ -1,4 +1,5 @@
 import 'package:fluttershare/classes/topic.dart';
+import 'package:fluttershare/classes/topic_notes.dart';
 import 'package:fluttershare/classes/topic_questions.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -62,7 +63,9 @@ class DBManager {
       ..registerAdapter(QuestionAdapter());
     ;
     var box = await Hive.openBox('Learn');
-    box.put(userId, {topicName: questions});
+    box.put(userId, {
+      topicName: {'questions': questions}
+    });
   }
 
   Future<List<dynamic>> getTopicQuestions(
@@ -71,8 +74,24 @@ class DBManager {
     String path = await directory.path;
     await Hive.init(path);
     var box = await Hive.openBox('Learn');
-    var topics = box.get('userId');
-    var topicQuestions = topics[topicName];
+    var topics = box.get(userId);
+    var topic = topics[topicName];
+    var topicQuestions = topic['questions'];
     return topicQuestions;
   }
+
+  Future<void> saveTopicNotes(
+      String userId, String topicName, List<Note> topicNotes) async {
+    final directory = await getApplicationDocumentsDirectory();
+    String path = await directory.path;
+    await Hive
+      ..init(path)
+      ..registerAdapter(NoteAdapter());
+    var box = await Hive.openBox('Learn');
+    box.put(userId, {
+      topicName: {'topicNotes': topicNotes}
+    });
+  }
+
+  Future<List<dynamic>> getTopicNotes(String userId, String topicName) {}
 }
