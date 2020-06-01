@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/widgets/header.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -19,7 +20,7 @@ class _CreateAccountState extends State<CreateAccount> {
     final form = _formKey.currentState;
     if(form.validate()){
       form.save();
-      SnackBar snackBar = SnackBar(content: Text("Welcome $username!"));
+      SnackBar snackBar = SnackBar(content: Text("${getTranslated(context,"welcome")} $username!"));
       _scaffoldKey.currentState.showSnackBar(snackBar);
       Timer(Duration(seconds: 2),() {
         Navigator.pop(context, username);
@@ -31,7 +32,7 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget build(BuildContext parentContext) {
     return Scaffold( 
       key: _scaffoldKey,
-      appBar: header(context, titleText: "Set up your Profile", removeBackButton: true),
+      appBar: header(context, titleText: getTranslated(context, "set_up"), removeBackButton: true),
       body: ListView(
         children: <Widget>[
           Container(
@@ -40,7 +41,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 padding: EdgeInsets.only(top: 25.0),
                 child: Center(
                   child: Text(
-                    "Create a username",
+                    getTranslated(context, "create_user_name"),
                     style: TextStyle(
                       fontSize: 25.0,
                     ),
@@ -56,9 +57,9 @@ class _CreateAccountState extends State<CreateAccount> {
                     child: TextFormField(
                       validator: (val) {
                         if(val.trim().length < 3 || val.isEmpty){
-                          return "Username too short";
+                          return getTranslated(context, "user_short");
                         } else if (val.trim().length > 15){
-                          return "Username too long";
+                          return getTranslated(context, "user_long");
                         } else {
                           return null;
                         }
@@ -67,9 +68,9 @@ class _CreateAccountState extends State<CreateAccount> {
                       onSaved: (val) => username = val,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: "Username",
+                        labelText: getTranslated(context, "user_name"),
                         labelStyle: TextStyle(fontSize: 15.0),
-                        hintText: "Must be at least 3 characters",
+                        hintText: getTranslated(context, "three_char"),
                       ),
                     ),
                     ),
@@ -86,7 +87,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                     child: Center(child: 
                     Text(
-                      "Submit",
+                      getTranslated(context, "submit"),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 15.0,

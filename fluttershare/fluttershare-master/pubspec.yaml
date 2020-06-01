@@ -66,6 +66,9 @@ flutter:
     - family: Signatra
       fonts:
         - asset: assets/fonts/Signatra.ttf
+    - family: Lemonada
+      fonts:
+        - asset: assets/fonts/Lemonada.ttf
   assets:
     - assets/images/google_signin_button.png
     - lib/lang/en.json

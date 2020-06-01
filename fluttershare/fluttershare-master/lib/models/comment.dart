@@ -6,7 +6,7 @@ class Comment {
   final String userId;
   final String avatarUrl;
   final String comment;
-  final Timestamp timestamp;
+  final int timestamp;
 
   Comment({
     this.username,

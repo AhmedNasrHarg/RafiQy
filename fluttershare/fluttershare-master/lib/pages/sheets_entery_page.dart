@@ -72,7 +72,7 @@ class _EnterySheetsState extends State<EnterySheets> {
                     // ),
                     title: Center(
                       child: Text(
-                          "${sheets[index].sheetTitle} + ${sheets[index].done}",
+                          "${sheets[index].sheetTitle}",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,

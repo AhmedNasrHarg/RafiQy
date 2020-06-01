@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/widgets/header.dart';
@@ -52,7 +53,7 @@ class _EditProfileState extends State<EditProfile> {
         Padding(
           padding: EdgeInsets.only(top:12.0),
           child: Text(
-            "UserName",
+            getTranslated(context,"user_name"),
             style: TextStyle(
               color: Colors.grey
             ),
@@ -61,8 +62,8 @@ class _EditProfileState extends State<EditProfile> {
         TextField(
           controller: userNameController,
           decoration: InputDecoration(
-            hintText: "Update UserName",
-            errorText: _userNameValid ? null : userNameController.text.trim().length < 15 ? "Username too short" : "Username too long"
+            hintText: getTranslated(context,"update_username"),
+            errorText: _userNameValid ? null : userNameController.text.trim().length < 15 ? getTranslated(context, "user_short") : getTranslated(context, "user_long")
           ),
         ),
       ],
@@ -76,7 +77,7 @@ class _EditProfileState extends State<EditProfile> {
         Padding(
           padding: EdgeInsets.only(top:12.0),
           child: Text(
-            "Bio",
+            getTranslated(context, "bio"),
             style: TextStyle(
               color: Colors.grey
             ),
@@ -85,8 +86,8 @@ class _EditProfileState extends State<EditProfile> {
         TextField(
           controller: bioController,
           decoration: InputDecoration(
-            hintText: "Update Bio",
-            errorText: _bioValid ? null : "Bio is too long"
+            hintText: getTranslated(context, "update_bio"),
+            errorText: _bioValid ? null : getTranslated(context, "bio_long")
 
           ),
         ),
@@ -115,7 +116,7 @@ class _EditProfileState extends State<EditProfile> {
         });
        });
       }
-      SnackBar snackbar = SnackBar(content: Text("Profile Updated"));
+      SnackBar snackbar = SnackBar(content: Text(getTranslated(context, "profile_updated")));
       _scaffoldKey.currentState.showSnackBar(snackbar);
       isUpdated = true;
     }
@@ -131,7 +132,7 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(context) {
     return Scaffold(
       key : _scaffoldKey,
-      appBar: header(context,isAppTitle: false,titleText: "Edit Profile", removeBackButton: true, hasAction: true, isIcon: true,actionIcon: Icons.done, actionFunction: ()=> Navigator.pop(context, isUpdated),),
+      appBar: header(context,isAppTitle: false,titleText: getTranslated(context, "edit_profile"), removeBackButton: true, hasAction: true, isIcon: true,actionIcon: Icons.done, actionFunction: ()=> Navigator.pop(context, isUpdated),),
       body: isLoading ? circularProgress() : ListView(
         children: <Widget>[
           Container(
@@ -156,7 +157,7 @@ class _EditProfileState extends State<EditProfile> {
                 RaisedButton(
                   onPressed: updateProfileData,
                   child: Text(
-                    "Update profile",
+                    getTranslated(context, "update_profile"),
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: 20.0,
@@ -170,7 +171,7 @@ class _EditProfileState extends State<EditProfile> {
                     onPressed: logout,
                     icon: Icon(Icons.cancel, color: Colors.red,),
                     label: Text(
-                      "Logout",
+                      getTranslated(context, "log_out"),
                       style: TextStyle(
                         color: Colors.red,
                         fontSize: 20.0

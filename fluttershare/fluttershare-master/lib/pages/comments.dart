@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/post.dart';
 import 'package:fluttershare/widgets/header.dart';
 import 'package:fluttershare/pages/home.dart';
@@ -46,7 +47,7 @@ class _CommentsState extends State<Comments> {
       .add({
         "username": currentUser.username,
         "comment": commentController.text,
-        "timestamp": timestamp,
+        "timestamp": DateTime.now().millisecondsSinceEpoch,
         "avatarUrl": currentUser.photoUrl,
         "userId": currentUser.id
       });
@@ -56,7 +57,7 @@ class _CommentsState extends State<Comments> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context,titleText: "Comments"),
+      appBar: header(context,titleText: getTranslated(context,"comments")),
       body: Column(
         children: <Widget>[
           Expanded(child: buildComments(),),
@@ -66,13 +67,13 @@ class _CommentsState extends State<Comments> {
               controller: commentController,
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
-                labelText: "Write a comment...",                
+                labelText: getTranslated(context, "write_comment"),                
               ),
             ),
             trailing: OutlineButton(
               onPressed: () => addComment(),
               borderSide: BorderSide.none,
-              child: Text("post"),
+              child: Text(getTranslated(context, "post")),
             ),
           )
         ],
@@ -95,7 +96,7 @@ class CommentTile extends StatelessWidget {
           leading: CircleAvatar(
             backgroundImage: CachedNetworkImageProvider(comment.avatarUrl),
           ),
-          subtitle: Text(timeago.format(comment.timestamp.toDate())),
+          subtitle: Text(timeago.format(DateTime.fromMillisecondsSinceEpoch(comment.timestamp))),
         ),
         Divider(),
       ],

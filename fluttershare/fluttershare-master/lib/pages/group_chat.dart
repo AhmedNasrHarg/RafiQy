@@ -29,7 +29,7 @@ class _GroupChatState extends State<GroupChat> {
           "text" : messageController.text,
           "from" : currentUser.username,
           "senderId" : currentUser.id,
-          "timestamp" : timestamp
+          "timestamp" : DateTime.now().millisecondsSinceEpoch
         });
         messageController.clear();
         scrollController.animateTo(scrollController.position.minScrollExtent, duration: Duration(microseconds: 300), curve: Curves.easeOut);
@@ -54,11 +54,13 @@ class _GroupChatState extends State<GroupChat> {
                   );
                 }
                 List<DocumentSnapshot> docs = snapshot.data.documents;
-                List<Widget> messages = docs.map((doc) => Message(
+                List<Message> messages = docs.map((doc) => Message(
                   from: doc.data["from"],
                   text: doc.data["text"],
                   isMe: currentUser.id == doc.data["senderId"],
                 )).toList();
+                // messages.sort((a,b) => a.timestamp.compareTo(b.timestamp));
+                // messages.forEach((element) {print(element.text);});
                 return ListView(
                   controller: scrollController,
                   reverse: true,
@@ -94,24 +96,7 @@ class _GroupChatState extends State<GroupChat> {
   }
 }
 
-class SendButton extends StatelessWidget {
-  final String text;
-  final Function callback;
 
-  SendButton({this.text,this.callback});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.all(8.0),
-      child: FlatButton(
-      color: Theme.of(context).accentColor,
-      onPressed: callback,
-      child: Text(text,style: TextStyle(color: Colors.white),),
-    ),
-    );
-    
-  }
-}
 
 
 class Message extends StatelessWidget {

@@ -7,7 +7,6 @@ import 'package:fluttershare/models/post.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/edit_profile.dart';
 import 'package:fluttershare/widgets/article.dart';
-import 'package:fluttershare/widgets/header.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/widgets/progress.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,11 +29,11 @@ class _ProfileState extends State<Profile> {
   int postCount = 0;
   List<Article> posts = [];
   List<Article> temp;
-  void _changeLanguage(Language language) async
-  {
-    Locale _temp=await setLocale(language.languageCode);
+  void _changeLanguage(Language language) async {
+    Locale _temp = await setLocale(language.languageCode);
 
-    MyApp.setLocale(context,_temp);
+    MyApp.setLocale(context, _temp);
+    print("current lang :${Localizations.localeOf(context).languageCode}");
   }
 
   @override
@@ -106,8 +105,8 @@ class _ProfileState extends State<Profile> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          buildCountColumn("Articles", postCount),
-          buildCountColumn("Followers", 0)
+          buildCountColumn(getTranslated(context, "articles"), postCount),
+          buildCountColumn(getTranslated(context, "followers"), 0)
         ],
       );
     } else {
@@ -115,7 +114,7 @@ class _ProfileState extends State<Profile> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          buildCountColumn("Following", 0),
+          buildCountColumn(getTranslated(context, "following"), 0),
         ],
       );
     }
@@ -161,7 +160,7 @@ class _ProfileState extends State<Profile> {
     // viewing your own profile - should show profile button
     bool isProfileOwner = currentUserId == widget.profileId;
     if (isProfileOwner) {
-      return buildButton(text: "Edit Profile", function: editProfile);
+      return buildButton(text: getTranslated(context, "edit_profile"), function: editProfile);
     }
   }
 
@@ -203,21 +202,25 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
               Container(
-                alignment: Alignment.centerLeft,
+                // alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(top: 12.0),
-                child: Text(
-                  user.username,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22.0,
+                child: Center(
+                  child: Text(
+                    user.username,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22.0,
+                    ),
                   ),
                 ),
               ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 2.0),
-                child: Text(
-                  user.bio,
+              Center(
+                child: Container(
+                  // alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(top: 2.0),
+                  child: Text(
+                    user.bio,
+                  ),
                 ),
               ),
             ],
@@ -259,11 +262,17 @@ class _ProfileState extends State<Profile> {
   buildUserProfile() {
     return Column(
       children: <Widget>[
-        Text("Still Working on it",style: TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold,color: Colors.amber,)),
-        Lottie.network("https://assets5.lottiefiles.com/packages/lf20_DYkRIb.json"),
+        Text("Still Working on it",
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.amber,
+            )),
+        Lottie.network(
+            "https://assets5.lottiefiles.com/packages/lf20_DYkRIb.json"),
       ],
     );
- }
+  }
 
   ListView buildProfile() {
     return ListView(
@@ -277,24 +286,25 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(context) {
-    return Scaffold
-      (
+    return Scaffold(
         appBar: AppBar(
-          title: Text(getTranslated(context, "project_name")??"CBTTeam" ,
+          automaticallyImplyLeading: false,
+          title: Text(
+            getTranslated(context, "project_name") ?? "CBTTeam",
             style: TextStyle(
               color: Colors.white,
-              fontFamily: "Signatra",
-              fontSize:50.0,
-
+              fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                  ? "Lemonada"
+                  : "Signatra",
+              fontSize: Localizations.localeOf(context).languageCode == "ar" ? 30.0 : 50.0,
             ),
-
           ),
 //          (DemoLocalization.of(context).getTranslatedValues('home_page')),
           actions: <Widget>[
             Padding(
               padding: EdgeInsets.all(8.0),
               child: DropdownButton(
-                onChanged: (Language language){
+                onChanged: (Language language) {
                   _changeLanguage(language);
                 },
                 underline: SizedBox(),
@@ -302,24 +312,27 @@ class _ProfileState extends State<Profile> {
                   Icons.language,
                   color: Colors.white,
                 ),
-                items: Language.languageList().map((lang)=>DropdownMenuItem(value: lang,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[Text(lang.flag),Text(lang.name,style: TextStyle(fontSize: 30),)],
-                  ),
-                ))
+                items: Language.languageList()
+                    .map((lang) => DropdownMenuItem(
+                          value: lang,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Text(lang.flag),
+                              Text(
+                                lang.name,
+                                style: TextStyle(fontSize: 30),
+                              )
+                            ],
+                          ),
+                        ))
                     .toList(),
-
-
               ),
-
             )
           ],
           centerTitle: true,
           backgroundColor: Theme.of(context).accentColor,
-        )
-        ,body: buildProfile()
-
-    );
+        ),
+        body: buildProfile());
   }
 }
