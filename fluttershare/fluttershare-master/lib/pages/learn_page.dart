@@ -123,7 +123,7 @@ class _LearnPageState extends State<LearnPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => LearnDetailsPage(
-                                    index: index,
+                                    index: learnTopics[index],
                                   )));
                     },
                     leading: Container(

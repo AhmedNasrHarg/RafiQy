@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/topic.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:video_player/video_player.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class LearnDetailsPage extends StatefulWidget {
-  int index;
-  LearnDetailsPage.learnIndex(int index) {
+  Topic index;
+  LearnDetailsPage.learnIndex(Topic index) {
     this.index = index;
   }
   LearnDetailsPage({Key key, this.index}) : super(key: key);
@@ -20,46 +19,18 @@ class LearnDetailsPage extends StatefulWidget {
 var learnTopics;
 
 class _LearnDetailsPageState extends State<LearnDetailsPage> {
-  int index;
+  Topic index;
   _LearnDetailsPageState(this.index);
-  YoutubePlayerController _controller;
   VideoPlayerController _videoPlayerController;
   var videoURL;
   bool connetcting = true;
 
   @override
   void initState() {
-    learnTopics = <Topic>[
-      Topic("CBT", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
-          "assets/images/1.png", Colors.deepPurple[200].value, false),
-      Topic(
-          "Anexiety",
-          "https://firebasestorage.googleapis.com/v0/b/cbt-rafiq.appspot.com/o/100611130_243714416727254_6466625261914816512_n.mp4?alt=media&token=df6fe0ef-1218-4535-94f7-d46eea05ebb1",
-          "assets/images/2.png",
-          Colors.teal[200].value,
-          false),
-      Topic("Worry", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
-          "assets/images/3.png", Colors.purple[200].value, false),
-      Topic("Calm", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
-          "assets/images/4.png", Colors.teal[200].value, false),
-      Topic("Need", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
-          "assets/images/5.png", Colors.green[200].value, false),
-      Topic("Nervious", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
-          "assets/images/6.png", Colors.cyan[200].value, false),
-      Topic("CBT", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
-          "assets/images/7.png", Colors.deepPurple[200].value, false),
-      Topic("Anexiety", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
-          "assets/images/8.png", Colors.teal[200].value, false),
-      Topic("Worry", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
-          "assets/images/9.png", Colors.purple[200].value, false),
-      Topic("Calm", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
-          "assets/images/10.png", Colors.teal[200].value, false),
-      Topic("Need", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
-          "assets/images/11.png", Colors.green[200].value, false),
-    ];
+    
     _checkInternetConnectivity();
-    videoURL = learnTopics[index].videoURL;
-
+    // videoURL = learnTopics[index].videoURL;
+videoURL=index.videoURL;
 // _controller =YoutubePlayerController(initialVideoId: YoutubePlayer.convertUrlToId(videoURL));
 
     _videoPlayerController = VideoPlayerController.network(videoURL)
@@ -79,7 +50,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
       print("conneting === $connetcting");
       return Scaffold(
         appBar: AppBar(
-          title: Text(getTranslated(context, 'cbt')),
+          title: Text(index.topicName),
         ),
         // body:
         // Container(
@@ -126,7 +97,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
       print('elseeeee');
       return Scaffold(
           appBar: AppBar(
-            title: Text(getTranslated(context, 'cbt')),
+            title: Text(index.topicName),
           ),
           body: Container(
             padding: EdgeInsets.all(10.0),
