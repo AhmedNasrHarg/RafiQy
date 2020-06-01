@@ -29,5 +29,5 @@ class QuestionAdapter extends TypeAdapter<Question> {
 
   @override
   // TODO: implement typeId
-  int get typeId => 2;
+  int get typeId => 1;
 }

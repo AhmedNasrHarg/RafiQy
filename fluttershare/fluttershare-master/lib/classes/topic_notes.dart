@@ -29,5 +29,5 @@ class NoteAdapter extends TypeAdapter<Note> {
 
   @override
   // TODO: implement typeId
-  int get typeId => 1;
+  int get typeId => 2;
 }

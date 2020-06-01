@@ -1,4 +1,5 @@
 import 'package:fluttershare/classes/topic.dart';
+import 'package:fluttershare/classes/topic_questions.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -50,5 +51,28 @@ class DBManager {
     ;
     var box = await Hive.openBox('Learn');
     box.put('LearnTopics', topics);
+  }
+
+  Future<void> saveQuestions(
+      String userId, String topicName, List<Question> questions) async {
+    final directory = await getApplicationDocumentsDirectory();
+    String path = await directory.path;
+    await Hive
+      ..init(path)
+      ..registerAdapter(QuestionAdapter());
+    ;
+    var box = await Hive.openBox('Learn');
+    box.put(userId, {topicName: questions});
+  }
+
+  Future<List<dynamic>> getTopicQuestions(
+      String userId, String topicName) async {
+    final directory = await getApplicationDocumentsDirectory();
+    String path = await directory.path;
+    await Hive.init(path);
+    var box = await Hive.openBox('Learn');
+    var topics = box.get('userId');
+    var topicQuestions = topics[topicName];
+    return topicQuestions;
   }
 }

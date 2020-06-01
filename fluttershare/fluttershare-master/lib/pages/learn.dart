@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/topic.dart';
+import 'package:fluttershare/classes/topic_questions.dart';
 import 'package:fluttershare/dbs/db_manager.dart';
 
 class Learn extends StatefulWidget {
@@ -10,6 +11,7 @@ class Learn extends StatefulWidget {
 class _LearnState extends State<Learn> {
   List<Topic> learnTopics;
   String userId;
+  List<Question> questions = [Question('what is cbt', 'hereis answer1', true)];
   DBManager db;
   @override
   void initState() {
@@ -43,17 +45,20 @@ class _LearnState extends State<Learn> {
       Topic("Need", "https://www.youtube.com/watch?v=9ZeJSOzd6fs",
           "assets/images/11.png", Colors.green[200].value, false),
     ];
+
     // take care of null ya nasr [use async await if you need]
-    saveUserId('4823fdf4823948');
-    getUserId();
+//    saveUserId('4823fdf4823948');
+//    getUserId();
     saveToHive();
-    getData(); // to get topics offline
+    getQues();
+//    getData(); // to get topics offline
   }
 
   Future<void> saveToHive() async {
     //to save to hive
     db = await DBManager();
-    db.saveTopics(learnTopics);
+//    db.saveTopics(learnTopics);
+    db.saveQuestions('09201902', 'cbt', questions);
   }
 
   void saveUserId(String id) {
@@ -66,6 +71,12 @@ class _LearnState extends State<Learn> {
     var id = db.getUserId();
     await id.then((value) => userId = value);
     print(userId);
+  }
+
+  Future<void> getQues() async {
+    db = await DBManager();
+    var questions = db.getTopicQuestions('09201902', 'cbt');
+    questions.then((value) => print(value[0].isDone));
   }
 
   Future<void> getData() async {
