@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fluttershare/classes/learn_hive.dart';
 import 'package:fluttershare/localization/demo_localiztion.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/home.dart';
@@ -92,12 +93,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   Locale _locale;
   final MethodChannel platform =
       MethodChannel('crossingthestreams.io/resourceResolver');
   @override
   void initState() {
     super.initState();
+    LearnHive();
 
 //    Firestore.instance.settings(persistenceEnabled: true);
     _requestIOSPermissions();
@@ -230,7 +233,7 @@ class _MyAppState extends State<MyApp> {
             accentColor: Colors.teal // secondryColor
             ),
 
-        home: Learn(),
+        home: Home(),
         locale: _locale,
         supportedLocales: [Locale('en', 'US'), Locale('ar', 'SA')],
         localizationsDelegates: [
