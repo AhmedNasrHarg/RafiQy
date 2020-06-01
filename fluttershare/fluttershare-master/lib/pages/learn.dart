@@ -50,15 +50,15 @@ class _LearnState extends State<Learn> {
 //    saveUserId('4823fdf4823948');
 //    getUserId();
     saveToHive();
-    getQues();
-//    getData(); // to get topics offline
+//    getQues();
+    getData(); // to get topics offline
   }
 
   Future<void> saveToHive() async {
     //to save to hive
     db = await DBManager();
-//    db.saveTopics(learnTopics);
-    db.saveQuestions('09201902', 'cbt', questions);
+    db.saveTopics(learnTopics);
+//    db.saveQuestions('09201902', 'cbt', questions);
   }
 
   void saveUserId(String id) {
@@ -85,7 +85,7 @@ class _LearnState extends State<Learn> {
     print(db);
     var topics = db.getLearnTopics();
     topics.then((value) {
-      for (int i = 0; i < value.length / 2; i++) {
+      for (int i = 0; i < value.length; i++) {
         print(value[i].topicName + ' ${value[i].isDone} ');
         learnTopics.add(value[i] as Topic);
       }
@@ -95,6 +95,7 @@ class _LearnState extends State<Learn> {
 
   @override
   Widget build(context) {
+    getData();
     return Scaffold(
       appBar: AppBar(
         title: Text('yarab'),
