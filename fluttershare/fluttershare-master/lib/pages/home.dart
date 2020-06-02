@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/community.dart';
 import 'package:fluttershare/pages/create_account.dart';
@@ -19,7 +20,6 @@ final commentRef = Firestore.instance.collection("comments");
 final groupRef = Firestore.instance.collection("groups");
 final chatRef = Firestore.instance.collection("chats");
 final sheetsRef = Firestore.instance.collection("sheets");
-final DateTime timestamp = DateTime.now();
 User currentUser;
 
 class Home extends StatefulWidget {
@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
       "email": user.email,
       "displayName": user.displayName,
       "bio": "",
-      "timestamp": timestamp,
+      "timestamp": DateTime.now(),
       "isAdmin": false,
     });
     doc = await userRef.document(user.id).get();
@@ -144,11 +144,11 @@ class _HomeState extends State<Home> {
         onTap: onTap,
         activeColor: Theme.of(context).primaryColor,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.account_circle),title: Text('Profile')),
-          BottomNavigationBarItem(icon: Icon(Icons.lightbulb_outline),title: Text('Learn')),
-          BottomNavigationBarItem(icon: Icon(Icons.wb_sunny,size: 35.0,),title: Text('Chill Zone')),
-          BottomNavigationBarItem(icon: Icon(Icons.note),title: Text('Sheets')),
-          BottomNavigationBarItem(icon: Icon(Icons.question_answer),title: Text('Community')),
+          BottomNavigationBarItem(icon: Icon(Icons.account_circle),title: Text(getTranslated(context, "profile"))),
+          BottomNavigationBarItem(icon: Icon(Icons.lightbulb_outline),title: Text(getTranslated(context, "learn"))),
+          BottomNavigationBarItem(icon: Icon(Icons.wb_sunny,size: 35.0,),title: Text(getTranslated(context, "chill_zone"))),
+          BottomNavigationBarItem(icon: Icon(Icons.note),title: Text(getTranslated(context, "sheets"))),
+          BottomNavigationBarItem(icon: Icon(Icons.question_answer),title: Text(getTranslated(context, "community"))),
         ],
       ),
     );
@@ -177,9 +177,9 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text('RafiQ',
+            Text(getTranslated(context, "project_name"),
             style: TextStyle(
-              fontFamily: "Signatra",
+              fontFamily: Localizations.localeOf(context).languageCode == "ar" ? "Lemonada" : "Signatra",
               fontSize: 90.0,
               color: Colors.white
             ),

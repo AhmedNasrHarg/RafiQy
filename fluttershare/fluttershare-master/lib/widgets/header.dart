@@ -9,7 +9,7 @@ header(context,{bool isAppTitle = false, String titleText, removeBackButton = fa
                 width: 250.0,
                 height: 40.0,
                 child: AutoSizeText(
-                  isAppTitle ? "RafiQ" : titleText,
+                  isAppTitle ? "RafiQy" : titleText,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,

@@ -5,5 +5,63 @@
   "navigate_to_learn": "انتقل إلي صفحة التعلم",
   "cbt": "العلاج المعرفي السلوكي",
   "anexiouty": "القلق",
-  "project_name": "رفيق"
+  "project_name": "رفيقى",
+  "profile" : "الملف الشخصي",
+  "learn" : "التعلم",
+  "chill_zone" :  "منطقة الاسترخاء",
+  "sheets" : "المهام",
+  "community" : "التواصل",
+  "articles" : "المقالات",
+  "followers" : "المتابِعين",
+  "following" : "المتابَعين",
+  "edit_profile" : "عدل ملفك الشخصي",
+  "user_name" : "الاسم الشخصى",
+  "bio" : "نبذة",
+  "update_profile" : "تحديث ملفك الشخصي",
+  "log_out" : "الخروج",
+  "update_username" : "حدث اسمك الشخصى",
+  "user_short" : "الاسم قصير جدا",
+  "user_long" : "الاسم طويل جدا",
+  "update_bio" : "نبذة تعبر عنك",
+  "bio_long" : "النبذة طويلة جدا",
+  "profile_updated" : "تم التحديث",
+  "like" : "إعجاب",
+  "discussions" : "المناقشات",
+  "groups" : "مجموعات الدردشة",
+  "choose_img" : "اختر صورة المقال",
+  "cam_img" : "صورة من الكاميرا",
+  "gallery_img" : "صورة من الاستوديو",
+  "cancel" : "اغلق",
+  "upload_img" : "حمل صورة",
+  "upload_article_img" : "حمل صورة المقال",
+  "add_article_info" : "أضف محتوى المقال",
+  "write_article_title" : "أكتب عنوان المقال...",
+  "write_article_body" : "أكتب محتوى المقال",
+  "post" : "شارك",
+  "comments" : "التعليقات",
+  "write_comment" : "أكتب تعليق...",
+  "welcome" : "أهلا",
+  "set_up" : "أنشأ حسابك الشخصي",
+  "create_user_name" : "أنشأ اسم شخصي",
+  "three_char" : "يجب أن يكون على الأقل ثلاثة أحرف",
+  "submit" : "تسجيل",
+  "still_working" : "ما زال العمل قائما عليها",
+  "msg_null" : "من فضلك أدخل رسالة",
+  "enter_msg" : "أدخل رسالتك"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

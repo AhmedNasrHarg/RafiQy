@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/upload_post.dart';
 import 'package:fluttershare/widgets/header.dart';
 import 'package:fluttershare/widgets/toggle_row.dart';
@@ -38,11 +39,11 @@ class _CommunityState extends State<Community> {
 @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context,isAppTitle: false,titleText: "Community",removeBackButton: true),
+      appBar: header(context,isAppTitle: false,titleText: getTranslated(context,"community"),removeBackButton: true),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Toggle(context,tapOneTitle: "Discussions",tapTwoTitle: "Groups",toggleFunction: toggle,),
+            Toggle(context,tapOneTitle: getTranslated(context, "discussions"),tapTwoTitle: getTranslated(context, "groups"),toggleFunction: toggle,),
             isDiscuussion ?  Discussion() : PeerGroup()
         ],
       ),

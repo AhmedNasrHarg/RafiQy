@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/learn_bar.dart';
 import 'package:fluttershare/classes/sheet.dart';
+import 'package:fluttershare/classes/sheets_bar.dart';
 import 'package:fluttershare/pages/flexible_sheets_bar.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:lottie/lottie.dart';
@@ -52,7 +53,7 @@ class _EnterySheetsState extends State<EnterySheets> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            title: LearAppBar(),
+            title: SheetsAppBar(),
             pinned: true,
             expandedHeight: 150.0,
             flexibleSpace: FlexibleSpaceBar(background: FlexibleSheetsBar()),
@@ -72,7 +73,7 @@ class _EnterySheetsState extends State<EnterySheets> {
                     // ),
                     title: Center(
                       child: Text(
-                          "${sheets[index].sheetTitle} + ${sheets[index].done}",
+                          "${sheets[index].sheetTitle}",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
@@ -91,7 +92,7 @@ class _EnterySheetsState extends State<EnterySheets> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                MyHomePage(title: sheets[index].sheetIdName)),
+                                MyHomePage(title: sheets[index].sheetIdName,sheetName: sheets[index].sheetTitle,)),
                       );
                       //   } else {
                       //     Alert(

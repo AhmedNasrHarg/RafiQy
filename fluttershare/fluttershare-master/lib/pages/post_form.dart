@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/widgets/header.dart';
 import 'package:fluttershare/widgets/progress.dart';
 import 'package:path_provider/path_provider.dart';
@@ -50,7 +51,7 @@ class _PostFormState extends State<PostForm> {
       .document(postId)
       .setData({
         "postId": postId,
-        "timestamp" : timestamp,
+        "timestamp" : DateTime.now().millisecondsSinceEpoch
       });
     postRef
       .document(postId)
@@ -62,7 +63,7 @@ class _PostFormState extends State<PostForm> {
         "body" : body,
         "mediaUrl" : mediaUrl,
         "likes" : {},
-        "timestamp" : timestamp,
+        "timestamp" : DateTime.now().millisecondsSinceEpoch,
       });
       _titleController.clear();
       _bodyController.clear();
@@ -92,7 +93,7 @@ class _PostFormState extends State<PostForm> {
   @override
   Widget build(context) {
     return Scaffold(
-      appBar: header(context, isAppTitle: false, titleText: "2. Add Article Info", removeBackButton: false, hasAction: true, actionName: "Post", actionFunction: isUploading ? null : handleSubmit),
+      appBar: header(context, isAppTitle: false, titleText: getTranslated(context,"add_article_info"), removeBackButton: false, hasAction: true, actionName: getTranslated(context, "post"),actionFunction: isUploading ? null : handleSubmit),
       body:Form(
         child: ListView(
         children: <Widget>[
@@ -126,9 +127,10 @@ class _PostFormState extends State<PostForm> {
             title: Container(
               width: 250.0,
               child: TextField(
+                textDirection: Localizations.localeOf(context).languageCode == "ar" ? TextDirection.rtl : TextDirection.ltr,
                 controller: _titleController,
                 decoration: InputDecoration(
-                  hintText: "Write Article Title...",
+                  hintText: getTranslated(context, "write_article_title"),
                   border: InputBorder.none
                 ),
               ),
@@ -144,11 +146,12 @@ class _PostFormState extends State<PostForm> {
             title: Container(
               width: 250.0,
               child: TextField(
+                textDirection: Localizations.localeOf(context).languageCode == "ar" ? TextDirection.rtl : TextDirection.ltr,               
                 controller: _bodyController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 decoration: InputDecoration(
-                  hintText: "Write Article Body",
+                  hintText: getTranslated(context, "write_article_body"),
                   border: InputBorder.none
                 ),
               ),
