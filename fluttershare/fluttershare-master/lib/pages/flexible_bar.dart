@@ -27,7 +27,7 @@ class FlexibleAppBarWidget extends StatelessWidget{
                     Container(child: Padding(
                       padding: const EdgeInsets.only(left:50),
                       child: new Text(
-                          "ملاحظات سريعة",
+                          "معرض الصور",
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20.0
