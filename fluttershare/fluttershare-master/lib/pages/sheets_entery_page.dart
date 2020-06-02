@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/learn_bar.dart';
 import 'package:fluttershare/classes/sheet.dart';
+import 'package:fluttershare/classes/sheets_bar.dart';
 import 'package:fluttershare/pages/flexible_sheets_bar.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:lottie/lottie.dart';
@@ -52,7 +53,7 @@ class _EnterySheetsState extends State<EnterySheets> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            title: LearAppBar(),
+            title: SheetsAppBar(),
             pinned: true,
             expandedHeight: 150.0,
             flexibleSpace: FlexibleSpaceBar(background: FlexibleSheetsBar()),
