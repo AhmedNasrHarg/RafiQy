@@ -29,8 +29,8 @@ class _LearnPageState extends State<LearnPage> {
       }
   List<Topic> learnTopics=
   [Topic(
-          "Anexiety",
-          "https://firebasestorage.googleapis.com/v0/b/cbt-rafiq.appspot.com/o/100611130_243714416727254_6466625261914816512_n.mp4?alt=media&token=df6fe0ef-1218-4535-94f7-d46eea05ebb1",
+          "القلق",
+          "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
           "assets/images/2.png",
           Colors.teal[200].value,
           false)];

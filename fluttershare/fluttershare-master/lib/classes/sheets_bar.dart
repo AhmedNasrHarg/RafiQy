@@ -10,7 +10,7 @@ class SheetsAppBar extends StatelessWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-        child: Center(child: Text(getTranslated(context, 'sheet_entery')),),
+        child: Center(child: Text(getTranslated(context, 'sheet_entery')??"صفحة المهام"),),
      
       
     );

@@ -27,7 +27,7 @@ class FlexibleAppBarWidget extends StatelessWidget{
                     Container(child: Padding(
                       padding: const EdgeInsets.only(left:50),
                       child: new Text(
-                          "Fast Learn",
+                          "ملاحظات سريعة",
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20.0
@@ -56,7 +56,7 @@ class FlexibleAppBarWidget extends StatelessWidget{
                       
                         padding: const EdgeInsets.only(left:10),
                         child: new Text(
-                            "Every Lesson makes you grow",
+                            "كل موضوع تنهيه يجعل معرفتك أفضل",
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 15.0
