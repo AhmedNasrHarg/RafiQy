@@ -44,7 +44,9 @@
   "set_up" : "Set up your Profile",
   "create_user_name" : "Create a username",
   "three_char" : "Must be at least 3 characters",
-  "submit" : "Submit"
-
+  "submit" : "Submit",
+  "still_working" : "Still Working on it",
+  "msg_null" : "Please enter a message",
+  "enter_msg" : "Enter your message"
 
 }

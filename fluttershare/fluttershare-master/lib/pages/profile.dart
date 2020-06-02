@@ -262,7 +262,7 @@ class _ProfileState extends State<Profile> {
   buildUserProfile() {
     return Column(
       children: <Widget>[
-        Text("Still Working on it",
+        Text(getTranslated(context, "still_working"),
             style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
