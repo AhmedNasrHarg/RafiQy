@@ -117,7 +117,6 @@ flutter:
     - assets/animations/cant.json
     - assets/animations/hero_bar.json
     - assets/animations/hero_message.json
-<<<<<<< HEAD
     - assets/images/body1.png
     - assets/images/body.png
     - assets/images/brain.png
@@ -125,6 +124,4 @@ flutter:
     - assets/images/eyes1.png
     - assets/images/heart.png
     - assets/images/stomach.png
-=======
     - assets/images/contact.png
->>>>>>> dde46cc84914c5f0bf4955b3f7883932454d30a3
