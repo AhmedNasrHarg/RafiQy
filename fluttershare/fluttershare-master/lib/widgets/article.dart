@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:animator/animator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/post.dart';
@@ -47,7 +48,15 @@ class _ArticleState extends State<Article> {
   Map likes;
   bool isLiked;
   bool showHeart = false;
+  bool isTottalyVefified = true;
   _ArticleState({this.post, this.likes, this.likesCount});
+
+  @override
+  void initState() { 
+    super.initState();
+    checkPostVerified();
+  }
+
 
   buildPostHeader() {
     return FutureBuilder(
@@ -140,6 +149,7 @@ class _ArticleState extends State<Article> {
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
+          // mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(top: 40.0, left: 20.0),
@@ -160,7 +170,7 @@ class _ArticleState extends State<Article> {
               child: Icon(
                 Icons.chat,
                 size: 28.0,
-                color: Colors.blue[900],
+                color: isTottalyVefified?  Colors.blue[900] : Colors.red[900],
               ),
             ),
             Padding(
@@ -177,7 +187,7 @@ class _ArticleState extends State<Article> {
                               isProfile: false,
                             ))),
                 child: SizedBox(
-                  width: 270.0,
+                  // width: 270.0,
                   height: 25.0,
                   child: AutoSizeText(
                     post.title,
@@ -190,6 +200,7 @@ class _ArticleState extends State<Article> {
                 ),
               ),
             ),
+           
           ],
         ),
         Row(
@@ -226,6 +237,27 @@ class _ArticleState extends State<Article> {
         )
       ],
     );
+  }
+
+  checkPostVerified() async{
+    QuerySnapshot snapshot = await
+    userRef
+    .document(currentUserId)
+    .collection("userPosts")
+    .document(post.postId)
+    .collection("comments")
+    .getDocuments();
+    for(int i =0; i< snapshot.documents.length; i++){
+      if(snapshot.documents[i]["isVerified"]){
+        continue;
+      }
+      else{
+        setState(() {
+          isTottalyVefified = false;
+        });
+        break;
+      }
+    }
   }
 
   @override

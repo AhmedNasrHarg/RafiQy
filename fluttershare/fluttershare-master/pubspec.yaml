@@ -116,3 +116,4 @@ flutter:
     - assets/animations/cant.json
     - assets/animations/hero_bar.json
     - assets/animations/hero_message.json
+    - assets/images/contact.png
