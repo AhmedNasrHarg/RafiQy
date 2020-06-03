@@ -48,6 +48,7 @@
   "still_working" : "Still Working on it",
   "msg_null" : "Please enter a message",
   "enter_msg" : "Enter your message",
-  "sheet_entery": "Sheets Page"
+  "sheet_entery": "Sheets Page",
+  "note_page": "Note Page"
 
 }

@@ -5,7 +5,7 @@ class ImageViewer extends StatefulWidget{
   String ImageUrl;
   @override
   _ImageViewerState createState() => _ImageViewerState(this.ImageUrl);
-  ImageViewer({Key key,this.ImageUrl}):super(key:key);
+  ImageViewer(this.ImageUrl,{Key key}):super(key:key);
 }
 
 class _ImageViewerState extends State<ImageViewer> {
@@ -16,9 +16,9 @@ class _ImageViewerState extends State<ImageViewer> {
     // TODO: implement build
   return Container(
     child: 
-    PhotoView(imageProvider: AssetImage(ImageUrl),
-)
-  );
+    PhotoView(imageProvider: NetworkImage(ImageUrl)),
+);
+
 
   }
 }

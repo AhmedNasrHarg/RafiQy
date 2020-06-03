@@ -55,13 +55,13 @@ class _AlbumPageState extends State<AlbumPage>
           indicatorColor: Colors.deepPurple,
           tabs: <Widget>[
             Tab(icon: new Icon(Icons.image)),
-            Tab(icon: new Icon(Icons.grid_on))
+            Tab(icon: new Icon(Icons.favorite))
           ],
         ),
       ),
       body: TabBarView(
         controller: controller,
-        children: <Widget>[AlbumViewer(), AlbumGrid()],
+        children: <Widget>[AlbumGrid(), AlbumGrid()],
       ),
     );
   }
