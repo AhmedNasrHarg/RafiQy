@@ -7,13 +7,18 @@ class Comment {
   final String avatarUrl;
   final String comment;
   final int timestamp;
+  bool isVerified;
+  String commentId;
+
 
   Comment({
     this.username,
     this.userId,
     this.avatarUrl,
     this.comment,
-    this.timestamp
+    this.timestamp,
+    this.isVerified = false,
+    this.commentId
   });
 
   factory Comment.fromDocument(DocumentSnapshot doc){
@@ -22,7 +27,9 @@ class Comment {
       userId: doc["userId"],
       avatarUrl: doc["avatarUrl"],
       comment: doc["comment"],
-      timestamp: doc["timestamp"]
+      timestamp: doc["timestamp"],
+      isVerified: doc["isVerified"],
+      commentId: doc["commentId"]
     );
   }
 }

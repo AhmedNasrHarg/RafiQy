@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/question.dart';
 import 'package:fluttershare/pages/home.dart';
+import 'package:fluttershare/pages/human_body.dart';
 import 'package:fluttershare/widgets/chat_bubble.dart';
 import 'package:fluttershare/widgets/check_list.dart';
 import 'package:fluttershare/widgets/progress.dart';
@@ -11,9 +12,8 @@ import 'package:fluttershare/models/message.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title,this.sheetName}) : super(key: key);
+  MyHomePage({Key key, this.title, this.sheetName}) : super(key: key);
 
   final String title;
   final String sheetName;
@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
     userMessage('المزيد');
     await saveChat();
     setState(() {
-      i++;
+      // i++;
       nextBotMessage();
     });
   }
@@ -125,6 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
   showDoneCongrats() {
     Alert(
         context: context,
+        style: AlertStyle(isCloseButton: false),
         title: "أنت تقوم بعمل جيد",
         content: Column(
           children: <Widget>[
@@ -139,8 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
         buttons: [
           DialogButton(
             onPressed: () {
-              // Navigator.of(context).pop(true);
-              // Navigator.pop(context);
               Navigator.pop(context);
             },
             child: Text("التالي"),
@@ -156,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void dispose() {
-    saveLastAnsIndex();
+    //saveLastAnsIndex();
     super.dispose();
   }
 
@@ -192,16 +191,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   buildChat() async {
-    await getBodyResponseSheet();
     DocumentSnapshot documentSnapshot = await userRef
         .document(currentUser.id)
         .collection("completedSheets")
         .document(widget.title + "Log")
         .get();
     if (documentSnapshot.exists) {
-      getOldChat(documentSnapshot);
-      print("Exist");
+      bool isDone = documentSnapshot['isDone'];
+      if (isDone) {
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HumanBody()),
+        );
+      } else {
+        getOldChat(documentSnapshot);
+        print("Exist");
+      }
     }
+    await getBodyResponseSheet();
   }
 
   void getOldChat(DocumentSnapshot documentSnapshot) {
@@ -248,25 +256,27 @@ class _MyHomePageState extends State<MyHomePage> {
         .get();
 
     if (sheetlog.exists) {
-      if (sheetlog['answer$i'] == null){
-        if (isDone) {
-        chatLog.clear();
-        checkedItems.forEach((e) {
-          if(e.media != null)
-          chatLog.add({
-            'name': e.name,
-            'type': e.type,
-            'media': e.media,
+      if (sheetlog['answer$i'] == null) {
+        if (bodyResponseSheet[i].items != null) {
+          chatLog.clear();
+          checkedItems.forEach((e) {
+            if (e.media != null)
+              chatLog.add({
+                'name': e.name,
+                'type': e.type,
+                'media': e.media,
+              });
+            else
+              chatLog.add({
+                'name': e.name,
+                'type': e.type,
+              });
           });
-          else
-            chatLog.add({
-            'name': e.name,
-            'type': e.type,
-          });
-        });
-        sheetlog.reference.updateData({'answer$i': chatLog, "isDone": isDone});
-      }else{
-        sheetlog.reference.updateData({'answer$i': chatLog, "isDone": isDone});
+          sheetlog.reference
+              .updateData({'answer$i': chatLog, "isDone": isDone});
+        } else {
+          sheetlog.reference
+              .updateData({'answer$i': chatLog, "isDone": isDone});
         }
       }
     } else {
@@ -360,6 +370,7 @@ class _MyHomePageState extends State<MyHomePage> {
           isBotTyping = false;
         }),
       );
+      saveLastAnsIndex();
       _scrollController.animateTo(_scrollController.position.minScrollExtent,
           duration: Duration(microseconds: 300), curve: Curves.easeOut);
     }
@@ -455,39 +466,42 @@ class _MyHomePageState extends State<MyHomePage> {
                                           message = v;
                                         },
                                         decoration: InputDecoration(
-                                          // contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                          suffixIcon: IconButton(
-                                            icon: Icon(Icons.send),
-                                            onPressed: isBotTyping
-                                                ? () {}
-                                                : () {
-                                                    if (message.length > 0) {
-                                                      // DO NOT FORGET TO CHECK ARRAY BOUNDARY
-                                                      setState(() {
-                                                        userMessage(message);
-                                                        _text.text = '';
-                                                      });
-                                                      message = '';
-                                                    } else {
-                                                      Fluttertoast.showToast(
-                                                          msg:
-                                                              getTranslated(context,"msg_null"),
-                                                          toastLength: Toast
-                                                              .LENGTH_SHORT,
-                                                          gravity: ToastGravity
-                                                              .CENTER,
-                                                          timeInSecForIosWeb: 1,
-                                                          textColor:
-                                                              Colors.white,
-                                                          fontSize: 16.0);
-                                                      print(chatLog);
-                                                      // saveChat();
-                                                    }
-                                                  },
-                                          ),
-                                          border: InputBorder.none,
-                                          hintText: getTranslated(context, "enter_msg")
-                                        ),
+                                            // contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                            suffixIcon: IconButton(
+                                              icon: Icon(Icons.send),
+                                              onPressed: isBotTyping
+                                                  ? () {}
+                                                  : () {
+                                                      if (message.length > 0) {
+                                                        // DO NOT FORGET TO CHECK ARRAY BOUNDARY
+                                                        setState(() {
+                                                          userMessage(message);
+                                                          _text.text = '';
+                                                        });
+                                                        message = '';
+                                                      } else {
+                                                        Fluttertoast.showToast(
+                                                            msg: getTranslated(
+                                                                context,
+                                                                "msg_null"),
+                                                            toastLength: Toast
+                                                                .LENGTH_SHORT,
+                                                            gravity:
+                                                                ToastGravity
+                                                                    .CENTER,
+                                                            timeInSecForIosWeb:
+                                                                1,
+                                                            textColor:
+                                                                Colors.white,
+                                                            fontSize: 16.0);
+                                                        print(chatLog);
+                                                        // saveChat();
+                                                      }
+                                                    },
+                                            ),
+                                            border: InputBorder.none,
+                                            hintText: getTranslated(
+                                                context, "enter_msg")),
                                       ),
                                     ),
                                     IconButton(
@@ -497,11 +511,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ? () {}
                                           : () async {
                                               userMessage('تم');
-                                              await saveChat();
-                                              setState(() {
-                                                nextBotMessage();
-                                                isBotTyping = true;
-                                              });
+                                              print("i=$i, sheet = ${bodyResponseSheet.length}");
+                                              if (i+1 >=
+                                                  bodyResponseSheet.length) {
+                                                await sheetDone();
+                                              } else {
+                                                await saveChat();
+                                                setState(() {
+                                                  nextBotMessage();
+                                                  isBotTyping = true;
+                                                });
+                                              }
                                             },
                                     )
                                   ],
