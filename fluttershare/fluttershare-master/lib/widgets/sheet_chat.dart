@@ -4,6 +4,7 @@ import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/question.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/widgets/chat_bubble.dart';
+import 'package:fluttershare/widgets/check_list.dart';
 import 'package:fluttershare/widgets/progress.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fluttershare/models/message.dart';
@@ -246,8 +247,27 @@ class _MyHomePageState extends State<MyHomePage> {
         .get();
 
     if (sheetlog.exists) {
-      if (sheetlog['answer$i'] == null)
+      if (sheetlog['answer$i'] == null){
+        if (isDone) {
+        chatLog.clear();
+        checkedItems.forEach((e) {
+          if(e.media != null)
+          chatLog.add({
+            'name': e.name,
+            'type': e.type,
+            'media': e.media,
+          });
+          else
+            chatLog.add({
+            'name': e.name,
+            'type': e.type,
+          });
+        });
         sheetlog.reference.updateData({'answer$i': chatLog, "isDone": isDone});
+      }else{
+        sheetlog.reference.updateData({'answer$i': chatLog, "isDone": isDone});
+        }
+      }
     } else {
       sheetlog.reference.setData({'answer$i': chatLog, "isDone": isDone});
     }

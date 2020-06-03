@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/video_provider.dart';
 import 'package:fluttershare/models/question.dart';
@@ -16,7 +15,8 @@ class ChatBubble extends StatelessWidget {
   Function f2;
   bool isPressed;
 
-  ChatBubble({this.msg, this.question, this.f1, this.f2,this.isPressed = false}) {
+  ChatBubble(
+      {this.msg, this.question, this.f1, this.f2, this.isPressed = false}) {
     isMe = this.question != null ? false : true;
     // print(DateTime.fromMillisecondsSinceEpoch(msg.timeStamp));
     // print(msg.message);
@@ -34,7 +34,9 @@ class ChatBubble extends StatelessWidget {
       return Text(
         msg.message,
         style: TextStyle(
-          color: Colors.black,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
         ),
       );
     }

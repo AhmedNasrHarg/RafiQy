@@ -21,9 +21,10 @@ class ChatButtons extends StatefulWidget {
 class _ChatButtonsState extends State<ChatButtons> {
   bool isPressed;
   _ChatButtonsState({this.isPressed});
-
+  
   @override
   Widget build(BuildContext context) {
+    bool isArabic = Localizations.localeOf(context).languageCode == 'ar';
     return Container(
       child: Row(children: <Widget>[
         RaisedButton(
@@ -41,10 +42,10 @@ class _ChatButtonsState extends State<ChatButtons> {
           shape: RoundedRectangleBorder(
             side: BorderSide(color: Colors.amber, width: 2),
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.zero,
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.zero,
+              topLeft: isArabic? Radius.zero:Radius.circular(20),
+              topRight: isArabic? Radius.circular(20):Radius.zero,
+              bottomLeft: isArabic? Radius.zero:Radius.circular(20),
+              bottomRight: isArabic? Radius.circular(20):Radius.zero,
             ),
           ),
         ),
@@ -63,10 +64,10 @@ class _ChatButtonsState extends State<ChatButtons> {
           shape: RoundedRectangleBorder(
             side: BorderSide(color: Colors.amber, width: 2),
             borderRadius: BorderRadius.only(
-              topLeft: Radius.zero,
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.zero,
-              bottomRight: Radius.circular(20),
+              topLeft: isArabic? Radius.circular(20):Radius.zero,
+              topRight: isArabic? Radius.zero:Radius.circular(20),
+              bottomLeft: isArabic? Radius.circular(20):Radius.zero,
+              bottomRight: isArabic? Radius.zero:Radius.circular(20),
             ),
           ),
         ),
