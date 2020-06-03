@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fluttershare/models/check_list_item.dart';
 
-List<String> checkedItems =[];
+List<CheckListItem> checkedItems =[];
 
 
-checkList({List<dynamic> items}){
+checkList({List<CheckListItem> items}){
   List<Widget> widgests = [];
   items.forEach((element) {
-    widgests.add(Item(text: element.toString()));
+    widgests.add(Item(item: element));
   });
   return Column(
     children: widgests,
@@ -15,18 +16,18 @@ checkList({List<dynamic> items}){
 
 class Item extends StatefulWidget {
 
-  final String text;
-  Item({this.text});
+  final CheckListItem item;
+  Item({this.item});
 
   @override
-  _ItemState createState() => _ItemState(text: this.text);
+  _ItemState createState() => _ItemState(item: this.item);
 
 
 }
 
 class _ItemState extends State<Item> {
 
-  final String text;
+  final CheckListItem item;
   bool isChecked = false;
 
   @override
@@ -35,17 +36,17 @@ class _ItemState extends State<Item> {
     checkedItems.clear();
   }
 
-  _ItemState({this.text});
+  _ItemState({this.item});
 
   handleCheck(){
     setState(() {
       isChecked = !isChecked;
     });
     if(isChecked){
-      checkedItems.add(text);
+      checkedItems.add(item);
     }
     else{
-      checkedItems.remove(text);
+      checkedItems.remove(item);
     }
   }
 
@@ -62,7 +63,7 @@ class _ItemState extends State<Item> {
         ),
       ),
       Text(
-    text,
+    item.name,
     maxLines: 2,
     style: TextStyle(
       fontSize: 15.0,

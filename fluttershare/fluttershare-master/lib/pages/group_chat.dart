@@ -40,7 +40,7 @@ class _GroupChatState extends State<GroupChat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context,titleText: "Welcome to Chat"),
+      appBar: header(context,titleText: "أهلا بك في المحادثة"),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -77,7 +77,7 @@ class _GroupChatState extends State<GroupChat> {
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: "Enter a Message...",
+                      hintText: "أدخل رسالتك",
                       border: OutlineInputBorder()
                     ),
                     controller: messageController,

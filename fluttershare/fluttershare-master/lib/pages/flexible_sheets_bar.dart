@@ -28,7 +28,7 @@ class FlexibleSheetsBar extends StatelessWidget{
                       
                         padding: const EdgeInsets.only(left:10),
                         child: new Text(
-                            "Every sheet makes your tree grow",
+                            "كل مهمة تقوم بها تجعلك شجرتك تنمو أفضل",
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 15.0

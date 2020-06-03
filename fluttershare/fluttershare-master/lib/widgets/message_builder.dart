@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttershare/models/check_list_item.dart';
 import 'package:fluttershare/models/question.dart';
 import 'package:fluttershare/widgets/chat_bubble_typing.dart';
 import 'package:fluttershare/widgets/chat_bubble_video.dart';
@@ -10,8 +11,16 @@ class QuesMsgBuilder extends StatelessWidget {
   final Function f1;
   final Function f2;
   final bool isPressed;
-  QuesMsgBuilder({this.question, this.f1, this.f2,this.isPressed = false});
-
+  QuesMsgBuilder({this.question, this.f1, this.f2, this.isPressed = false});
+  itemsToCheckListItems() {
+    List<CheckListItem> items = [];
+    question.items.forEach((element) {
+      var q = Map<String, dynamic>.from(element);
+        CheckListItem qst = CheckListItem.fromJson(q);
+        items.add(qst);
+    });
+    return items;
+  }
   // Function functionBuilder(str) {
   //   switch (str) {
   //     case "مشاهدة":
@@ -88,13 +97,13 @@ class QuesMsgBuilder extends StatelessWidget {
                   ),
             question.videoUrl != null
                 ? BubbleVideo(
-                  videoUrl: question.videoUrl,
-                )
+                    videoUrl: question.videoUrl,
+                  )
                 : SizedBox(
                     height: 0.0,
                   ),
             question.items != null
-                ? checkList(items: question.items)
+                ? checkList(items: itemsToCheckListItems())
                 : SizedBox(
                     height: 0.0,
                   ),
