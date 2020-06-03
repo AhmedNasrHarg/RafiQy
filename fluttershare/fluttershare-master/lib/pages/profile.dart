@@ -16,7 +16,6 @@ import '../main.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
-
   Profile({this.profileId});
 
   @override
@@ -74,6 +73,7 @@ class _ProfileState extends State<Profile> {
       });
     }
   }
+  
 
   buildCountColumn(String label, int count) {
     return Column(
@@ -257,6 +257,11 @@ class _ProfileState extends State<Profile> {
     return Column(
       children: posts,
     );
+    // return Column(
+    //   children: <Widget>[
+    //     Text("Pending comments"),
+    //   ],
+    // );
   }
 
   buildUserProfile() {

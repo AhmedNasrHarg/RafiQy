@@ -41,6 +41,7 @@ dependencies:
   chewie: ^0.9.10
   provider: ^4.1.2
   auto_size_text: ^2.1.0
+  carousel_slider: ^2.1.0
 
   shared_preferences: 0.5.7+2
   youtube_player_flutter: 6.1.1
@@ -117,3 +118,11 @@ flutter:
     - assets/animations/cant.json
     - assets/animations/hero_bar.json
     - assets/animations/hero_message.json
+    - assets/images/body1.png
+    - assets/images/body.png
+    - assets/images/brain.png
+    - assets/images/lungs.png
+    - assets/images/eyes1.png
+    - assets/images/heart.png
+    - assets/images/stomach.png
+    - assets/images/contact.png
