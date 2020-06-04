@@ -54,7 +54,7 @@ dependencies:
   video_player: 0.10.11+1
   hive: ^1.4.1+1
   hive_flutter: ^0.3.0+2
-  rflutter_alert: ^1.0.3
+  rflutter_alert: ^1.0.1
   photo_view: 0.9.2
 
 dev_dependencies:

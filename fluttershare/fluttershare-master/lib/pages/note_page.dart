@@ -47,7 +47,9 @@ class _NotePageState extends State<NotePage> {
                 DialogButton(
                   onPressed: ()
                   {
-          Navigator.pop(context);
+                    Navigator.of(context, rootNavigator: true).pop();
+
+//                    Navigator.pop(context);
           setState(() {
 //            notes.add(Note())
           });
