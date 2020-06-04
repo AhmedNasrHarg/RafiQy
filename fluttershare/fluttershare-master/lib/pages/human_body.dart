@@ -367,6 +367,7 @@ class HumanBodyState extends State<HumanBody> {
                   child: Text(
                     'الإستجابة الجسدية للقلق هي بمثابة جرس إنذار، جسدك يخبرك انه في حاجة لتدخلك .. غير أن جسدك لا يميز درجة الخطورة، هذه مهمة فصك الأمامي، في انتباهك للأعراض الجسدية الخاصة بك تستطيع القاط شعور القلق منذ بدايته، تسميته و محاولة التعامل معه مبكرا، فتتحكم فيه قبل أن يتحكم فيك.',
                     textDirection: TextDirection.rtl,
+                    softWrap: true,
                     style: TextStyle(
                       fontSize: 18,
                     ),
