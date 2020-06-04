@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/learn_bar.dart';
 import 'package:fluttershare/classes/learn_hive.dart';
 import 'package:fluttershare/classes/topic.dart';
 import 'package:fluttershare/dbs/db_manager.dart';
+import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/learn.dart';
 import 'package:fluttershare/pages/learn_details_page.dart';
 //import 'package:lottie/lottie.dart';
@@ -17,25 +19,34 @@ class LearnPage extends StatefulWidget {
   _LearnPageState createState() => _LearnPageState();
 }
 
-
 class _LearnPageState extends State<LearnPage> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getData();
+//    getData(); //to get data when offline
+    getTopicsFromFireStore();
+  }
 
-      }
-  List<Topic> learnTopics=
-  [Topic(
-          "القلق",
-          "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/2.png",
-          Colors.teal[200].value,
-          false)];
+  void getTopicsFromFireStore() {
+    topicRef.getDocuments().then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        Topic topic = new Topic(f.data['topic_name'], f.data['video_url'],
+            f.data['topic_image'], f.data['topic_color'], f.data['isDone']);
+        setState(() {
+          learnTopics.add(topic);
+        });
+        // Topic(topicName, videoURL, topicImage, topicColor, isDone)
+        print('${f.data}}');
+        print('k');
+      });
+    });
+    //save offline
+  }
+
+  List<Topic> learnTopics = [];
   DBManager db;
-   Future<void> getData() async {
+  Future<void> getData() async {
     print(db);
     db = await DBManager();
     print(db);
@@ -46,7 +57,6 @@ class _LearnPageState extends State<LearnPage> {
         print(value[i].topicName + ' ${value[i].isDone} ');
         setState(() {
           learnTopics.add(value[i] as Topic);
-
         });
       }
 //      print(value[0].name);
@@ -129,7 +139,7 @@ class _LearnPageState extends State<LearnPage> {
                     leading: Container(
                       height: 35.0,
                       width: 35.0,
-                      child: Image.asset(learnTopics[index].topicImage),
+                      child: Image.network(learnTopics[index].topicImage),
                     ),
                   ),
                   height: 100,

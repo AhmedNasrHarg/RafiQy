@@ -54,6 +54,7 @@ class DBManager {
     box.put('LearnTopics', topics);
   }
 
+  //create new box ya 3m ma tt3bsh nfsk
   Future<void> saveQuestions(
       String userId, String topicName, List<Question> questions) async {
     final directory = await getApplicationDocumentsDirectory();
@@ -80,6 +81,7 @@ class DBManager {
     return topicQuestions;
   }
 
+  //create new box ya 3m ma tt3bsh nfsk
   Future<void> saveTopicNotes(
       String userId, String topicName, List<Note> topicNotes) async {
     final directory = await getApplicationDocumentsDirectory();

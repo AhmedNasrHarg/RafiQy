@@ -57,9 +57,9 @@ class HumanBodyState extends State<HumanBody> {
         .collection("completedSheets")
         .document('bodyResponseSheetLog')
         .get();
-    if(documentSnapshot['answer7'] != null){
-     documentSnapshot['answer7'].forEach((e){
-        if(e.toString().compareTo('تم') != 0){
+    if (documentSnapshot['answer7'] != null) {
+      documentSnapshot['answer7'].forEach((e) {
+        if (e.toString().compareTo('تم') != 0) {
           str += e.toString() + '\n';
         }
       });
@@ -111,16 +111,18 @@ class HumanBodyState extends State<HumanBody> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            title+':',
+            title + ':',
             textDirection: TextDirection.rtl,
           ),
-          content:sympWidgets(title, symp).isEmpty? Text('لا يوجد أعراض'): SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: ListBody(
-              children: sympWidgets(title, symp),
-              mainAxis: Axis.vertical,
-            ),
-          ),
+          content: sympWidgets(title, symp).isEmpty
+              ? Text('لا يوجد أعراض')
+              : SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: ListBody(
+                    children: sympWidgets(title, symp),
+                    mainAxis: Axis.vertical,
+                  ),
+                ),
         );
       },
     );
@@ -340,7 +342,9 @@ class HumanBodyState extends State<HumanBody> {
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   color: Colors.white,
-                  child: (otherSymp.isNotEmpty || moreSymp.isNotEmpty) ? CompilcatedImageDemo():Center(child: Text("لا يوجد أعراض أخري")),
+                  child: (otherSymp.isNotEmpty || moreSymp.isNotEmpty)
+                      ? CompilcatedImageDemo()
+                      : Center(child: Text("لا يوجد أعراض أخري")),
                 ),
               ),
               Center(
@@ -394,7 +398,7 @@ class HumanBodyState extends State<HumanBody> {
 
 class CompilcatedImageDemo extends StatelessWidget {
   gifWidgets() {
-   // print(symptoms.length);
+    // print(symptoms.length);
     List<Widget> widgets = [];
     var moreSym = Card(
       color: Colors.amber[100],
@@ -461,8 +465,7 @@ class CompilcatedImageDemo extends StatelessWidget {
           ),
         ));
     }
-    if(moreSymp.isNotEmpty)
-    widgets.add(moreSym);
+    if (moreSymp.isNotEmpty) widgets.add(moreSym);
     return widgets;
   }
 
