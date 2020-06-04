@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/learn_bar.dart';
@@ -19,17 +20,31 @@ class LearnPage extends StatefulWidget {
   _LearnPageState createState() => _LearnPageState();
 }
 
+Future<bool> checkConnectivity() async {
+  var result = await Connectivity().checkConnectivity();
+  if (result == ConnectivityResult.none) {
+    return false;
+  } else if (result == ConnectivityResult.wifi ||
+      result == ConnectivityResult.mobile) {
+    return true;
+  }
+}
+
 class _LearnPageState extends State<LearnPage> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-//    getData(); //to get data when offline
-    getTopicsFromFireStore();
+    bool isConnected = checkConnectivity() as bool;
+
+    if (isConnected)
+      getTopicsFromFireStore();
+    else
+      getTopicsFromHive(); //to get data when offline
   }
 
-  void getTopicsFromFireStore() {
-    topicRef.getDocuments().then((QuerySnapshot snapshot) {
+  Future<void> getTopicsFromFireStore() async {
+    await topicRef.getDocuments().then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
         Topic topic = new Topic(f.data['topic_name'], f.data['video_url'],
             f.data['topic_image'], f.data['topic_color'], f.data['isDone']);
@@ -42,11 +57,18 @@ class _LearnPageState extends State<LearnPage> {
       });
     });
     //save offline
+    saveToHive();
+  }
+
+  Future<void> saveToHive() {
+    //to save to hive
+    db = DBManager();
+    db.saveTopics(learnTopics);
   }
 
   List<Topic> learnTopics = [];
   DBManager db;
-  Future<void> getData() async {
+  Future<void> getTopicsFromHive() async {
     print(db);
     db = await DBManager();
     print(db);
