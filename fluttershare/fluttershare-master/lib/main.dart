@@ -75,11 +75,14 @@ Future<void> main() async {
     }
     selectNotificationSubject.add(payload);
   });
-  runApp(MaterialApp(
-    title: 'Navigation Basics',
-    debugShowCheckedModeBanner: false,
-    home: MyApp(),
-  ));
+  runApp(
+//      MaterialApp(
+//    title: 'Navigation Basics',
+//    debugShowCheckedModeBanner: false,
+//    home:
+    MyApp()
+//  )
+  );
 }
 
 class MyApp extends StatefulWidget {

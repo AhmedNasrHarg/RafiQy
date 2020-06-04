@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/album_grid.dart';
-import 'package:fluttershare/pages/album_viewer.dart';
+import 'package:fluttershare/pages/album_favourite.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'album_grid.dart';
-import 'album_viewer.dart';
+import 'album_favourite.dart';
 
 class AlbumPage extends StatefulWidget {
   AlbumPage({Key key}) : super(key: key);
@@ -55,13 +55,14 @@ class _AlbumPageState extends State<AlbumPage>
           indicatorColor: Colors.deepPurple,
           tabs: <Widget>[
             Tab(icon: new Icon(Icons.image)),
-            Tab(icon: new Icon(Icons.grid_on))
+            Tab(icon: new Icon(Icons.favorite))
           ],
         ),
       ),
       body: TabBarView(
         controller: controller,
-        children: <Widget>[AlbumViewer(), AlbumGrid()],
+        children: <Widget>[AlbumGrid(), AlbumFavourite()],
+
       ),
     );
   }

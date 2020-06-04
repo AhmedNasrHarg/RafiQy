@@ -20,6 +20,7 @@ final commentRef = Firestore.instance.collection("comments");
 final groupRef = Firestore.instance.collection("groups");
 final chatRef = Firestore.instance.collection("chats");
 final sheetsRef = Firestore.instance.collection("sheets");
+final albumRef =Firestore.instance.collection("album");
 User currentUser;
 
 class Home extends StatefulWidget {
