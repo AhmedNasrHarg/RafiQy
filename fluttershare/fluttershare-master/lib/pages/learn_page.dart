@@ -53,9 +53,11 @@ class _LearnPageState extends State<LearnPage> {
       snapshot.documents.forEach((f) {
         Topic topic = new Topic(f.data['topic_name'], f.data['video_url'],
             f.data['topic_image'], f.data['topic_color'], f.data['isDone']);
-        setState(() {
-          learnTopics.add(topic);
-        });
+        if (this.mounted) {
+          setState(() {
+            learnTopics.add(topic);
+          });
+        }
         // Topic(topicName, videoURL, topicImage, topicColor, isDone)
         print('${f.data}}');
         print('k');

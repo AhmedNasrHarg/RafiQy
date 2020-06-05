@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/chill.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/image_viewer.dart';
+import 'package:lottie/lottie.dart';
 
 class ChillGrid extends StatefulWidget {
   @override
@@ -22,8 +23,9 @@ class _ChillGridState extends State<ChillGrid> {
   }
 
   getChill() async {
+    print('chiiiiiiil');
     QuerySnapshot snapshot =
-        await chillRef.orderBy("image_id", descending: false).getDocuments();
+        await chillRef.orderBy("ch_id", descending: false).getDocuments();
     snapshot.documents.forEach((DocumentSnapshot doc) async {
       Chill chill = Chill.fromDocument(doc);
       images.add(chill);
@@ -76,6 +78,7 @@ class _ChillGridState extends State<ChillGrid> {
 //
                     GestureDetector(
                         child: Container(
+//                          child: Lottie.network(images[index].lottie),
                           child: Image.network(images[index].image_url),
                           width: 150,
                           height: 120,

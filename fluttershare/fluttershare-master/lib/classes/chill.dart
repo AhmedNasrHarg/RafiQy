@@ -7,13 +7,19 @@ class Chill {
   String lottie;
   bool isFavorite;
 
-  Chill({this.image_id, this.image_url, this.image_title, this.isFavorite});
+  Chill(
+      {this.image_id,
+      this.image_url,
+      this.lottie,
+      this.image_title,
+      this.isFavorite});
 
   factory Chill.fromDocument(DocumentSnapshot doc) {
     return Chill(
-        image_id: doc["image_id"],
-        image_url: doc["image_url"],
-        image_title: doc["image_title"],
-        isFavorite: doc["isFavorite"]);
+        image_id: doc["ch_id"],
+        image_url: doc["ch_image"],
+        lottie: doc['ch_lottie'],
+        image_title: doc["ch_name"],
+        isFavorite: doc["is_favorite"]);
   }
 }
