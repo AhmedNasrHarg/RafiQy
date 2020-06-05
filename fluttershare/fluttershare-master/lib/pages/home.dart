@@ -22,6 +22,7 @@ final chatRef = Firestore.instance.collection("chats");
 final sheetsRef = Firestore.instance.collection("sheets");
 final albumRef = Firestore.instance.collection("album");
 final topicRef = Firestore.instance.collection("topic");
+final chillRef = Firestore.instance.collection("chill");
 User currentUser;
 
 class Home extends StatefulWidget {
