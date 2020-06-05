@@ -35,12 +35,17 @@ class _LearnPageState extends State<LearnPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    bool isConnected = checkConnectivity() as bool;
+    bool isConnected;
+    checkConnectivity().then((value) {
+      setState(() {
+        isConnected = value;
+      });
+    });
 
-    if (isConnected)
-      getTopicsFromFireStore();
-    else
-      getTopicsFromHive(); //to get data when offline
+//    if (isConnected)
+    getTopicsFromFireStore();
+//    else
+//      getTopicsFromHive(); //to get data when offline
   }
 
   Future<void> getTopicsFromFireStore() async {
@@ -57,7 +62,7 @@ class _LearnPageState extends State<LearnPage> {
       });
     });
     //save offline
-    saveToHive();
+//    saveToHive();
   }
 
   Future<void> saveToHive() {
