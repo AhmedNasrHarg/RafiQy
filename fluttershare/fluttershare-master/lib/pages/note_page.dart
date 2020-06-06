@@ -57,76 +57,79 @@ class _NotePageState extends State<NotePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(getTranslated(context, "note_page")),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Alert(
-              context: context,
-              title: "New Note",
-              content: Column(
-                children: <Widget>[
-                  TextField(
-                    onChanged: (text) {
-                      curTitle = text;
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'title',
-                    ),
-//                    onSubmitted: (),
-                  ),
-                  Container(
-                    child: TextField(
+        appBar: AppBar(
+          title: Text(getTranslated(context, "note_page")),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Alert(
+                context: context,
+                title: "New Note",
+                content: Column(
+                  children: <Widget>[
+                    TextField(
                       onChanged: (text) {
-                        curContent = text;
+                        curTitle = text;
                       },
-                      maxLines: 15,
                       decoration: InputDecoration(
-                        labelText: 'content',
+                        labelText: 'title',
                       ),
+//                    onSubmitted: (),
                     ),
-                    height: 300,
-                    width: 300,
-                  )
-                ],
-              ),
-              buttons: [
-                DialogButton(
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true).pop();
+                    Container(
+                      child: TextField(
+                        onChanged: (text) {
+                          curContent = text;
+                        },
+                        maxLines: 15,
+                        decoration: InputDecoration(
+                          labelText: 'content',
+                        ),
+                      ),
+                      height: 300,
+                      width: 300,
+                    )
+                  ],
+                ),
+                buttons: [
+                  DialogButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
 
 //                    Navigator.pop(context);
-                    setState(() {
-                      //check first if title & content is not empty
-                      if (curTitle.length > 0 && curContent.length > 0) {
-                        notesTitles.add(curTitle);
-                        notesContents.add(curContent);
-                        saveNotes();
-                      } else {
-                        //show toast here
-                      }
-                    });
-                  },
-                  child: Text(
-                    "Add Note",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                )
-              ]).show();
-        },
-        child: Icon(
-          Icons.add,
+                      setState(() {
+                        //check first if title & content is not empty
+                        if (curTitle.length > 0 && curContent.length > 0) {
+                          notesTitles.add(curTitle);
+                          notesContents.add(curContent);
+                          saveNotes();
+                        } else {
+                          //show toast here
+                        }
+                      });
+                    },
+                    child: Text(
+                      "Add Note",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  )
+                ]).show();
+          },
+          child: Icon(
+            Icons.add,
+          ),
         ),
-      ),
-      body: Column(
-        children: notesTitles.map((e) {
-          Note note = Note(e, e);
-//          idx++;
-          return NoteRow(note);
-        }).toList(),
-      ),
-    );
+        body: ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: notesContents.length,
+            itemBuilder: (context, index) {
+              return Container(
+                // here we return row content, or template
+                height: 50,
+                color: index % 2 == 0 ? Colors.amber[200] : Colors.teal,
+                child: NoteRow(Note(notesTitles[index], notesContents[index])),
+              );
+            }));
   }
 }
 
@@ -142,9 +145,12 @@ class NoteRow extends StatelessWidget {
           children: <Widget>[
             Text(
               note.getTitle,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ), //add style ya nonnna
-            Text(note.getContent),
+            Text(note.getContent, style: TextStyle(color: Colors.white)),
           ],
         ),
       ),
