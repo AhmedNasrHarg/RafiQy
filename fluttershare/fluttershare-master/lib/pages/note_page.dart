@@ -124,8 +124,6 @@ class _NotePageState extends State<NotePage> {
             itemCount: notesContents.length,
             itemBuilder: (context, index) {
               return Container(
-                // here we return row content, or template
-                height: 50,
                 color: index % 2 == 0 ? Colors.amber[200] : Colors.teal,
                 child: NoteRow(Note(notesTitles[index], notesContents[index])),
               );
