@@ -15,6 +15,12 @@ class NotePage extends StatefulWidget {
 class _NotePageState extends State<NotePage> {
   String topic_id;
   _NotePageState(this.topic_id);
+
+  @override
+  void initState() {
+    getNotes();
+  }
+
   List<Note> notes = [];
   String curTitle = '';
   String curContent = '';
@@ -33,7 +39,7 @@ class _NotePageState extends State<NotePage> {
         .collection(topic_id)
         .getDocuments()
         .then((QuerySnapshot snapshot) {
-      snapshot.documents.forEach((f) => print('${f.data}}'));
+      snapshot.documents.forEach((f) {print('gg'); print('${f.data}}');});
     });
   }
 
@@ -84,6 +90,7 @@ class _NotePageState extends State<NotePage> {
                       //check first if title & content is not empty
                       if (curTitle.length > 0 && curContent.length > 0) {
                         notes.add(Note(curTitle, curContent));
+                        saveNotes();
                       } else {
                         //show toast here
                       }

@@ -46,6 +46,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
 //    if(connetcting==true)
 //    {
 //      print("conneting === $connetcting");
+  print("topic id ${topic.topicId}");
     return Scaffold(
       appBar: AppBar(
         title: Text(topic.topicName),
