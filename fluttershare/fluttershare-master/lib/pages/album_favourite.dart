@@ -120,7 +120,7 @@ List<Album>favoutiesImages=[];
 
                         }
                     ),
-                    Row(
+                    FittedBox(child:    Row(
                       children: <Widget>[
                         Text(favoutiesImages[index].image_title),
 //                    Icon(Icons.favorite,color: Colors.grey,)
@@ -129,20 +129,21 @@ List<Album>favoutiesImages=[];
 
                             setState(() {
 
-                                favorites.remove(images[index].image_id);
-                                addFavorite(favorites);
-                                print(favorites.length);
-                                setState(() {
-                                  images[index].isFavorite=false;
-                                  favoutiesImages.removeAt(index);
-                                });
+                              favorites.remove(images[index].image_id);
+                              addFavorite(favorites);
+                              print(favorites.length);
+                              setState(() {
+                                images[index].isFavorite=false;
+                                favoutiesImages.removeAt(index);
+                              });
 
 
 
                             });
                           },)
                       ], mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    )
+                    ) ,),
+
                   ],
                   )
 

@@ -101,45 +101,46 @@ List<int>favorites=[];
 
       }
                   ),
-                  Row(
+                  FittedBox(child: Row(
                     children: <Widget>[
-                    Text(images[index].image_title),
+                      Text(images[index].image_title),
 //                    Icon(Icons.favorite,color: Colors.grey,)
-                  IconButton(icon:isFavorite?Icon(Icons.favorite,color: Colors.red,):Icon(Icons.favorite_border),color: Colors.grey,
-                    onPressed: () {
-                      isFavorite=favorites.contains(images[index].image_id);
-                      print(isFavorite);
+                      IconButton(icon:isFavorite?Icon(Icons.favorite,color: Colors.red,):Icon(Icons.favorite_border),color: Colors.grey,
+                        onPressed: () {
+                          isFavorite=favorites.contains(images[index].image_id);
+                          print(isFavorite);
 
-                      setState(() {
-                      if(isFavorite)
-                        {
-                          print("ifffff");
-                          favorites.remove(images[index].image_id);
+                          setState(() {
+                            if(isFavorite)
+                            {
+                              print("ifffff");
+                              favorites.remove(images[index].image_id);
 //                            for(int i;i<favorites.length;i++)
 //                              {
 //                                print(favorites[i]);
 //                              }
-                          addFavorite(favorites);
-                          print(favorites.length);
-                          setState(() {
-                            images[index].isFavorite=false;
+                              addFavorite(favorites);
+                              print(favorites.length);
+                              setState(() {
+                                images[index].isFavorite=false;
+                              });
+                            }
+                            else{
+                              print("elssssssee");
+                              favorites.add(images[index].image_id);
+                              addFavorite(favorites);
+                              print(favorites.length);
+                              setState(() {
+                                images[index].isFavorite=true;
+                              });
+
+                            }
+
                           });
-                        }
-                      else{
-                        print("elssssssee");
-                        favorites.add(images[index].image_id);
-                        addFavorite(favorites);
-                        print(favorites.length);
-                        setState(() {
-                          images[index].isFavorite=true;
-                        });
+                        },)
+                    ], mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  )),
 
-                      }
-
-                    });
-                    },)
-                  ], mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  )
                 ],
                 )
                 

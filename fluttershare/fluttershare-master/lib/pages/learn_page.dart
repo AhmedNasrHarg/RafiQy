@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/learn_bar.dart';
 import 'package:fluttershare/classes/learn_hive.dart';
+import 'package:fluttershare/classes/learn_qa.dart';
 import 'package:fluttershare/classes/topic.dart';
 import 'package:fluttershare/dbs/db_manager.dart';
 import 'package:fluttershare/pages/home.dart';
@@ -50,20 +51,46 @@ class _LearnPageState extends State<LearnPage> {
 
   Future<void> getTopicsFromFireStore() async {
     await topicRef.getDocuments().then((QuerySnapshot snapshot) {
-      snapshot.documents.forEach((f) {
-        Topic topic = new Topic(f.data['topic_name'], f.data['video_url'],
-            f.data['topic_image'], f.data['topic_color'], f.data['isDone']);
-        setState(() {
-          learnTopics.add(topic);
-        });
+      snapshot.documents.forEach((f) async {
+
+       questions.clear();
         // Topic(topicName, videoURL, topicImage, topicColor, isDone)
         print('${f.data}}');
         print('k');
+        var questionsRef = Firestore.instance.collection("topic/${f.data['topic_id']}/topic_qa");
+        await questionsRef.getDocuments().then((QuerySnapshot topic)
+        {
+          topic.documents.forEach((element) {
+            print(element.data);
+            List<String>answers=element.data['answer'];
+            List<LearnQuestionAnswer>answerElement=[];
+            for(int i=0;i<answers.length;i++)
+              {
+                answerElement.add(LearnQuestionAnswer(answers[i]));
+              }
+
+            LearnQuestionAnswer questionAnswer=new  LearnQuestionAnswer(element.data['question'], answerElement);
+            questions.add(questionAnswer);
+
+          });
+        });
+        Topic topic = new Topic(f.data['topic_id'],f.data['topic_name'], f.data['video_url'],
+            f.data['topic_image'], f.data['topic_color'], f.data['is_done'],f.data['num_q'],f.data['num_q_read'],questions);
+          print(topic.questions);
+        setState(() {
+          learnTopics.add(topic);
+        });
+
       });
     });
     //save offline
 //    saveToHive();
   }
+
+
+
+
+
 
   Future<void> saveToHive() {
     //to save to hive
@@ -72,6 +99,7 @@ class _LearnPageState extends State<LearnPage> {
   }
 
   List<Topic> learnTopics = [];
+  List<LearnQuestionAnswer>questions=[];
   DBManager db;
   Future<void> getTopicsFromHive() async {
     print(db);

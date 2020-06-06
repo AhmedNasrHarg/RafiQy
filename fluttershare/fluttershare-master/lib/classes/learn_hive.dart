@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttershare/classes/learn_qa.dart';
 import 'package:fluttershare/classes/topic.dart';
 import 'package:fluttershare/classes/topic_questions.dart';
 import 'package:fluttershare/dbs/db_manager.dart';
@@ -9,32 +10,32 @@ class LearnHive
   DBManager db;
    LearnHive() {
     learnTopics = [
-      Topic("العلاج المعرفي السلوكي", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/1.png", Colors.deepPurple[200].value, false),
-      Topic(
-          "القلق",
-          "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/2.png",
-          Colors.teal[200].value,
-          false),
-      Topic("التوتر", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/3.png", Colors.purple[200].value, false),
-      Topic("الهدوء", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/4.png", Colors.teal[200].value, false),
-      Topic("الإحتياج", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/5.png", Colors.green[200].value, false),
-      Topic("العصبية", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/6.png", Colors.cyan[200].value, false),
-      Topic("العلاج المعرفي السلوكي", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/7.png", Colors.deepPurple[200].value, false),
-      Topic("القلق", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/8.png", Colors.teal[200].value, false),
-      Topic("التوتر", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/9.png", Colors.purple[200].value, false),
-      Topic("الهدوء", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/10.png", Colors.teal[200].value, false),
-      Topic("الحاجة", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
-          "assets/images/11.png", Colors.green[200].value, false),
+//      Topic('',"العلاج المعرفي السلوكي", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
+//          "assets/images/1.png", Colors.deepPurple[200].value, false,0,0,[LearnQuestionAnswer()]),
+//      Topic(
+//          "القلق",
+//          "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
+//          "assets/images/2.png",
+//          Colors.teal[200].value,
+//          false),
+//      Topic("التوتر", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
+//          "assets/images/3.png", Colors.purple[200].value, false),
+//      Topic("الهدوء", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
+//          "assets/images/4.png", Colors.teal[200].value, false),
+//      Topic("الإحتياج", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
+//          "assets/images/5.png", Colors.green[200].value, false),
+//      Topic("العصبية", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
+//          "assets/images/6.png", Colors.cyan[200].value, false),
+//      Topic("العلاج المعرفي السلوكي", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
+//          "assets/images/7.png", Colors.deepPurple[200].value, false),
+//      Topic("القلق", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
+//          "assets/images/8.png", Colors.teal[200].value, false),
+//      Topic("التوتر", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
+//          "assets/images/9.png", Colors.purple[200].value, false),
+//      Topic("الهدوء", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
+//          "assets/images/10.png", Colors.teal[200].value, false),
+//      Topic("الحاجة", "https://flutter.github.io/assets-for-api-docs//assets/videos/bee.mp4?fbclid=IwAR3zVlWOHIjVyo3cgsWTPuRWaht_lLBBW40KyeojQT4suMmZbFSICTLb2r8",
+//          "assets/images/11.png", Colors.green[200].value, false),
     ];
 
     // take care of null ya nasr [use async await if you need]

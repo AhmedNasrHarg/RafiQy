@@ -3,6 +3,9 @@ class LearnQuestionAnswer
 {
   String question;
   List<LearnQuestionAnswer>answers;
+  String questionId;
+  bool isRead;
+
 
   LearnQuestionAnswer(this.question,[this.answers = const <LearnQuestionAnswer>[]]);
 

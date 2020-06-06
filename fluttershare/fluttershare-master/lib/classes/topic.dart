@@ -1,9 +1,10 @@
+import 'package:fluttershare/classes/learn_qa.dart';
 import 'package:hive/hive.dart';
 
 @HiveType()
 class Topic {
-  Topic(this.topicName, this.videoURL, this.topicImage, this.topicColor,
-      this.isDone);
+//  Topic(this.topicId,this.topicName, this.videoURL, this.topicImage, this.topicColor,
+//      this.isDone,this.numQ,this.numQRead);
   @HiveField(0)
   String topicName;
   @HiveField(1)
@@ -14,6 +15,13 @@ class Topic {
   int topicColor;
   @HiveField(4)
   bool isDone;
+  int numQ;
+  int numQRead;
+  String topicId;
+  List<LearnQuestionAnswer> questions;
+  Topic(this.topicId,this.topicName, this.videoURL, this.topicImage, this.topicColor,
+      this.isDone,this.numQ,this.numQRead,this.questions);
+
 }
 
 //userId -> topic[]
@@ -21,7 +29,7 @@ class Topic {
 class TopicAdapter extends TypeAdapter<Topic> {
   @override
   Topic read(BinaryReader reader) {
-    return Topic('', '', '', 0, false)
+    return Topic('','', '', '', 0, false,0,0,[])
       ..topicName = reader.read()
       ..videoURL = reader.read()
       ..topicImage = reader.read()
