@@ -15,16 +15,25 @@ class NotePage extends StatefulWidget {
 class _NotePageState extends State<NotePage> {
   String topic_id;
   _NotePageState(this.topic_id);
-  List<Note> notes = [];
+  List<String> notesTitles = [];
+  List<String> notesContents = [];
   String curTitle = '';
   String curContent = '';
+  int idx = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getNotes();
+  }
 
   void saveNotes() {
     notesRef
         .document(currentUser.id)
         .collection(topic_id) //setb2a
         .document(topic_id)
-        .setData({'notes': notes});
+        .setData({'notesTitles': notesTitles, 'notesContents': notesContents});
   }
 
   void getNotes() {
@@ -33,7 +42,15 @@ class _NotePageState extends State<NotePage> {
         .collection(topic_id)
         .getDocuments()
         .then((QuerySnapshot snapshot) {
-      snapshot.documents.forEach((f) => print('${f.data}}'));
+      snapshot.documents.forEach((f) {
+        print('yarab');
+        setState(() {
+          notesTitles = new List<String>.from(f.data['notesTitles']);
+          notesContents = new List<String>.from(f.data['notesContents']);
+        });
+
+        print('${f.data}}');
+      });
     });
   }
 
@@ -83,7 +100,9 @@ class _NotePageState extends State<NotePage> {
                     setState(() {
                       //check first if title & content is not empty
                       if (curTitle.length > 0 && curContent.length > 0) {
-                        notes.add(Note(curTitle, curContent));
+                        notesTitles.add(curTitle);
+                        notesContents.add(curContent);
+                        saveNotes();
                       } else {
                         //show toast here
                       }
@@ -101,7 +120,11 @@ class _NotePageState extends State<NotePage> {
         ),
       ),
       body: Column(
-        children: notes.map((e) => NoteRow(e)).toList(),
+        children: notesTitles.map((e) {
+          Note note = Note(e, e);
+          idx++;
+          return NoteRow(note);
+        }).toList(),
       ),
     );
   }
