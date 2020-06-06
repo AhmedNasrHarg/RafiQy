@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/album.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/image_viewer.dart';
+import 'package:lottie/lottie.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 
 class AlbumFavourite extends StatefulWidget{
@@ -20,6 +22,8 @@ List<Album>favoutiesImages=[];
   @override
   void initState() {
     // TODO: implement initState
+    showDialog();
+
     super.initState();
     getAll();
 
@@ -43,6 +47,33 @@ List<Album>favoutiesImages=[];
             }
         }
     });
+  }
+  showDialog()
+  {
+//    if(favorites.isEmpty)
+//      {
+        Alert(
+                     context: context,
+                     title:
+                         "ليس لديك أي مفضلات اذهب إلي قائمة الاسترخاء لاضافة مفضلاتك",
+                     content: Column(
+                       children: <Widget>[
+                         Lottie.asset(
+                           'assets/animations/yoga.json',
+                           width: 300,
+                           height: 300,
+                           fit: BoxFit.fill,
+                         ),
+                       ],
+                     ),
+                     buttons: [
+                       DialogButton(
+                         onPressed: () => Navigator.pop(context),
+                         child: Text("حسنا"),
+                       )
+                     ]).show();
+
+    //https://lottiefiles.com/22979-meditating-lady
   }
 
 
