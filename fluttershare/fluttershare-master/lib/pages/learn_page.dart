@@ -57,23 +57,24 @@ class _LearnPageState extends State<LearnPage> {
         // Topic(topicName, videoURL, topicImage, topicColor, isDone)
         print('${f.data}}');
         print('k');
-        var questionsRef = Firestore.instance.collection("topic/${f.data['topic_id']}/topic_qa");
-        await questionsRef.getDocuments().then((QuerySnapshot topic)
-        {
-          topic.documents.forEach((element) {
-            print(element.data);
-            List<String>answers=element.data['answer'];
-            List<LearnQuestionAnswer>answerElement=[];
-            for(int i=0;i<answers.length;i++)
-              {
-                answerElement.add(LearnQuestionAnswer(answers[i]));
-              }
-
-            LearnQuestionAnswer questionAnswer=new  LearnQuestionAnswer(element.data['question'], answerElement);
-            questions.add(questionAnswer);
-
-          });
-        });
+//        var questionsRef = Firestore.instance.collection("topic/${f.data['topic_id']}/topic_qa");
+//        await questionsRef.getDocuments().then((QuerySnapshot topic)
+//        {
+//          topic.documents.forEach((element) {
+//            print("data question${element.data}");
+//            List<String>answers=element.data['answer'];
+//            print("Answerrrrr ${answers}");
+//            List<LearnQuestionAnswer>answerElement=[];
+//            for(int i=0;i<answers.length;i++)
+//              {
+//                answerElement.add(LearnQuestionAnswer(answers[i]));
+//              }
+//
+//            LearnQuestionAnswer questionAnswer=new  LearnQuestionAnswer(element.data['question'], answerElement);
+//            questions.add(questionAnswer);
+//
+//          });
+//        });
         Topic topic = new Topic(f.data['topic_id'],f.data['topic_name'], f.data['video_url'],
             f.data['topic_image'], f.data['topic_color'], f.data['is_done'],f.data['num_q'],f.data['num_q_read'],questions);
           print(topic.questions);

@@ -122,7 +122,7 @@ class _NotePageState extends State<NotePage> {
       body: Column(
         children: notesTitles.map((e) {
           Note note = Note(e, e);
-          idx++;
+//          idx++;
           return NoteRow(note);
         }).toList(),
       ),
