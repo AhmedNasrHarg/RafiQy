@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/note.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/home.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class NotePage extends StatefulWidget {
@@ -94,10 +95,9 @@ class _NotePageState extends State<NotePage> {
                 buttons: [
                   DialogButton(
                     onPressed: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-
 //                    Navigator.pop(context);
                       setState(() {
+                        Navigator.of(context, rootNavigator: true).pop();
                         //check first if title & content is not empty
                         if (curTitle.length > 0 && curContent.length > 0) {
                           notesTitles.add(curTitle);
@@ -105,6 +105,13 @@ class _NotePageState extends State<NotePage> {
                           saveNotes();
                         } else {
                           //show toast here
+                          Fluttertoast.showToast(
+                              msg: 'can not add empty note',
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
                         }
                       });
                     },
@@ -125,7 +132,22 @@ class _NotePageState extends State<NotePage> {
             itemBuilder: (context, index) {
               return Container(
                 color: index % 2 == 0 ? Colors.amber[200] : Colors.teal,
-                child: NoteRow(Note(notesTitles[index], notesContents[index])),
+                child: Column(
+                  children: <Widget>[
+                    NoteRow(Note(notesTitles[index], notesContents[index])),
+                    RaisedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          notesTitles.removeAt(index);
+                          notesContents.removeAt(index);
+                          saveNotes();
+                        });
+                      },
+                      icon: Icon(Icons.delete),
+                      label: Text('delete'),
+                    )
+                  ],
+                ),
               );
             }));
   }
@@ -144,7 +166,7 @@ class NoteRow extends StatelessWidget {
             Text(
               note.getTitle,
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
             ), //add style ya nonnna
