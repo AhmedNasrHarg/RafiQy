@@ -51,9 +51,19 @@ class _LearnPageState extends State<LearnPage> {
 
   Future<void> getTopicsFromFireStore() async {
     await topicRef.getDocuments().then((QuerySnapshot snapshot) {
+
       snapshot.documents.forEach((f) async {
 
        questions.clear();
+
+      snapshot.documents.forEach((f) {
+        Topic topic = new Topic(f.data['topic_name'], f.data['video_url'],
+            f.data['topic_image'], f.data['topic_color'], f.data['isDone']);
+        if (this.mounted) {
+          setState(() {
+            learnTopics.add(topic);
+          });
+        }
         // Topic(topicName, videoURL, topicImage, topicColor, isDone)
         print('${f.data}}');
         print('k');

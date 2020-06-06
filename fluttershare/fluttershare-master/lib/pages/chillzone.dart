@@ -34,7 +34,7 @@ class _ChillZoneState extends State<ChillZone>
           indicatorWeight: 5.0,
           indicatorColor: Colors.deepPurple,
           tabs: <Widget>[
-            Tab(icon: new Image.asset('assets/images/chill.png')),
+            Tab(icon: new Icon(Icons.wb_sunny)),
             Tab(icon: new Icon(Icons.favorite))
           ],
         ),

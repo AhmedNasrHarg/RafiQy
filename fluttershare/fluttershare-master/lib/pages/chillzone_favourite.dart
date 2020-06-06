@@ -39,7 +39,7 @@ class _ChillFavouriteState extends State<ChillFavourite> {
 
   getChill() async {
     QuerySnapshot snapshot =
-        await chillRef.orderBy("image_id", descending: false).getDocuments();
+        await chillRef.orderBy("ch_id", descending: false).getDocuments();
     snapshot.documents.forEach((DocumentSnapshot doc) async {
       Chill album = Chill.fromDocument(doc);
       images.add(album);
