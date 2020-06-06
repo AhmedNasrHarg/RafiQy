@@ -126,30 +126,48 @@ class _NotePageState extends State<NotePage> {
             Icons.add,
           ),
         ),
-        body: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: notesContents.length,
-            itemBuilder: (context, index) {
-              return Container(
-                color: index % 2 == 0 ? Colors.amber[200] : Colors.teal,
-                child: Column(
-                  children: <Widget>[
-                    NoteRow(Note(notesTitles[index], notesContents[index])),
-                    RaisedButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          notesTitles.removeAt(index);
-                          notesContents.removeAt(index);
-                          saveNotes();
-                        });
-                      },
-                      icon: Icon(Icons.delete),
-                      label: Text('delete'),
-                    )
-                  ],
-                ),
-              );
-            }));
+        body: Card(
+          child: ListView.builder(
+              padding: const EdgeInsets.all(2),
+              itemCount: notesContents.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Container(
+                      color: index % 2 == 0 ? Colors.amber[200] : Colors.teal,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          NoteRow(
+                              Note(notesTitles[index], notesContents[index])),
+                          RaisedButton.icon(
+                            color: index % 2 == 0
+                                ? Colors.amber[200]
+                                : Colors.teal,
+                            onPressed: () {
+                              setState(() {
+                                notesTitles.removeAt(index);
+                                notesContents.removeAt(index);
+                                saveNotes();
+                              });
+                            },
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red[200],
+                            ),
+                            label: Text(''),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
+        ));
   }
 }
 
@@ -162,15 +180,23 @@ class NoteRow extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Text(
               note.getTitle,
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
             ), //add style ya nonnna
-            Text(note.getContent, style: TextStyle(color: Colors.white)),
+            Divider(height: 20, color: Colors.white),
+            Text(note.getContent,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                )),
           ],
         ),
       ),
