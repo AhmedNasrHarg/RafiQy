@@ -14,9 +14,7 @@ final List<LearnQuestionAnswer> data = <LearnQuestionAnswer>[
   LearnQuestionAnswer(
     'Qusetion 1',
     <LearnQuestionAnswer>[
-      LearnQuestionAnswer(
-        'point 1 ',
-      ),
+      LearnQuestionAnswer( 'point 1 '),
       LearnQuestionAnswer('point 2'),
       LearnQuestionAnswer('point 3'),
     ],

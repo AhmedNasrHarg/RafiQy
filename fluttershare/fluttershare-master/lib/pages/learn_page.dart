@@ -32,6 +32,7 @@ Future<bool> checkConnectivity() async {
 }
 
 class _LearnPageState extends State<LearnPage> {
+  List<String> questionRefs=[];
   @override
   void initState() {
     // TODO: implement initState
@@ -76,10 +77,11 @@ class _LearnPageState extends State<LearnPage> {
 //          });
 //        });
         Topic topic = new Topic(f.data['topic_id'],f.data['topic_name'], f.data['video_url'],
-            f.data['topic_image'], f.data['topic_color'], f.data['is_done'],f.data['num_q'],f.data['num_q_read'],questions);
+            f.data['topic_image'], f.data['topic_color'], f.data['is_done'],f.data['num_q'],f.data['num_q_read']);
           print(topic.questions);
         setState(() {
           learnTopics.add(topic);
+          questionRefs.add(topic.topicId);
         });
 
       });
@@ -162,6 +164,10 @@ class _LearnPageState extends State<LearnPage> {
 
   @override
   Widget build(BuildContext context) {
+    for(int i=0;i<questionRefs.length;i++)
+      {
+        print(questionRefs[i]);
+      }
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[

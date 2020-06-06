@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:fluttershare/classes/learn_qa.dart';
 import 'package:fluttershare/classes/topic.dart';
 import 'package:fluttershare/pages/note_page.dart';
 import 'package:video_player/video_player.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class LearnDetailsPage extends StatefulWidget {
   Topic topic;
@@ -19,9 +19,11 @@ class LearnDetailsPage extends StatefulWidget {
 }
 
 var learnTopics;
-//Topic.learnTopics();
 
 class _LearnDetailsPageState extends State<LearnDetailsPage> {
+  List<String>questions=[];
+  List<List<String>>answers=[[]];
+  List<LearnQuestionAnswer>dataQuestions=[];
   Topic topic;
   _LearnDetailsPageState(this.topic);
   VideoPlayerController _videoPlayerController;
@@ -32,6 +34,8 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
   void initState() {
     _checkInternetConnectivity();
     videoURL = topic.videoURL;
+    getQuestions();
+
 
     _videoPlayerController = VideoPlayerController.network(videoURL)
       ..initialize().then((_) {
@@ -39,13 +43,40 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
       });
     super.initState();
   }
+  getQuestions ()
+  async {
+    final questionRef=Firestore.instance.collection("topic/${topic.topicId}/topic_qa");
+    print("hereeeeee topic/${topic.topicId}/topic_qa");
+    await questionRef.getDocuments().then((element)
+    {
+      element.documents.forEach((f) async {
+        List<LearnQuestionAnswer>learnAnswr=[];
+        var question=await f.data['question'];
+        var answer=await new List<String>.from(f.data['answer']);
+setState(() {
+  questions.add(question);
+  for(int i=0;i<answer.length;i++)
+  {
+    learnAnswr.add(new LearnQuestionAnswer(answer[i]));
+  }
+  answers.add(answer);
+  print("questionsss $question");
+  print("answers$answer");
+  dataQuestions.add(new LearnQuestionAnswer(question,learnAnswr));
+});
+
+      });
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
+print("lentof queston = ${dataQuestions.length}");
+print("${dataQuestions[0].question}");
+print("${dataQuestions[0]}");
     // TODO: implement build
-//    if(connetcting==true)
-//    {
-//      print("conneting === $connetcting");
+
   print("topic id ${topic.topicId}");
     return Scaffold(
       appBar: AppBar(
@@ -66,24 +97,21 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
       body: Container(
         child: Column(
           children: <Widget>[
+
             _videoPlayerController.value.initialized
                 ? AspectRatio(
-                    aspectRatio: _videoPlayerController.value.aspectRatio,
-                    child: VideoPlayer(_videoPlayerController),
-                  )
+              aspectRatio: _videoPlayerController.value.aspectRatio,
+              child: VideoPlayer(_videoPlayerController),
+            )
                 : Container(),
+
             Expanded(
               child: ListView.builder(
                 itemBuilder: (BuildContext context, int index) =>
-                    QAItem(data[index]),
-                itemCount: data.length,
+                    QAItem(dataQuestions[index]),
+                itemCount: dataQuestions.length,
 
-//  {
-//    return(
-//      // Container(child: Text("text"),)
-////      Column(children: <Widget>[Container(child:Text("Question")),Container(child: Text("Answer"),)],)
-//      );
-//  },
+
               ),
             )
             // , Text("Test")
@@ -106,19 +134,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
       ),
     );
 
-//    else if(connetcting==false){
-//      print('elseeeee');
-//       return Scaffold
-//      (
-//      appBar: AppBar(
-//        title: Text(getTranslated(context, 'cbt')),
-//      ),
-//      body:
-//       Container(
-//                padding: EdgeInsets.all(10.0),
-//                child: Text("Kaza kaza "),
-//              ));
-//    }
+
   }
 
   _checkInternetConnectivity() async {
@@ -162,7 +178,7 @@ class QAItem extends StatelessWidget {
     if (root.answers.isEmpty) return ListTile(title: Text(root.question));
     return ExpansionTile(
       key: PageStorageKey<LearnQuestionAnswer>(root),
-      title: Text(root.question),
+      title: Text(root.question,style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
       children: root.answers.map(_buildTiles).toList(),
     );
   }
