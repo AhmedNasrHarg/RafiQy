@@ -1,19 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttershare/classes/topic_notes.dart';
+import 'package:fluttershare/classes/note.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
+import 'package:fluttershare/pages/home.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class NotePage extends StatefulWidget {
+  String topic_id;
+  NotePage({Key key, this.topic_id}) : super(key: key);
   @override
-  _NotePageState createState() => _NotePageState();
+  _NotePageState createState() => _NotePageState(this.topic_id);
 }
 
 class _NotePageState extends State<NotePage> {
-  List <Note>notes;
+  String topic_id;
+  _NotePageState(this.topic_id);
+  List<Note> notes = [];
+  String curTitle = '';
+  String curContent = '';
+
+  void saveNotes() {
+    notesRef
+        .document(currentUser.id)
+        .collection(topic_id) //setb2a
+        .document(topic_id)
+        .setData({'notes': notes});
+  }
+
+  void getNotes() {
+    notesRef
+        .document(currentUser.id)
+        .collection(topic_id)
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) => print('${f.data}}'));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(getTranslated(context, "note_page")),),
+      appBar: AppBar(
+        title: Text(getTranslated(context, "note_page")),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Alert(
@@ -22,22 +51,24 @@ class _NotePageState extends State<NotePage> {
               content: Column(
                 children: <Widget>[
                   TextField(
+                    onChanged: (text) {
+                      curTitle = text;
+                    },
                     decoration: InputDecoration(
                       labelText: 'title',
-
                     ),
 //                    onSubmitted: (),
                   ),
-                  Container(child:
-                  TextField(
-                    maxLines: 15,
-                    decoration: InputDecoration(
-                      labelText: 'content',
-
+                  Container(
+                    child: TextField(
+                      onChanged: (text) {
+                        curContent = text;
+                      },
+                      maxLines: 15,
+                      decoration: InputDecoration(
+                        labelText: 'content',
+                      ),
                     ),
-
-
-                  ),
                     height: 300,
                     width: 300,
                   )
@@ -45,15 +76,19 @@ class _NotePageState extends State<NotePage> {
               ),
               buttons: [
                 DialogButton(
-                  onPressed: ()
-                  {
+                  onPressed: () {
                     Navigator.of(context, rootNavigator: true).pop();
 
 //                    Navigator.pop(context);
-          setState(() {
-//            notes.add(Note())
-          });
-          },
+                    setState(() {
+                      //check first if title & content is not empty
+                      if (curTitle.length > 0 && curContent.length > 0) {
+                        notes.add(Note(curTitle, curContent));
+                      } else {
+                        //show toast here
+                      }
+                    });
+                  },
                   child: Text(
                     "Add Note",
                     style: TextStyle(color: Colors.white, fontSize: 20),
@@ -64,7 +99,32 @@ class _NotePageState extends State<NotePage> {
         child: Icon(
           Icons.add,
         ),
-      ),      body: Center(child: Text("Notes"),),
+      ),
+      body: Column(
+        children: notes.map((e) => NoteRow(e)).toList(),
+      ),
+    );
+  }
+}
+
+class NoteRow extends StatelessWidget {
+  Note note;
+  NoteRow(this.note);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            Text(
+              note.getTitle,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ), //add style ya nonnna
+            Text(note.getContent),
+          ],
+        ),
+      ),
     );
   }
 }

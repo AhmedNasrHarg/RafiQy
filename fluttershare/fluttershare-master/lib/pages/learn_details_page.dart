@@ -1,4 +1,3 @@
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,65 +9,73 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class LearnDetailsPage extends StatefulWidget {
   Topic topic;
-  LearnDetailsPage.learnIndex( Topic topic){this.topic=topic;}
-  LearnDetailsPage({Key key,this.topic}):super(key:key);
+  LearnDetailsPage.learnIndex(Topic topic) {
+    this.topic = topic;
+  }
+  LearnDetailsPage({Key key, this.topic}) : super(key: key);
 
   @override
   _LearnDetailsPageState createState() => _LearnDetailsPageState(topic);
 }
+
 var learnTopics;
 //Topic.learnTopics();
-
 
 class _LearnDetailsPageState extends State<LearnDetailsPage> {
   Topic topic;
   _LearnDetailsPageState(this.topic);
-VideoPlayerController _videoPlayerController;
-var videoURL;
-bool connetcting;
+  VideoPlayerController _videoPlayerController;
+  var videoURL;
+  bool connetcting;
 
+  @override
+  void initState() {
+    _checkInternetConnectivity();
+    videoURL = topic.videoURL;
 
-@override
-void initState() {
-  _checkInternetConnectivity();
-  videoURL =topic.videoURL;
-
-_videoPlayerController=VideoPlayerController.network(
-        videoURL)
+    _videoPlayerController = VideoPlayerController.network(videoURL)
       ..initialize().then((_) {
         setState(() {});
       });
-super.initState();
-}
+    super.initState();
+  }
 
-@override
+  @override
   Widget build(BuildContext context) {
-
     // TODO: implement build
 //    if(connetcting==true)
 //    {
 //      print("conneting === $connetcting");
-    return Scaffold
-      (
+    return Scaffold(
       appBar: AppBar(
         title: Text(topic.topicName),
 //          (DemoLocalization.of(context).getTranslatedValues('home_page')),
-     actions: <Widget>[IconButton(icon: Icon(Icons.edit),onPressed: ()=>Navigator.push(context, MaterialPageRoute(
-       builder: (context)=>NotePage()
-     )),)],
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NotePage(
+                          topic_id: topic.topicId,
+                        ))),
+          )
+        ],
       ),
- body: 
- Container(child: Column(children: <Widget>[
-   _videoPlayerController.value.initialized
-              ? AspectRatio(
-                  aspectRatio: _videoPlayerController.value.aspectRatio,
-                  child: VideoPlayer(_videoPlayerController),
-                )
-              : Container(),
-Expanded(child: ListView.builder(
-  itemBuilder: (BuildContext context, int index) =>
-      QAItem(data[index]),
-  itemCount: data.length,
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            _videoPlayerController.value.initialized
+                ? AspectRatio(
+                    aspectRatio: _videoPlayerController.value.aspectRatio,
+                    child: VideoPlayer(_videoPlayerController),
+                  )
+                : Container(),
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (BuildContext context, int index) =>
+                    QAItem(data[index]),
+                itemCount: data.length,
 
 //  {
 //    return(
@@ -76,25 +83,27 @@ Expanded(child: ListView.builder(
 ////      Column(children: <Widget>[Container(child:Text("Question")),Container(child: Text("Answer"),)],)
 //      );
 //  },
-),)
-  // , Text("Test")
- ],),)
-,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              _videoPlayerController.value.isPlaying
-                  ? _videoPlayerController.pause()
-                  : _videoPlayerController.play();
-            });
-          },
-          child: Icon(
-            _videoPlayerController.value.isPlaying ? Icons.pause : Icons.play_arrow,
-          ),
+              ),
+            )
+            // , Text("Test")
+          ],
         ),
-      
-
-   ) ;
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _videoPlayerController.value.isPlaying
+                ? _videoPlayerController.pause()
+                : _videoPlayerController.play();
+          });
+        },
+        child: Icon(
+          _videoPlayerController.value.isPlaying
+              ? Icons.pause
+              : Icons.play_arrow,
+        ),
+      ),
+    );
 
 //    else if(connetcting==false){
 //      print('elseeeee');
@@ -111,40 +120,35 @@ Expanded(child: ListView.builder(
 //    }
   }
 
-
-   _checkInternetConnectivity() async {
+  _checkInternetConnectivity() async {
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
       _showDialog(
-        'No internet', 
-        "You're not connected to a network to view video" 
-      );
-              connetcting=false;
-
-    }  
-    else if (result == ConnectivityResult.wifi||result == ConnectivityResult.mobile) {
-      connetcting=true;
+          'No internet', "You're not connected to a network to view video");
+      connetcting = false;
+    } else if (result == ConnectivityResult.wifi ||
+        result == ConnectivityResult.mobile) {
+      connetcting = true;
     }
   }
 
   _showDialog(title, text) {
     showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(text),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        );
-      }
-    );
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(text),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
   }
 }
 
@@ -167,10 +171,3 @@ class QAItem extends StatelessWidget {
     return _buildTiles(learnQA);
   }
 }
-
-
-
-
-
-
-

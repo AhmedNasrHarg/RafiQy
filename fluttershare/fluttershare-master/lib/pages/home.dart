@@ -23,6 +23,7 @@ final sheetsRef = Firestore.instance.collection("sheets");
 final albumRef = Firestore.instance.collection("album");
 final topicRef = Firestore.instance.collection("topic");
 final chillRef = Firestore.instance.collection("chill_zone");
+final notesRef = Firestore.instance.collection("notes");
 User currentUser;
 
 class Home extends StatefulWidget {
