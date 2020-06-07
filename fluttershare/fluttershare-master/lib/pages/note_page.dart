@@ -131,7 +131,7 @@ class _NotePageState extends State<NotePage> {
             itemCount: notesContents.length,
             itemBuilder: (context, index) {
               return Container(
-                color: index % 2 == 0 ? Colors.amber[200] : Colors.teal,
+                color: index % 2 == 0 ? Colors.orange[200] : Colors.teal[200],
                 child: Column(
                   children: <Widget>[
                     NoteRow(Note(notesTitles[index], notesContents[index])),
@@ -143,8 +143,9 @@ class _NotePageState extends State<NotePage> {
                           saveNotes();
                         });
                       },
-                      icon: Icon(Icons.delete),
-                      label: Text('delete'),
+                      icon: Icon(Icons.delete,color: Colors.white,),
+                      label: Text('delete',style: TextStyle(color: Colors.white),),
+                      color: Colors.deepPurple[300],
                     )
                   ],
                 ),

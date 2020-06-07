@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,9 +7,16 @@ import 'package:fluttershare/classes/learn_qa.dart';
 import 'package:fluttershare/classes/topic.dart';
 import 'package:fluttershare/pages/note_page.dart';
 import 'package:video_player/video_player.dart';
+import 'package:http/http.dart' as http;
+
+import 'image_viewer.dart';
+
+bool vis=false;
 
 class LearnDetailsPage extends StatefulWidget {
   Topic topic;
+
+
   LearnDetailsPage.learnIndex(Topic topic) {
     this.topic = topic;
   }
@@ -19,8 +27,10 @@ class LearnDetailsPage extends StatefulWidget {
 }
 
 var learnTopics;
+List<String>topicImages=[];
 
 class _LearnDetailsPageState extends State<LearnDetailsPage> {
+  var hasImage;
   List<String>questions=[];
   List<List<String>>answers=[[]];
   List<LearnQuestionAnswer>dataQuestions=[];
@@ -49,11 +59,29 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
     print("hereeeeee topic/${topic.topicId}/topic_qa");
     await questionRef.getDocuments().then((element)
     {
+      topicImages.clear();
       element.documents.forEach((f) async {
+        vis=false;
         List<LearnQuestionAnswer>learnAnswr=[];
         var question=await f.data['question'];
         var answer=await new List<String>.from(f.data['answer']);
+         hasImage=await f.data['has_image'];
+        var images;
+        if(hasImage){
+           images
+              =await f.data['images'];
+           print("imageslength ${images.length}");
+        }
+        
 setState(() {
+  if(hasImage){
+    for(int i=0;i<images.length;i++){
+      topicImages.add(images[i]);
+      print("imagessss ${images[i]}");
+    }
+    hasImage=false;
+    vis=true;
+  }
   questions.add(question);
   for(int i=0;i<answer.length;i++)
   {
@@ -94,28 +122,54 @@ print("${dataQuestions[0]}");
           )
         ],
       ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
+      body:
+      SingleChildScrollView(
+        child: Container(
+          height:1000 ,
+          child: Column(
+            children: <Widget>[
 
-            _videoPlayerController.value.initialized
-                ? AspectRatio(
-              aspectRatio: _videoPlayerController.value.aspectRatio,
-              child: VideoPlayer(_videoPlayerController),
-            )
-                : Container(),
+              _videoPlayerController.value.initialized
+                  ? AspectRatio(
+                aspectRatio: _videoPlayerController.value.aspectRatio,
+                child: VideoPlayer(_videoPlayerController),
+              )
+                  : Container(),
+              Visibility(
+                child:
+                CarouselSlider(
+                    options: CarouselOptions(height: 300),
+                    items:topicImages.map((item) =>
+                        Container(child:
+                        GestureDetector(
+                          child: Center(child:
 
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (BuildContext context, int index) =>
-                    QAItem(dataQuestions[index]),
-                itemCount: dataQuestions.length,
-
-
+                          Image(image: NetworkImage(item),)
+                          ),
+                          onTap: ()
+                          {
+                            print("tapped");
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewer(item)));
+                          },
+                        )
+                          ,height: 400,)).toList()
+                )
+                ,
+                visible:vis ,
               ),
-            )
-            // , Text("Test")
-          ],
+
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) =>
+                      QAItem(dataQuestions[index]),
+                  itemCount: dataQuestions.length,
+
+
+                ),
+              )
+              // , Text("Test")
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -180,8 +234,12 @@ class QAItem extends StatelessWidget {
       key: PageStorageKey<LearnQuestionAnswer>(root),
       title: Text(root.question,style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
       children: root.answers.map(_buildTiles).toList(),
+
     );
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
