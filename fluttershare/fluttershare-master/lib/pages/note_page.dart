@@ -62,6 +62,9 @@ class _NotePageState extends State<NotePage> {
           title: Text(getTranslated(context, "note_page")),
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: notesTitles.length % 2 == 0
+              ? Colors.amber[600]
+              : Colors.teal[600],
           onPressed: () {
             Alert(
                 context: context,
