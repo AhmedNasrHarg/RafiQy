@@ -145,6 +145,8 @@ class _NotePageState extends State<NotePage> {
                           NoteRow(
                               Note(notesTitles[index], notesContents[index])),
                           RaisedButton.icon(
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
                             color: index % 2 == 0
                                 ? Colors.amber[200]
                                 : Colors.teal,
