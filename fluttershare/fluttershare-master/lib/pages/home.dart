@@ -9,6 +9,7 @@ import 'package:fluttershare/pages/learn_page.dart';
 import 'package:fluttershare/pages/profile.dart';
 import 'package:fluttershare/pages/chillzone.dart';
 import 'package:fluttershare/pages/sheets_entery_page.dart';
+import 'package:fluttershare/pages/video_details.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lottie/lottie.dart';
@@ -138,7 +139,7 @@ class _HomeState extends State<Home> {
             profileId: currentUser.id,
           ),
           LearnPage(),
-          ChillZone(),
+          VideoPlay(),
           EnterySheets(),
           Community(),
         ],
@@ -149,9 +150,7 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: pageIndex,
         onTap: onTap,
-        activeColor: Theme
-            .of(context)
-            .primaryColor,
+        activeColor: Theme.of(context).primaryColor,
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle),
@@ -188,13 +187,9 @@ class _HomeState extends State<Home> {
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
                   colors: [
-                    Theme
-                        .of(context)
-                        .accentColor,
-                    Theme
-                        .of(context)
-                        .primaryColor
-                  ])),
+                Theme.of(context).accentColor,
+                Theme.of(context).primaryColor
+              ])),
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -204,11 +199,9 @@ class _HomeState extends State<Home> {
                 getTranslated(context, "project_name"),
                 style: TextStyle(
                     fontFamily:
-                    Localizations
-                        .localeOf(context)
-                        .languageCode == "ar"
-                        ? "Lemonada"
-                        : "Signatra",
+                        Localizations.localeOf(context).languageCode == "ar"
+                            ? "Lemonada"
+                            : "Signatra",
                     fontSize: 90.0,
                     color: Colors.white),
               ),
@@ -219,10 +212,9 @@ class _HomeState extends State<Home> {
                   height: 60.0,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(
-                            'assets/images/google_signin_button.png'),
-                        fit: BoxFit.cover,
-                      )),
+                    image: AssetImage('assets/images/google_signin_button.png'),
+                    fit: BoxFit.cover,
+                  )),
                 ),
               )
             ],
@@ -236,13 +228,13 @@ class _HomeState extends State<Home> {
   }
 
   _showWellcomeDialog() async {
-    bool checkBox ;
+    bool checkBox;
     await getSharedPref().then((value) {
-       print("i am in share pref");
-       print("valuee $value");
-         checkBox=value;
-         print("checkkk $checkBox");
-     });
+      print("i am in share pref");
+      print("valuee $value");
+      checkBox = value;
+      print("checkkk $checkBox");
+    });
     if (checkBox == false) {
       print("Iam in if check box = false");
       Alert(
@@ -268,26 +260,29 @@ class _HomeState extends State<Home> {
                       overflow: TextOverflow.ellipsis,
                       textDirection: TextDirection.rtl,
                       textAlign: TextAlign.justify,
-                      style: TextStyle(fontSize: 15),),
+                      style: TextStyle(fontSize: 15),
+                    ),
                   ),
                 ),
                 FittedBox(
-
                   child: Row(
                     children: <Widget>[
-                      Text("لا تظهر الرسالة مرة أخري",
-                        style: TextStyle(fontSize: 11, color: Colors.teal),),
-                      Checkbox(value: noHelloSheet,
+                      Text(
+                        "لا تظهر الرسالة مرة أخري",
+                        style: TextStyle(fontSize: 11, color: Colors.teal),
+                      ),
+                      Checkbox(
+                        value: noHelloSheet,
 //                      onChanged: savePrefs(),
                         onChanged: (bool value) {
-                        setState(() {
-                          setHelloSheet(value);
-                          noHelloSheet=value;
-
-                        });
+                          setState(() {
+                            setHelloSheet(value);
+                            noHelloSheet = value;
+                          });
                         },
                       )
-                    ],),
+                    ],
+                  ),
                 )
               ],
             ),
@@ -298,11 +293,8 @@ class _HomeState extends State<Home> {
               child: Text("أبدأ الآن"),
             )
           ]).show();
-    }
-    else
-      {
-
-        print("elseee");
+    } else {
+      print("elseee");
 //        Alert(
 //            context: context,
 //            title: "أهلابك في الجزء الأهم في رفيقي ",
@@ -359,9 +351,8 @@ class _HomeState extends State<Home> {
 //                child: Text("أبدأ الآن"),
 //              )
 //            ]).show();
-      }
+    }
   }
-
 
   bool noHelloSheet = false;
 
@@ -380,7 +371,7 @@ class _HomeState extends State<Home> {
 
     await prefs.setBool('hello_sheet', currentHelloSheet);
     setState(() {
-      noHelloSheet=currentHelloSheet;
+      noHelloSheet = currentHelloSheet;
     });
   }
 }
