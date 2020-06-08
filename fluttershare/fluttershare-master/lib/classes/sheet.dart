@@ -3,18 +3,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Sheet
 {
-  Sheet({this.sheetTitle,this.sheetIdName,this.done,this.sheetColor,this.sheetImage});
+  Sheet({this.sheetTitle,this.sheetIdName,this.done,this.sheetColor,this.sheetImage,this.sheetNumber});
   String sheetTitle;
   String sheetIdName;
   bool done;
   int sheetColor;
   String sheetImage;
+  int sheetNumber;
 
   factory Sheet.fromDocument(DocumentSnapshot doc){
     return Sheet(
       sheetTitle: doc["sheetTitle"],
       sheetIdName: doc["sheetIdName"],
       sheetColor: doc["sheetColor"],
+      sheetImage: "assets/images/flower.png",
+      sheetNumber: doc["sheetNumber"]
     );
   }
 
