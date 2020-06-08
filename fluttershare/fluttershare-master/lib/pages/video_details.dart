@@ -40,13 +40,20 @@ class _VideoPlayState extends State<VideoPlay> {
         title: Text('Youga'),
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child: GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
             children: controllers.map((e) {
-          return YoutubePlayer(
-            controller: e,
-            showVideoProgressIndicator: true,
-          );
-        }).toList()),
+              return FittedBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: YoutubePlayer(
+                    controller: e,
+                    showVideoProgressIndicator: true,
+                  ),
+                ),
+              );
+            }).toList()),
       ),
     );
   }
