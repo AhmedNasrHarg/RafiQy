@@ -144,31 +144,5 @@ class _EnterySheetsState extends State<EnterySheets> {
     super.didChangeDependencies();
   }
 
-  _showWellcomeDialog() {
-    Alert(
-        context: context,
-        title: "أهلا بك في الجزء  الأهم في رفيقي ",
-        content: Column(
-          children: <Widget>[
-            Lottie.asset(
-              'assets/animations/first.json',
-              width: 300,
-              height: 300,
-              fit: BoxFit.fill,
-            ),
-            //          Expanded(
-            //   child: Text("سوف نقوم باعطاء لك شجرة ،عليك أن تراعيها حتي تكبر وتصبح جزء من حديقتنا", maxLines: 3,
-            //     overflow: TextOverflow.ellipsis,
-            //     textDirection: TextDirection.rtl,
-            //     textAlign: TextAlign.justify,),
-            // )
-          ],
-        ),
-        buttons: [
-          DialogButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("أبدأ الآن"),
-          )
-        ]).show();
-  }
+
 }

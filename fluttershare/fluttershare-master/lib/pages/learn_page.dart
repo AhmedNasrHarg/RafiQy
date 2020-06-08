@@ -32,7 +32,6 @@ Future<bool> checkConnectivity() async {
 }
 
 class _LearnPageState extends State<LearnPage> {
-  List<String> questionRefs=[];
   @override
   void initState() {
     // TODO: implement initState
@@ -54,35 +53,13 @@ class _LearnPageState extends State<LearnPage> {
     await topicRef.getDocuments().then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) async {
 
-       questions.clear();
-        // Topic(topicName, videoURL, topicImage, topicColor, isDone)
-        print('${f.data}}');
-        print('k');
-//        var questionsRef = Firestore.instance.collection("topic/${f.data['topic_id']}/topic_qa");
-//        await questionsRef.getDocuments().then((QuerySnapshot topic)
-//        {
-//          topic.documents.forEach((element) {
-//            print("data question${element.data}");
-//            List<String>answers=element.data['answer'];
-//            print("Answerrrrr ${answers}");
-//            List<LearnQuestionAnswer>answerElement=[];
-//            for(int i=0;i<answers.length;i++)
-//              {
-//                answerElement.add(LearnQuestionAnswer(answers[i]));
-//              }
-//
-//            LearnQuestionAnswer questionAnswer=new  LearnQuestionAnswer(element.data['question'], answerElement);
-//            questions.add(questionAnswer);
-//
-//          });
-//        });
         Topic topic = new Topic(f.data['topic_id'],f.data['topic_name'], f.data['video_url'],
             f.data['topic_image'], f.data['topic_color'], f.data['is_done'],f.data['num_q'],f.data['num_q_read']);
-          print(topic.questions);
-        setState(() {
-          learnTopics.add(topic);
-          questionRefs.add(topic.topicId);
-        });
+        if(mounted) {
+          setState(() {
+            learnTopics.add(topic);
+          });
+        }
 
       });
     });
@@ -102,7 +79,6 @@ class _LearnPageState extends State<LearnPage> {
   }
 
   List<Topic> learnTopics = [];
-  List<LearnQuestionAnswer>questions=[];
   DBManager db;
   Future<void> getTopicsFromHive() async {
     print(db);
@@ -164,10 +140,6 @@ class _LearnPageState extends State<LearnPage> {
 
   @override
   Widget build(BuildContext context) {
-    for(int i=0;i<questionRefs.length;i++)
-      {
-        print(questionRefs[i]);
-      }
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -210,20 +182,7 @@ class _LearnPageState extends State<LearnPage> {
               childCount: learnTopics.length,
             ),
           ),
-          // ListView.builder(
-          //   itemCount: learnTopics.length,
-          //   itemBuilder: (context,index)
-          //   {
-          //      return (Ink(
-          //     color: learnTopics[index].topicColor,
-          //     child: ListTile(
-          //       title:Center(child:Text(learnTopics[index].topicName,style: TextStyle(color: Colors.white,fontSize: 20,decorationThickness: 2.85)),),
-          //       onTap: () {
-          //         Navigator.pushNamed(context, learnDetailsRoute);
-          //       },
-          //     ),height: 100,));
-          //   }
-          //   )
+
         ],
       ),
     );

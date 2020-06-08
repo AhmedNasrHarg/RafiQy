@@ -56,7 +56,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
   getQuestions ()
   async {
     final questionRef=Firestore.instance.collection("topic/${topic.topicId}/topic_qa");
-    print("hereeeeee topic/${topic.topicId}/topic_qa");
+//    print("hereeeeee topic/${topic.topicId}/topic_qa");
     await questionRef.getDocuments().then((element)
     {
       topicImages.clear();
@@ -70,14 +70,14 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
         if(hasImage){
            images
               =await f.data['images'];
-           print("imageslength ${images.length}");
+//           print("imageslength ${images.length}");
         }
         
 setState(() {
   if(hasImage){
     for(int i=0;i<images.length;i++){
       topicImages.add(images[i]);
-      print("imagessss ${images[i]}");
+//      print("imagessss ${images[i]}");
     }
     hasImage=false;
     vis=true;
@@ -88,8 +88,8 @@ setState(() {
     learnAnswr.add(new LearnQuestionAnswer(answer[i]));
   }
   answers.add(answer);
-  print("questionsss $question");
-  print("answers$answer");
+//  print("questionsss $question");
+//  print("answers$answer");
   dataQuestions.add(new LearnQuestionAnswer(question,learnAnswr));
 });
 
@@ -100,12 +100,12 @@ setState(() {
 
   @override
   Widget build(BuildContext context) {
-print("lentof queston = ${dataQuestions.length}");
-print("${dataQuestions[0].question}");
-print("${dataQuestions[0]}");
+//print("lentof queston = ${dataQuestions.length}");
+//print("${dataQuestions[0].question}");
+//print("${dataQuestions[0]}");
     // TODO: implement build
 
-  print("topic id ${topic.topicId}");
+//  print("topic id ${topic.topicId}");
     return Scaffold(
       appBar: AppBar(
         title: Text(topic.topicName),
@@ -148,7 +148,7 @@ print("${dataQuestions[0]}");
                           ),
                           onTap: ()
                           {
-                            print("tapped");
+//                            print("tapped");
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewer(item)));
                           },
                         )

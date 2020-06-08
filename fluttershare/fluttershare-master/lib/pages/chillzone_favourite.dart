@@ -28,13 +28,15 @@ class _ChillFavouriteState extends State<ChillFavourite> {
   }
 
   getChillFavourites() {
-    setState(() {
-      for (int i = 0; i < images.length; i++) {
-        if (favorites.contains(images[i].image_id)) {
-          favoutiesImages.add(images[i]);
+    if(mounted) {
+      setState(() {
+        for (int i = 0; i < images.length; i++) {
+          if (favorites.contains(images[i].image_id)) {
+            favoutiesImages.add(images[i]);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   getChill() async {
@@ -43,10 +45,13 @@ class _ChillFavouriteState extends State<ChillFavourite> {
     snapshot.documents.forEach((DocumentSnapshot doc) async {
       Chill album = Chill.fromDocument(doc);
       images.add(album);
+      if(mounted)
+        {
       setState(() {
         images = images;
-      });
+      });}
     });
+
   }
 
   addFavorite(List favourites) async {
@@ -65,10 +70,12 @@ class _ChillFavouriteState extends State<ChillFavourite> {
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
         print('${f.data}}');
-        setState(() {
-          favorites = new List<int>.from(f.data['favourite']);
+        if(mounted) {
+          setState(() {
+            favorites = new List<int>.from(f.data['favourite']);
 //                f.data['favourite'].cast<int>();
-        });
+          });
+        }
       });
       ;
     });

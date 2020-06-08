@@ -11,6 +11,9 @@ import 'package:fluttershare/pages/chillzone.dart';
 import 'package:fluttershare/pages/sheets_entery_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:lottie/lottie.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final StorageReference storageRef = FirebaseStorage.instance.ref();
@@ -120,6 +123,9 @@ class _HomeState extends State<Home> {
   }
 
   onTap(int pageIndex) {
+    if (pageIndex == 3) {
+      _showWellcomeDialog();
+    }
     pageController.animateToPage(pageIndex,
         duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
@@ -143,7 +149,9 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: pageIndex,
         onTap: onTap,
-        activeColor: Theme.of(context).primaryColor,
+        activeColor: Theme
+            .of(context)
+            .primaryColor,
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle),
@@ -180,9 +188,13 @@ class _HomeState extends State<Home> {
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
                   colors: [
-                Theme.of(context).accentColor,
-                Theme.of(context).primaryColor
-              ])),
+                    Theme
+                        .of(context)
+                        .accentColor,
+                    Theme
+                        .of(context)
+                        .primaryColor
+                  ])),
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -192,9 +204,11 @@ class _HomeState extends State<Home> {
                 getTranslated(context, "project_name"),
                 style: TextStyle(
                     fontFamily:
-                        Localizations.localeOf(context).languageCode == "ar"
-                            ? "Lemonada"
-                            : "Signatra",
+                    Localizations
+                        .localeOf(context)
+                        .languageCode == "ar"
+                        ? "Lemonada"
+                        : "Signatra",
                     fontSize: 90.0,
                     color: Colors.white),
               ),
@@ -205,9 +219,10 @@ class _HomeState extends State<Home> {
                   height: 60.0,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                    image: AssetImage('assets/images/google_signin_button.png'),
-                    fit: BoxFit.cover,
-                  )),
+                        image: AssetImage(
+                            'assets/images/google_signin_button.png'),
+                        fit: BoxFit.cover,
+                      )),
                 ),
               )
             ],
@@ -218,5 +233,154 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return isAuth ? buildAuthScreen() : buildUnAuthScreen();
+  }
+
+  _showWellcomeDialog() async {
+    bool checkBox ;
+    await getSharedPref().then((value) {
+       print("i am in share pref");
+       print("valuee $value");
+         checkBox=value;
+         print("checkkk $checkBox");
+     });
+    if (checkBox == false) {
+      print("Iam in if check box = false");
+      Alert(
+          context: context,
+          title: "أهلابك في الجزء الأهم في رفيقي ",
+          content: Container(
+            height: 350,
+            width: 350,
+            child: Column(
+              children: <Widget>[
+                Lottie.asset(
+                  'assets/animations/first.json',
+                  width: 300,
+                  height: 250,
+                  fit: BoxFit.fill,
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: Text(
+                      "سوف نقوم باعطاء لك شجرة،عليك أن تراعيها حتي تكبر و تصبح جزء من حديقتنا",
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(fontSize: 15),),
+                  ),
+                ),
+                FittedBox(
+
+                  child: Row(
+                    children: <Widget>[
+                      Text("لا تظهر الرسالة مرة أخري",
+                        style: TextStyle(fontSize: 11, color: Colors.teal),),
+                      Checkbox(value: noHelloSheet,
+//                      onChanged: savePrefs(),
+                        onChanged: (bool value) {
+                        setState(() {
+                          setHelloSheet(value);
+                          noHelloSheet=value;
+
+                        });
+                        },
+                      )
+                    ],),
+                )
+              ],
+            ),
+          ),
+          buttons: [
+            DialogButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("أبدأ الآن"),
+            )
+          ]).show();
+    }
+    else
+      {
+
+        print("elseee");
+//        Alert(
+//            context: context,
+//            title: "أهلابك في الجزء الأهم في رفيقي ",
+//            content: Container(
+//              height: 350,
+//              width: 350,
+//              child: Column(
+//                children: <Widget>[
+//                  Lottie.asset(
+//                    'assets/animations/first.json',
+//                    width: 300,
+//                    height: 250,
+//                    fit: BoxFit.fill,
+//                  ),
+//                  Expanded(
+//                    child: Container(
+//                      margin: EdgeInsets.only(top: 5),
+//                      child: Text(
+//                        "سوف نقوم باعطاء لك شجرة،عليك أن تراعيها حتي تكبر و تصبح جزء من حديقتنا",
+//                        maxLines: 3,
+//                        overflow: TextOverflow.ellipsis,
+//                        textDirection: TextDirection.rtl,
+//                        textAlign: TextAlign.justify,
+//                        style: TextStyle(fontSize: 15),),
+//                    ),
+//                  ),
+//                  FittedBox(
+//
+//                    child: Row(
+//                      children: <Widget>[
+//                        Text("لا تظهر الرسالة مرة أخري",
+//                          style: TextStyle(fontSize: 11, color: Colors.teal),),
+//                        Checkbox(value: noHelloSheet,
+////                      onChanged: savePrefs(),
+//                          onChanged: (bool value) {
+//                          setState(() {
+//                            noHelloSheet=value;
+//                          });
+//                            setState(() {
+//                              setHelloSheet(value);
+//                              noHelloSheet=value;
+//
+//                            });
+//                          },
+//                        )
+//                      ],),
+//                  )
+//                ],
+//              ),
+//            ),
+//            buttons: [
+//              DialogButton(
+//                onPressed: () => Navigator.pop(context),
+//                child: Text("أبدأ الآن"),
+//              )
+//            ]).show();
+      }
+  }
+
+
+  bool noHelloSheet = false;
+
+  Future<bool> getSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    final helloSheet = prefs.getBool('hello_sheet');
+    if (helloSheet == null) {
+      return false;
+    }
+    return helloSheet;
+  }
+
+  Future<void> setHelloSheet(bool val) async {
+    final prefs = await SharedPreferences.getInstance();
+    bool currentHelloSheet = val;
+
+    await prefs.setBool('hello_sheet', currentHelloSheet);
+    setState(() {
+      noHelloSheet=currentHelloSheet;
+    });
   }
 }
