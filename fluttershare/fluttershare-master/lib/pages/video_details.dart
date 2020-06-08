@@ -20,7 +20,7 @@ class _VideoPlayState extends State<VideoPlay> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 16; i++) {
       setState(() {
         controllers.add(YoutubePlayerController(
           initialVideoId: 'iLnmTe5Q2Qw',
@@ -36,25 +36,23 @@ class _VideoPlayState extends State<VideoPlay> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Youga'),
-      ),
-      body: SingleChildScrollView(
-        child: GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            children: controllers.map((e) {
-              return FittedBox(
-                child: Padding(
-                  padding: const EdgeInsets.all(1.0),
-                  child: YoutubePlayer(
-                    controller: e,
-                    showVideoProgressIndicator: true,
-                  ),
+        appBar: AppBar(
+          title: Text('Youga'),
+        ),
+        body: GridView.count(
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          children: new List<Widget>.generate(controllers.length, (index) {
+            return new GridTile(
+              child: new Card(
+                color: Colors.blue.shade200,
+                child: YoutubePlayer(
+                  controller: controllers[index],
+                  showVideoProgressIndicator: true,
                 ),
-              );
-            }).toList()),
-      ),
-    );
+              ),
+            );
+          }),
+        ));
   }
 }
