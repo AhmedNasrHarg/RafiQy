@@ -9,10 +9,11 @@ import 'package:lottie/lottie.dart';
 class ChillGrid extends StatefulWidget {
   @override
   _ChillGridState createState() => _ChillGridState();
+  ChillGrid();
 }
 
 class _ChillGridState extends State<ChillGrid> {
-  List<Chill> images = [];
+  List<Chill> shillItems = [];
   List<int> favorites = [];
   @override
   void initState() {
@@ -28,9 +29,9 @@ class _ChillGridState extends State<ChillGrid> {
         await chillRef.orderBy("ch_id", descending: false).getDocuments();
     snapshot.documents.forEach((DocumentSnapshot doc) async {
       Chill chill = Chill.fromDocument(doc);
-      images.add(chill);
+      shillItems.add(chill);
       setState(() {
-        images = images;
+        shillItems = shillItems;
       });
     });
   }
@@ -67,9 +68,11 @@ class _ChillGridState extends State<ChillGrid> {
     // TODO: implement build
     return Scaffold(
       body: GridView.count(
-          crossAxisCount: 2,
-          children: List.generate(images.length, (index) {
-            isFavorite = favorites.contains(images[index].image_id);
+        childAspectRatio: (70/50),
+          crossAxisCount: 1,
+          children: List.generate(
+              shillItems.length, (index) {
+            isFavorite = favorites.contains(shillItems[index].item_id);
 
             return Card(
                 elevation: 10.0,
@@ -79,51 +82,53 @@ class _ChillGridState extends State<ChillGrid> {
                     GestureDetector(
                         child: Container(
 //                          child: Lottie.network(images[index].lottie),
-                          child: Image.network(images[index].image_url),
-                          width: 150,
-                          height: 120,
+                          child: Lottie.network(shillItems[index].lottie),
+                          width: 170,
+                          height: 170,
                         ),
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ImageViewer(
-                                  images[index].image_url,
+                                  shillItems[index].item_image,
                                 ),
                               ));
                         }),
                     Row(
                       children: <Widget>[
-                        Text(images[index].image_title),
+                        Text(shillItems[index].item_title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.teal),),
 //                    Icon(Icons.favorite,color: Colors.grey,)
                         IconButton(
                           icon: isFavorite
                               ? Icon(
                                   Icons.favorite,
                                   color: Colors.red,
+                            size: 30,
                                 )
                               : Icon(Icons.favorite_border),
                           color: Colors.grey,
+                          iconSize:30 ,
                           onPressed: () {
                             isFavorite =
-                                favorites.contains(images[index].image_id);
+                                favorites.contains(shillItems[index].item_id);
                             print(isFavorite);
                             setState(() {
                               if (isFavorite) {
                                 print("ifffff");
-                                favorites.remove(images[index].image_id);
+                                favorites.remove(shillItems[index].item_id);
                                 addFavorite(favorites);
                                 print(favorites.length);
                                 setState(() {
-                                  images[index].isFavorite = false;
+                                  shillItems[index].isFavorite = false;
                                 });
                               } else {
                                 print("elssssssee");
-                                favorites.add(images[index].image_id);
+                                favorites.add(shillItems[index].item_id);
                                 addFavorite(favorites);
                                 print(favorites.length);
                                 setState(() {
-                                  images[index].isFavorite = true;
+                                  shillItems[index].isFavorite = true;
                                 });
                               }
                             });
@@ -133,7 +138,8 @@ class _ChillGridState extends State<ChillGrid> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                     )
                   ],
-                ));
+                )
+            );
           })),
     );
   }
