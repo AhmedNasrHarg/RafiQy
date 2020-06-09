@@ -5,17 +5,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/learn_qa.dart';
 import 'package:fluttershare/classes/topic.dart';
+import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/note_page.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 
 import 'image_viewer.dart';
 
-bool vis=false;
+bool vis = false;
 
 class LearnDetailsPage extends StatefulWidget {
   Topic topic;
-
 
   LearnDetailsPage.learnIndex(Topic topic) {
     this.topic = topic;
@@ -27,25 +27,57 @@ class LearnDetailsPage extends StatefulWidget {
 }
 
 var learnTopics;
-List<String>topicImages=[];
+List<String> topicImages = [];
 
 class _LearnDetailsPageState extends State<LearnDetailsPage> {
   var hasImage;
-  List<String>questions=[];
-  List<List<String>>answers=[[]];
-  List<LearnQuestionAnswer>dataQuestions=[];
+  List<String> questions = [];
+  List<List<String>> answers = [[]];
+  List<LearnQuestionAnswer> dataQuestions = [];
   Topic topic;
   _LearnDetailsPageState(this.topic);
   VideoPlayerController _videoPlayerController;
   var videoURL;
   bool connetcting;
 
+  var is_done = false;
+  var num_q;
+  var num_q_read;
+  var topic_color;
+  var topic_id;
+  var topic_image;
+  var topic_name;
+  var video_url;
+
+  void isTopicDone() {
+    topicRef.getDocuments().then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        setState(() {
+          if (f.data['topic_id'] == topic.topicId) {
+            is_done = f.data['is_done'];
+            num_q = f.data['num_q'];
+            num_q_read = f.data['num_q_read'];
+            topic_color = f.data['topic_color'];
+            topic_id = f.data['topic_id'];
+            topic_image = f.data['topic_image'];
+            topic_name = f.data['topic_name'];
+            video_url = f.data['video_url'];
+            print(topic_name);
+            print(f.data['is_done']);
+          }
+        });
+
+        print('jjjjjjjjjjjjjjjjjjjjj');
+      });
+    });
+  }
+
   @override
   void initState() {
     _checkInternetConnectivity();
     videoURL = topic.videoURL;
     getQuestions();
-
+    isTopicDone();
 
     _videoPlayerController = VideoPlayerController.network(videoURL)
       ..initialize().then((_) {
@@ -53,49 +85,45 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
       });
     super.initState();
   }
-  getQuestions ()
-  async {
-    final questionRef=Firestore.instance.collection("topic/${topic.topicId}/topic_qa");
+
+  getQuestions() async {
+    final questionRef =
+        Firestore.instance.collection("topic/${topic.topicId}/topic_qa");
 //    print("hereeeeee topic/${topic.topicId}/topic_qa");
-    await questionRef.getDocuments().then((element)
-    {
+    await questionRef.getDocuments().then((element) {
       topicImages.clear();
       element.documents.forEach((f) async {
-        vis=false;
-        List<LearnQuestionAnswer>learnAnswr=[];
-        var question=await f.data['question'];
-        var answer=await new List<String>.from(f.data['answer']);
-         hasImage=await f.data['has_image'];
+        vis = false;
+        List<LearnQuestionAnswer> learnAnswr = [];
+        var question = await f.data['question'];
+        var answer = await new List<String>.from(f.data['answer']);
+        hasImage = await f.data['has_image'];
         var images;
-        if(hasImage){
-           images
-              =await f.data['images'];
+        if (hasImage) {
+          images = await f.data['images'];
 //           print("imageslength ${images.length}");
         }
-        
-setState(() {
-  if(hasImage){
-    for(int i=0;i<images.length;i++){
-      topicImages.add(images[i]);
+
+        setState(() {
+          if (hasImage) {
+            for (int i = 0; i < images.length; i++) {
+              topicImages.add(images[i]);
 //      print("imagessss ${images[i]}");
-    }
-    hasImage=false;
-    vis=true;
-  }
-  questions.add(question);
-  for(int i=0;i<answer.length;i++)
-  {
-    learnAnswr.add(new LearnQuestionAnswer(answer[i]));
-  }
-  answers.add(answer);
+            }
+            hasImage = false;
+            vis = true;
+          }
+          questions.add(question);
+          for (int i = 0; i < answer.length; i++) {
+            learnAnswr.add(new LearnQuestionAnswer(answer[i]));
+          }
+          answers.add(answer);
 //  print("questionsss $question");
 //  print("answers$answer");
-  dataQuestions.add(new LearnQuestionAnswer(question,learnAnswr));
-});
-
+          dataQuestions.add(new LearnQuestionAnswer(question, learnAnswr));
+        });
       });
     });
-
   }
 
   @override
@@ -122,51 +150,72 @@ setState(() {
           )
         ],
       ),
-      body:
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Container(
-          height:1000 ,
+          height: 1000,
           child: Column(
             children: <Widget>[
-
               _videoPlayerController.value.initialized
                   ? AspectRatio(
-                aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: VideoPlayer(_videoPlayerController),
-              )
+                      aspectRatio: _videoPlayerController.value.aspectRatio,
+                      child: VideoPlayer(_videoPlayerController),
+                    )
                   : Container(),
               Visibility(
-                child:
-                CarouselSlider(
+                child: CarouselSlider(
                     options: CarouselOptions(height: 300),
-                    items:topicImages.map((item) =>
-                        Container(child:
-                        GestureDetector(
-                          child: Center(child:
-
-                          Image(image: NetworkImage(item),)
-                          ),
-                          onTap: ()
-                          {
+                    items: topicImages
+                        .map((item) => Container(
+                              child: GestureDetector(
+                                child: Center(
+                                    child: Image(
+                                  image: NetworkImage(item),
+                                )),
+                                onTap: () {
 //                            print("tapped");
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageViewer(item)));
-                          },
-                        )
-                          ,height: 400,)).toList()
-                )
-                ,
-                visible:vis ,
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ImageViewer(item)));
+                                },
+                              ),
+                              height: 400,
+                            ))
+                        .toList()),
+                visible: vis,
               ),
-
+              CheckboxListTile(
+                title: Text("is Topic Done"),
+                value: is_done,
+                onChanged: (newValue) {
+                  setState(() {
+                    is_done = !is_done;
+                    //firebase
+                    print(topicRef.document(topic.topicId));
+//                    topicRef.document(topic.topicId).setData({
+//                      'is_done': is_done,
+//                      'num_q': num_q,
+//                      'num_q_read': num_q_read,
+//                      'topic_color': topic_color,
+//                      'topic_id': topic_id,
+//                      'topic_image': topic_image,
+//                      'topic_name': topic_name,
+//                      'video_url': video_url
+//                    });
+                  });
+                },
+                controlAffinity:
+                    ListTileControlAffinity.leading, //  <-- leading Checkbox
+              ),
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index) =>
                       QAItem(dataQuestions[index]),
                   itemCount: dataQuestions.length,
-
-
                 ),
-              )
+              ),
+
               // , Text("Test")
             ],
           ),
@@ -187,8 +236,6 @@ setState(() {
         ),
       ),
     );
-
-
   }
 
   _checkInternetConnectivity() async {
@@ -232,14 +279,13 @@ class QAItem extends StatelessWidget {
     if (root.answers.isEmpty) return ListTile(title: Text(root.question));
     return ExpansionTile(
       key: PageStorageKey<LearnQuestionAnswer>(root),
-      title: Text(root.question,style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
+      title: Text(
+        root.question,
+        style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+      ),
       children: root.answers.map(_buildTiles).toList(),
-
     );
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {

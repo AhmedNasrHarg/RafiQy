@@ -73,11 +73,15 @@ class _VideoPlayState extends State<VideoPlay> {
                         )),
                   ),
                 ),
-                Text(
-                  videoTitle[index],
-                  textAlign: TextAlign.justify,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 5,
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    videoTitle[index],
+                    textAlign: TextAlign.justify,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 5,
+                    style: TextStyle(fontSize: 18),
+                  ),
                 )
               ],
             );
