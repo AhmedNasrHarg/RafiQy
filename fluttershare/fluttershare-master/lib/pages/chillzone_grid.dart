@@ -5,6 +5,9 @@ import 'package:fluttershare/classes/chill.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/image_viewer.dart';
 import 'package:lottie/lottie.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
+import 'chillLottie.dart';
 
 class ChillGrid extends StatefulWidget {
   @override
@@ -15,6 +18,7 @@ class ChillGrid extends StatefulWidget {
 class _ChillGridState extends State<ChillGrid> {
   List<Chill> shillItems = [];
   List<int> favorites = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -26,7 +30,7 @@ class _ChillGridState extends State<ChillGrid> {
   getChill() async {
     print('chiiiiiiil');
     QuerySnapshot snapshot =
-        await chillRef.orderBy("ch_id", descending: false).getDocuments();
+    await chillRef.orderBy("ch_id", descending: false).getDocuments();
     snapshot.documents.forEach((DocumentSnapshot doc) async {
       Chill chill = Chill.fromDocument(doc);
       shillItems.add(chill);
@@ -68,7 +72,7 @@ class _ChillGridState extends State<ChillGrid> {
     // TODO: implement build
     return Scaffold(
       body: GridView.count(
-        childAspectRatio: (70/50),
+          childAspectRatio: (70 / 50),
           crossAxisCount: 1,
           children: List.generate(
               shillItems.length, (index) {
@@ -87,28 +91,40 @@ class _ChillGridState extends State<ChillGrid> {
                           height: 170,
                         ),
                         onTap: () {
+//                          Navigator.push(
+//                              context,
+//                              MaterialPageRoute(
+//                                builder: (context) => ImageViewer(
+//                                  shillItems[index].item_image,
+//                                ),
+//                              ));
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ImageViewer(
-                                  shillItems[index].item_image,
+                                builder: (context) => ChillLottie(
+                                 lottieUrl: shillItems[index].lottie,
                                 ),
                               ));
+
                         }),
                     Row(
                       children: <Widget>[
-                        Text(shillItems[index].item_title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.teal),),
+                        Text(shillItems[index].item_title, style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.teal),),
 //                    Icon(Icons.favorite,color: Colors.grey,)
                         IconButton(
                           icon: isFavorite
                               ? Icon(
-                                  Icons.favorite,
-                                  color: Colors.red,
+                            Icons.favorite,
+                            color: Colors.red,
                             size: 30,
-                                )
+                          )
                               : Icon(Icons.favorite_border),
                           color: Colors.grey,
-                          iconSize:30 ,
+                          iconSize: 30,
                           onPressed: () {
                             isFavorite =
                                 favorites.contains(shillItems[index].item_id);
@@ -141,6 +157,101 @@ class _ChillGridState extends State<ChillGrid> {
                 )
             );
           })),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor:Colors.teal,
+          onPressed: () {
+            showSuggestionsDialog();
+
+          },
+          child: Column(children:<Widget>[
+            Icon(Icons.mood,color: Colors.white,)
+            ,Text("اقترح",style: TextStyle(color: Colors.white),)
+          ],),
+        )
     );
   }
+
+  showSuggestionsDialog()
+  {
+    if(favorites.isEmpty)
+    {
+      Alert(
+          context: context,
+          title: "ليس لديك أية مفضلات",
+          content: Container(
+            height: 300,
+            width: 350,
+            child: Column(
+              children: <Widget>[
+                Lottie.network(
+                  'https://assets5.lottiefiles.com/packages/lf20_EvfyyO.json',
+                  width: 300,
+                  height: 300,
+                  fit: BoxFit.fill,
+                ),
+              ],
+            ),
+          ),
+          buttons: [
+            DialogButton(
+              onPressed: () {
+                Navigator.pop(context);
+                //animate to the next
+              },
+              child: Text("اظهر القائمة"),
+            )
+          ]).show();
+    }
+    else
+    {
+
+//      Alert(
+//          context: context,
+//          title: "مقترحات ",
+//          content: Container(
+//            height: 300,
+//            width: 350,
+//            child: Column(
+//              children: <Widget>[
+//                Image.network(
+//                  favorites[item].item_image,
+//                  width: 300,
+//                  height: 300,
+//                  fit: BoxFit.fill,
+//                ),
+//              ],
+//            ),
+//          ),
+//          buttons: [
+//            DialogButton(
+//              onPressed: () {
+//                Navigator.pop(context);
+//                //animate to the next
+//              },
+//              child: Text("سأختر بنفسي"),
+//            ),
+//            DialogButton(
+//              onPressed: ()
+//              {
+//
+////                setState(() {
+////                  item+1;
+////                });
+//                Navigator.pop(context);
+//                showSuggestionsDialog();
+//              },
+//              child: Text(" شيء آخر"),
+//            ),
+//            DialogButton(
+//              onPressed: ()
+//              {
+//                Navigator.pop(context);
+//
+//              },
+//              child: Text("حسنا"),
+//            )
+//          ]).show();
+    }
+  }
+
 }

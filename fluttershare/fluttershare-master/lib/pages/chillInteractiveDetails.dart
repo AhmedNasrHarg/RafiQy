@@ -25,3 +25,33 @@
 //    return Container();
 //  }
 //}
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttershare/classes/chill.dart';
+
+class ChillInteractiveDetails extends StatefulWidget {
+  Chill itemChill;
+  @override
+  _ChillInteractiveDetailsState createState() => _ChillInteractiveDetailsState(this.itemChill);
+  ChillInteractiveDetails({Key key,this.itemChill}):super(key:key);
+}
+
+class _ChillInteractiveDetailsState extends State<ChillInteractiveDetails> {
+  Chill itemChill;
+  _ChillInteractiveDetailsState(this.itemChill);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(itemChill.item_title),
+      ),
+      body: ListView.builder(itemBuilder: null),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.teal,
+        child: Icon(Icons.add,color: Colors.white,),
+      ),
+    );
+  }
+}
+

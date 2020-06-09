@@ -37,15 +37,16 @@ class _ChillZoneState extends State<ChillZone>
           indicatorWeight: 5.0,
           indicatorColor: Colors.deepPurple,
           tabs: <Widget>[
-            Tab(icon: new Icon(Icons.favorite)),
             Tab(icon: new Icon(Icons.wb_sunny)),
+            Tab(icon: new Icon(Icons.favorite)),
+
 
           ],
         ),
       ),
       body: TabBarView(
         controller: controller,
-        children: <Widget>[ ChillFavourite(),ChillGrid(),],
+        children: <Widget>[ ChillGrid(),ChillFavourite()],
       ),
     );
   }

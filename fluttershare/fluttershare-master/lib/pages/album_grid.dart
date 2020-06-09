@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/album.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/image_viewer.dart';
+import 'package:lottie/lottie.dart';
 import 'package:photo_view/photo_view.dart';
 
 
@@ -150,4 +151,5 @@ List<int>favorites=[];
       ),
       );
   }
+
 }
