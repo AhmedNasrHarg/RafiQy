@@ -6,13 +6,15 @@ class Chill {
   String item_title;
   String lottie;
   bool isFavorite;
+  int numUsed;
 
   Chill(
       {this.item_id,
       this.item_image,
       this.lottie,
       this.item_title,
-      this.isFavorite});
+      this.isFavorite,
+      this.numUsed});
 
   factory Chill.fromDocument(DocumentSnapshot doc) {
     return Chill(
@@ -20,6 +22,9 @@ class Chill {
         item_image: doc["ch_image"],
         lottie: doc['ch_lottie'],
         item_title: doc["ch_name"],
-        isFavorite: doc["is_favorite"]);
+        isFavorite: doc["is_favorite"],
+      numUsed: doc["num_used"]
+
+    );
   }
 }

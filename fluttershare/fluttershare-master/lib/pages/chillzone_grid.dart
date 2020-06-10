@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/chill.dart';
+import 'package:fluttershare/pages/chillInteractiveDetails.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/image_viewer.dart';
+import 'package:fluttershare/pages/video_details.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -16,15 +18,24 @@ class ChillGrid extends StatefulWidget {
 }
 
 class _ChillGridState extends State<ChillGrid> {
-  List<Chill> shillItems = [];
+  List<Chill> chillItems = [];
   List<int> favorites = [];
+  List<ChillUsed>numberOfUsedItem=[];
+  
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getChill();
-    getFavorites();
+    getAll();
+  }
+  getAll()async
+  {
+   await getChill();
+   await getFavorites();
+   await getNumberUsed();
+   addNumUsed();
+
   }
 
   getChill() async {
@@ -33,9 +44,9 @@ class _ChillGridState extends State<ChillGrid> {
     await chillRef.orderBy("ch_id", descending: false).getDocuments();
     snapshot.documents.forEach((DocumentSnapshot doc) async {
       Chill chill = Chill.fromDocument(doc);
-      shillItems.add(chill);
+      chillItems.add(chill);
       setState(() {
-        shillItems = shillItems;
+        chillItems = chillItems;
       });
     });
   }
@@ -49,6 +60,11 @@ class _ChillGridState extends State<ChillGrid> {
         .setData({"favourite": favourites});
   }
 
+  increaseCounter(Chill itemUsed)async
+  {
+    await userRef.document(currentUser.id).collection("number_used_chill")
+        .document("${itemUsed.item_id}").setData({"num_used":itemUsed.numUsed,"ch_id":itemUsed.item_id});
+  }
   //done
   getFavorites() async {
     await userRef
@@ -65,19 +81,56 @@ class _ChillGridState extends State<ChillGrid> {
       ;
     });
   }
+  
+  getNumberUsed()async
+  {
+    await userRef
+        .document(currentUser.id)
+        .collection("number_used_chill")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        
+        numberOfUsedItem.add(ChillUsed.fromDocument(f));
+        print("number used${f["num_used"]}");
+        setState(() {
+          numberOfUsedItem=numberOfUsedItem;
+
+        });
+      });
+      ;
+    });
+
+
+    
+  }
+  addNumUsed()
+  {
+    for(int i=0;i<numberOfUsedItem.length;i++)
+    {
+      for(int j=0;j<chillItems.length;j++)
+      {
+        if(numberOfUsedItem[i].ch_id==chillItems[j].item_id)
+        {
+          chillItems[j].numUsed=numberOfUsedItem[i].ch_num_used;
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     bool isFavorite;
+//    bool numUseId;
     // TODO: implement build
     return Scaffold(
       body: GridView.count(
           childAspectRatio: (70 / 50),
           crossAxisCount: 1,
           children: List.generate(
-              shillItems.length, (index) {
-            isFavorite = favorites.contains(shillItems[index].item_id);
-
+              chillItems.length, (index) {
+            isFavorite = favorites.contains(chillItems[index].item_id);
+//            numUseId=numberOfUsedItem.contains(chillItems[index].item_id);
             return Card(
                 elevation: 10.0,
                 child: Column(
@@ -86,9 +139,9 @@ class _ChillGridState extends State<ChillGrid> {
                     GestureDetector(
                         child: Container(
 //                          child: Lottie.network(images[index].lottie),
-                          child: Lottie.network(shillItems[index].lottie),
-                          width: 170,
-                          height: 170,
+                          child: Lottie.network(chillItems[index].lottie),
+                          width: 150,
+                          height: 150,
                         ),
                         onTap: () {
 //                          Navigator.push(
@@ -98,19 +151,37 @@ class _ChillGridState extends State<ChillGrid> {
 //                                  shillItems[index].item_image,
 //                                ),
 //                              ));
-
+                        if(index==0)
+                          {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChillLottie(
-                                 lottieUrl: shillItems[index].lottie,
+                                 lottieUrl: chillItems[index].lottie,
                                 ),
                               ));
+                          }
+                        else if(index%2==0&&index!=0)
+                          {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>VideoPlay()
+                                ));
+
+                          }
+                        else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChillInteractiveDetails(itemChill: chillItems[index],)
+                              ));
+                        }
 
                         }),
                     Row(
                       children: <Widget>[
-                        Text(shillItems[index].item_title, style: TextStyle(
+                        Text(chillItems[index].item_title, style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                             color: Colors.teal),),
@@ -127,27 +198,58 @@ class _ChillGridState extends State<ChillGrid> {
                           iconSize: 30,
                           onPressed: () {
                             isFavorite =
-                                favorites.contains(shillItems[index].item_id);
+                                favorites.contains(chillItems[index].item_id);
                             print(isFavorite);
                             setState(() {
                               if (isFavorite) {
                                 print("ifffff");
-                                favorites.remove(shillItems[index].item_id);
+                                favorites.remove(chillItems[index].item_id);
                                 addFavorite(favorites);
                                 print(favorites.length);
                                 setState(() {
-                                  shillItems[index].isFavorite = false;
+                                  chillItems[index].isFavorite = false;
                                 });
                               } else {
                                 print("elssssssee");
-                                favorites.add(shillItems[index].item_id);
+                                favorites.add(chillItems[index].item_id);
                                 addFavorite(favorites);
                                 print(favorites.length);
                                 setState(() {
-                                  shillItems[index].isFavorite = true;
+                                  chillItems[index].isFavorite = true;
                                 });
                               }
                             });
+                          },
+                        )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    ),
+                    Container(
+                      height: 1,
+                      child: Ink(color: Colors.teal[800],),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text("عدد الاستخدمات"),
+                        Text(chillItems[index].numUsed.toString(), style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.teal),),
+//                    Icon(Icons.favorite,color: Colors.grey,)
+                        IconButton(
+                          icon: 
+                               Icon(
+                            Icons.add,
+                            color: Colors.teal,
+                            size: 30,
+                          )
+                              ,
+                          onPressed: () {
+                            setState(() {
+                              chillItems[index].numUsed++;
+                              increaseCounter(chillItems[index]);
+                            });
+                         
                           },
                         )
                       ],
@@ -254,4 +356,16 @@ class _ChillGridState extends State<ChillGrid> {
     }
   }
 
+}
+class ChillUsed
+{
+  int ch_id;
+  int ch_num_used;
+  ChillUsed({this.ch_id,this.ch_num_used});
+  factory ChillUsed.fromDocument(DocumentSnapshot doc) {
+    return ChillUsed(
+        ch_id: doc["ch_id"],
+        ch_num_used:doc["num_used"]
+    );
+  }
 }

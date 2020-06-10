@@ -39,6 +39,9 @@ class ChillInteractiveDetails extends StatefulWidget {
 
 class _ChillInteractiveDetailsState extends State<ChillInteractiveDetails> {
   Chill itemChill;
+  final List<String> entries = <String>['A', 'B', 'C'];
+  final List<int> colorCodes = <int>[600, 500, 100];
+
   _ChillInteractiveDetailsState(this.itemChill);
   @override
   Widget build(BuildContext context) {
@@ -46,7 +49,17 @@ class _ChillInteractiveDetailsState extends State<ChillInteractiveDetails> {
       appBar: AppBar(
         title: Text(itemChill.item_title),
       ),
-      body: ListView.builder(itemBuilder: null),
+      body:
+      ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: entries.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              height: 50,
+              color: Colors.amber[colorCodes[index]],
+              child: Center(child: Text('Entry ${entries[index]}')),
+            );
+          }      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal,
         child: Icon(Icons.add,color: Colors.white,),
