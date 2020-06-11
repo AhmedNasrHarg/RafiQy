@@ -166,7 +166,7 @@ class _ChillGridState extends State<ChillGrid> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>VideoPlay()
+                                  builder: (context) =>VideoPlay(itemChill: chillItems[index])
                                 ));
 
                           }
