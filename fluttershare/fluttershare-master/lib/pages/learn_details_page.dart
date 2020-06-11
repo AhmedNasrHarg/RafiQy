@@ -74,14 +74,15 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
 
   isDone() {
     setState(() {
-      for(int i=0;i<done.length;i++){
-          if(done[i]==topic_id){
-            is_done=true;
-            break;
-          }
+      for (int i = 0; i < done.length; i++) {
+        if (done[i] == topic_id) {
+          is_done = true;
+          break;
+        }
       }
     });
   }
+
   //to update our done
   addDone(List done) async {
     await userRef
@@ -210,26 +211,13 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                 onChanged: (newValue) {
                   setState(() {
                     is_done = !is_done;
-                    if(is_done){
+                    if (is_done) {
                       done.add(topic.topicId);
                       addDone(done);
-                    }else{
+                    } else {
                       done.remove(topic.topicId);
                       addDone(done);
                     }
-//                    print(is_done); //firebase
-//                    print(topic.topicId);
-//                    print(topicRef.document(topic.topicId));
-//                    topicRef.document(topic.topicId).setData({
-//                      'is_done': is_done,
-//                      'num_q': num_q,
-//                      'num_q_read': num_q_read,
-//                      'topic_color': topic_color,
-//                      'topic_id': topic_id,
-//                      'topic_image': topic_image,
-//                      'topic_name': topic_name,
-//                      'video_url': video_url
-//                    });
                   });
                 },
                 controlAffinity:
