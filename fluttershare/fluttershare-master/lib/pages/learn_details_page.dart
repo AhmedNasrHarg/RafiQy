@@ -48,28 +48,47 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
   var topic_image;
   var topic_name;
   var video_url;
+  List<String> done = [];
 
-  void isTopicDone() {
-    topicRef.getDocuments().then((QuerySnapshot snapshot) {
+  Future<void> getDoneTopics() async {
+    await userRef
+        .document(currentUser.id)
+        .collection("done_topics")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
+        print('${f.data}}');
         setState(() {
-          if (f.data['topic_id'] == topic.topicId) {
-            is_done = f.data['is_done'];
-            num_q = f.data['num_q'];
-            num_q_read = f.data['num_q_read'];
-            topic_color = f.data['topic_color'];
-            topic_id = f.data['topic_id'];
-            topic_image = f.data['topic_image'];
-            topic_name = f.data['topic_name'];
-            video_url = f.data['video_url'];
-            print(topic_name);
-            print(f.data['is_done']);
-          }
+          done = new List<String>.from(f.data['done']);
+//                f.data['favourite'].cast<int>();
         });
-
-        print('jjjjjjjjjjjjjjjjjjjjj');
       });
+      ;
     });
+  }
+
+  checkIsDone() async {
+    await getDoneTopics();
+    isDone();
+  }
+
+  isDone() {
+    setState(() {
+      for(int i=0;i<done.length;i++){
+          if(done[i]==topic_id){
+            is_done=true;
+            break;
+          }
+      }
+    });
+  }
+  //to update our done
+  addDone(List done) async {
+    await userRef
+        .document(currentUser.id)
+        .collection("done_topics")
+        .document("don")
+        .setData({"done": done});
   }
 
   @override
@@ -77,7 +96,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
     _checkInternetConnectivity();
     videoURL = topic.videoURL;
     getQuestions();
-    isTopicDone();
+    checkIsDone();
 
     _videoPlayerController = VideoPlayerController.network(videoURL)
       ..initialize().then((_) {
@@ -191,19 +210,26 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                 onChanged: (newValue) {
                   setState(() {
                     is_done = !is_done;
-                    print(is_done); //firebase
-                    print(topic.topicId);
-                    print(topicRef.document(topic.topicId));
-                    topicRef.document(topic.topicId).setData({
-                      'is_done': is_done,
-                      'num_q': num_q,
-                      'num_q_read': num_q_read,
-                      'topic_color': topic_color,
-                      'topic_id': topic_id,
-                      'topic_image': topic_image,
-                      'topic_name': topic_name,
-                      'video_url': video_url
-                    });
+                    if(is_done){
+                      done.add(topic.topicId);
+                      addDone(done);
+                    }else{
+                      done.remove(topic.topicId);
+                      addDone(done);
+                    }
+//                    print(is_done); //firebase
+//                    print(topic.topicId);
+//                    print(topicRef.document(topic.topicId));
+//                    topicRef.document(topic.topicId).setData({
+//                      'is_done': is_done,
+//                      'num_q': num_q,
+//                      'num_q_read': num_q_read,
+//                      'topic_color': topic_color,
+//                      'topic_id': topic_id,
+//                      'topic_image': topic_image,
+//                      'topic_name': topic_name,
+//                      'video_url': video_url
+//                    });
                   });
                 },
                 controlAffinity:
