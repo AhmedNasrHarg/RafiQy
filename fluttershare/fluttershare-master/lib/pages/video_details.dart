@@ -1,15 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttershare/classes/chill.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoPlay extends StatefulWidget {
+  Chill itemChill;
   @override
-  _VideoPlayState createState() => _VideoPlayState();
+  _VideoPlayState createState() => _VideoPlayState(this.itemChill);
+  VideoPlay({Key key,this.itemChill}):super(key:key);
 }
 
 class _VideoPlayState extends State<VideoPlay> {
+  Chill itemChill;
+_VideoPlayState(this.itemChill);
   YoutubePlayerController _controller = YoutubePlayerController(
     initialVideoId: 'iLnmTe5Q2Qw',
     flags: YoutubePlayerFlags(
@@ -28,8 +33,8 @@ class _VideoPlayState extends State<VideoPlay> {
 
   void getYougaVideos() async {
     await chillRef
-        .document('2')
-        .collection('youga')
+        .document("${itemChill.item_id}")
+        .collection("${itemChill.item_id}")
         .getDocuments()
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
@@ -55,7 +60,7 @@ class _VideoPlayState extends State<VideoPlay> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Youga'),
+          title: Text(itemChill.item_title),
         ),
         body: GridView.count(
           crossAxisCount: 1,
