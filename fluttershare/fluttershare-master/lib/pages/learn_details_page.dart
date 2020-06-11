@@ -191,18 +191,19 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                 onChanged: (newValue) {
                   setState(() {
                     is_done = !is_done;
-                    //firebase
+                    print(is_done); //firebase
+                    print(topic.topicId);
                     print(topicRef.document(topic.topicId));
-//                    topicRef.document(topic.topicId).setData({
-//                      'is_done': is_done,
-//                      'num_q': num_q,
-//                      'num_q_read': num_q_read,
-//                      'topic_color': topic_color,
-//                      'topic_id': topic_id,
-//                      'topic_image': topic_image,
-//                      'topic_name': topic_name,
-//                      'video_url': video_url
-//                    });
+                    topicRef.document(topic.topicId).setData({
+                      'is_done': is_done,
+                      'num_q': num_q,
+                      'num_q_read': num_q_read,
+                      'topic_color': topic_color,
+                      'topic_id': topic_id,
+                      'topic_image': topic_image,
+                      'topic_name': topic_name,
+                      'video_url': video_url
+                    });
                   });
                 },
                 controlAffinity:
