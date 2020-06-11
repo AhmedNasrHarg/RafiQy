@@ -139,7 +139,7 @@ class _HomeState extends State<Home> {
             profileId: currentUser.id,
           ),
           LearnPage(),
-          VideoPlay(),
+          ChillZone(),
           EnterySheets(),
           Community(),
         ],

@@ -27,22 +27,26 @@ class _ChillZoneState extends State<ChillZone>
     return Scaffold(
       backgroundColor: Colors.deepPurple[50],
       appBar: AppBar(
-        title: Text('ChillZone'),
+        title: Text('منطقة الاسترخاء'),
         backgroundColor: Colors.teal,
+//        actions: <Widget>[
+//        RaisedButton.icon(onPressed: null, icon: Icon(Icons.mood), label: Text("اثترح"))
+//        ],
         bottom: TabBar(
           controller: controller,
           indicatorWeight: 5.0,
           indicatorColor: Colors.deepPurple,
           tabs: <Widget>[
-            Tab(icon: new Icon(Icons.favorite)),
             Tab(icon: new Icon(Icons.wb_sunny)),
+            Tab(icon: new Icon(Icons.favorite)),
+
 
           ],
         ),
       ),
       body: TabBarView(
         controller: controller,
-        children: <Widget>[ ChillFavourite(),ChillGrid(),],
+        children: <Widget>[ ChillGrid(),ChillFavourite()],
       ),
     );
   }
