@@ -151,7 +151,7 @@ class _EnterySheetsState extends State<EnterySheets> {
                           MaterialPageRoute(
                               builder: (context) =>
                                   MyHomePage(title: sheets[index].sheetIdName,sheetName: sheets[index].sheetTitle,)),
-                        );
+                        )??false;
                         if(sheets[index].done)
                           {
                             setState(() {
