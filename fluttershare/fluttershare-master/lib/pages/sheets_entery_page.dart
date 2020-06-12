@@ -143,7 +143,7 @@ class _EnterySheetsState extends State<EnterySheets> {
                               decorationThickness: 2.85)),
                     ),
                     onTap: () async{
-                      if((lastDone!=0&&sheets[index].sheetNumber==lastDone+1)||sheets[index].sheetNumber==1)
+                      if(((lastDone!=0&&sheets[index].sheetNumber==lastDone+1)||(sheets[index].sheetNumber==lastDone))||sheets[index].sheetNumber==1)
                       {
                         sheets[index].done=await
                         Navigator.push(

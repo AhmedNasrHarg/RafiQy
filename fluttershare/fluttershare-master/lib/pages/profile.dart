@@ -22,12 +22,14 @@ class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Profile>with TickerProviderStateMixin {
   String currentUserId = currentUser.id;
   bool isLoading = false;
   int postCount = 0;
   List<Article> posts = [];
   List<Article> temp;
+  int completed=0;
+  AnimationController controller;
   void _changeLanguage(Language language) async {
     Locale _temp = await setLocale(language.languageCode);
 
@@ -41,6 +43,23 @@ class _ProfileState extends State<Profile> {
     if (currentUser.isAdmin) {
       getAdminPosts();
     }
+
+    controller = AnimationController(vsync: this)
+      ..value = 0.0
+      ..addListener(() {
+        setState(() {
+//          controller.stop();
+          // Rebuild the widget at each frame to update the "progress" label.
+        });
+      });
+    getDoneTopics();
+    getCompletedDocs();
+  }
+
+  @override
+  void dispose() {
+controller.dispose();
+super.dispose();
   }
 
   getAdminPosts() async {
@@ -265,35 +284,87 @@ class _ProfileState extends State<Profile> {
   }
 
   buildUserProfile() {
-    
-//    return Column(
-//      children: <Widget>[
-//        Text(getTranslated(context, "still_working"),
-//            style: TextStyle(
-//              fontSize: 18.0,
-//              fontWeight: FontWeight.bold,
-//              color: Colors.amber,
-//            )),
-//        Lottie.network(
-//            "https://assets5.lottiefiles.com/packages/lf20_DYkRIb.json"),
-//      ],
-//    );
-  
-//  return Text("hel");
-  
-  
-  return Column(
-    children: <Widget>[
-      Lottie.network("https://assets6.lottiefiles.com/packages/lf20_4zv971.json")
-//      Card(
+
+  return completed==0?
+  Card(
+
+    color: Colors.teal[100],
+    child: Row(
+      children: <Widget>[
+        Text("هيا تشجع لاكمال الدرس الاول",
+          style: TextStyle(
+            fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                ? "Lemonada"
+                : "Signatra",
+          ),),
+        Lottie.network("https://assets4.lottiefiles.com/packages/lf20_zm1z76.json",width: 100,height: 100)
+
+//            Image.asset("assets/images/flower.png")
+      ],
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    ),
+  ):
+    Container(
+//    color: Colors.teal[100],
+//    height: MediaQuery.of(context).size.height,
+    child:
+
+            Column(
+
+              children: <Widget>[
+                Card(
+//                  color: Colors.teal[100],
+
+                  child: Text("لقد انهيت الدرس الاول",
+      style: TextStyle(
+      fontFamily: Localizations.localeOf(context).languageCode == "ar"
+          ? "Tajwal"
+          : "Signatra",
+//        color: Colors.white
+      )),
+                ),
+                Card(
+//                  color: Colors.teal[100],
+                  child: Text("لقد انهيت المهمة الاولي",
+                      style: TextStyle(
+                        fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                            ? "Tajwal"
+                            : "Signatra",
+//                        color: Colors.white
+                      )),
+                ),
+                Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
+    ,width: 200
+    , height: 200
+    ,controller: controller,
+    onLoaded: (composition)
+    {
+    setState(() {
+    controller.duration=composition.duration*2;
+    });
+    }
+    )
+              ],
+            )
+//        Lottie.network("https://assets4.lottiefiles.com/packages/lf20_zm1z76.json",width: 200,height: 200)
+
+
+//              ,Card(
+//          color: Colors.teal[100],
 //        child: Row(
 //          children: <Widget>[
-//            Text("هيا تشجع لاكمال الدرس الاول"),
-//            Image.asset("assets/images/flower.png")
+//            Text("هيا تشجع لاكمال الدرس الاول",
+//            style: TextStyle(
+//              fontFamily: Localizations.localeOf(context).languageCode == "ar"
+//                  ? "Lemonada"
+//                  : "Signatra",
+//            ),),
+////            Image.asset("assets/images/flower.png")
 //          ],
 //        ),
 //      )
-    ],
+
+
   );
   }
 
@@ -357,5 +428,44 @@ class _ProfileState extends State<Profile> {
           backgroundColor: Theme.of(context).accentColor,
         ),
         body: buildProfile());
+  }
+  getCompletedDocs()async
+  {
+
+    await userRef
+            .document(currentUser.id)
+            .collection("completedSheets").getDocuments()
+         .then((QuerySnapshot snapshot) {
+       snapshot.documents.forEach((f) {
+         print('${f.data}}');
+         setState(() {
+           completed=completed+1;
+           print("Completed $completed");
+
+         });
+       });
+       ;
+     });
+
+
+
+  }
+
+  Future<void> getDoneTopics() async {
+    await userRef
+        .document(currentUser.id)
+        .collection("done_topics")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        print('${f.data}}');
+        setState(() {
+          var c = new List<String>.from(f.data['done']);
+        completed=completed+c.length;
+        print("Completed $completed");
+        });
+      });
+      ;
+    });
   }
 }
