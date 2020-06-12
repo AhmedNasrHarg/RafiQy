@@ -141,6 +141,8 @@ class _MyHomePageState extends State<MyHomePage> {
           DialogButton(
             onPressed: () {
               Navigator.pop(context);
+              Navigator.pop(context,true);
+
             },
             child: Text("التالي"),
           )
