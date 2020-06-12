@@ -265,19 +265,36 @@ class _ProfileState extends State<Profile> {
   }
 
   buildUserProfile() {
-    return Column(
-      children: <Widget>[
-        Text(getTranslated(context, "still_working"),
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.amber,
-            )),
-        Lottie.network(
-            "https://assets5.lottiefiles.com/packages/lf20_DYkRIb.json"),
-      ],
-    );
+    
+//    return Column(
+//      children: <Widget>[
+//        Text(getTranslated(context, "still_working"),
+//            style: TextStyle(
+//              fontSize: 18.0,
+//              fontWeight: FontWeight.bold,
+//              color: Colors.amber,
+//            )),
+//        Lottie.network(
+//            "https://assets5.lottiefiles.com/packages/lf20_DYkRIb.json"),
+//      ],
+//    );
+  
 //  return Text("hel");
+  
+  
+  return Column(
+    children: <Widget>[
+      Lottie.network("https://assets6.lottiefiles.com/packages/lf20_4zv971.json")
+//      Card(
+//        child: Row(
+//          children: <Widget>[
+//            Text("هيا تشجع لاكمال الدرس الاول"),
+//            Image.asset("assets/images/flower.png")
+//          ],
+//        ),
+//      )
+    ],
+  );
   }
 
   ListView buildProfile() {
