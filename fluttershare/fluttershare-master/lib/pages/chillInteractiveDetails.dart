@@ -1,35 +1,9 @@
-//Future<String> uploadImage(imageFile) async {
-//  StorageUploadTask uploadTask = storageRef.child("post_$postId.jpg").putFile(imageFile);
-//  StorageTaskSnapshot storageSnap =  await uploadTask.onComplete;
-//  String downloadUrl = await storageSnap.ref.getDownloadURL();
-//  return downloadUrl;
-//}
-//
-//compressImage() async {
-//  final tempDir = await getTemporaryDirectory();
-//  final path = tempDir.path;
-//  Im.Image imageFile = Im.decodeImage(widget.imgFile.readAsBytesSync());
-//  final compressedImageFile = File('$path/img_$postId.jpg')..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
-//  setState(() {
-//    widget.imgFile = compressedImageFile;
-//  });
-//}
-//class ChillInteractvieDetails extends StatefulWidget {
-//  @override
-//  _ChillInteractvieDetailsState createState() => _ChillInteractvieDetailsState();
-//}
-//
-//class _ChillInteractvieDetailsState extends State<ChillInteractvieDetails> {
-//  @override
-//  Widget build(BuildContext context) {
-//    return Container();
-//  }
-//}
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/chill.dart';
 import 'package:fluttershare/classes/chill_interactive.dart';
+import 'package:fluttershare/pages/chill_interactive_upload.dart';
 
 import 'image_viewer.dart';
 
@@ -44,9 +18,6 @@ class _ChillInteractiveDetailsState extends State<ChillInteractiveDetails> {
   Chill itemChill;
   List<ChillInteractive>userImages=[ChillInteractive("https://firebasestorage.googleapis.com/v0/b/cbtproject-55d7a.appspot.com/o/mandala.png?alt=media&token=79805b74-e36a-4032-ac96-0cedaa8ba41c","mandala")];
 
-  final List<String> entries = <String>['A', 'B', 'C'];
-  final List<int> colorCodes = <int>[600, 500, 100];
-
   _ChillInteractiveDetailsState(this.itemChill);
   @override
   Widget build(BuildContext context) {
@@ -55,22 +26,8 @@ class _ChillInteractiveDetailsState extends State<ChillInteractiveDetails> {
         title: Text(itemChill.item_title),
       ),
       body:
-
-//      ListView.builder(
-//          padding: const EdgeInsets.all(8),
-//          itemCount: entries.length,
-//          itemBuilder: (BuildContext context, int index) {
-//            return Container(
-//              height: 50,
-//              color: Colors.amber[colorCodes[index]],
-//              child: Center(child: Text('Entry ${entries[index]}')),
-//            );
-//          }      ),
-
-
-
-
       GridView.count(
+          childAspectRatio: (70 / 50),
           crossAxisCount: 1,
           children:List.generate(userImages.length, (index)
           {
@@ -96,6 +53,12 @@ class _ChillInteractiveDetailsState extends State<ChillInteractiveDetails> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal,
         child: Icon(Icons.add,color: Colors.white,),
+        onPressed: ()
+        {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context)=>ChillInteractiveUpload()
+          ));
+        },
       ),
     );
   }

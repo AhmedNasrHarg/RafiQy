@@ -45,9 +45,11 @@ class _ChillGridState extends State<ChillGrid> {
     snapshot.documents.forEach((DocumentSnapshot doc) async {
       Chill chill = Chill.fromDocument(doc);
       chillItems.add(chill);
-      setState(() {
-        chillItems = chillItems;
-      });
+      if(mounted) {
+        setState(() {
+          chillItems = chillItems;
+        });
+      }
     });
   }
 
@@ -74,9 +76,11 @@ class _ChillGridState extends State<ChillGrid> {
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
         print('${f.data}}');
-        setState(() {
-          favorites = new List<int>.from(f.data['favourite']);
-        });
+        if(mounted) {
+          setState(() {
+            favorites = new List<int>.from(f.data['favourite']);
+          });
+        }
       });
       ;
     });
@@ -93,10 +97,11 @@ class _ChillGridState extends State<ChillGrid> {
         
         numberOfUsedItem.add(ChillUsed.fromDocument(f));
         print("number used${f["num_used"]}");
-        setState(() {
-          numberOfUsedItem=numberOfUsedItem;
-
-        });
+        if(mounted) {
+          setState(() {
+            numberOfUsedItem = numberOfUsedItem;
+          });
+        }
       });
       ;
     });

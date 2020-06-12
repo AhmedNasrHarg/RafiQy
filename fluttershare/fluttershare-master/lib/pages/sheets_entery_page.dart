@@ -19,7 +19,7 @@ class EnterySheets extends StatefulWidget {
 class _EnterySheetsState extends State<EnterySheets> {
   List<Sheet> sheets = [];
   List<String>sheetImages=[];
-  int lastDone;
+  int lastDone=0;
   @override
   void initState() {
     super.initState();
@@ -45,18 +45,37 @@ class _EnterySheetsState extends State<EnterySheets> {
           .get();
       if (completeDoc.exists) {
         sheet.done = completeDoc["isDone"];
-        sheet.sheetImage="assets/images/reward.png";
-        lastDone=sheet.sheetNumber;
+        if(sheet.done) {
+          if(mounted) {
+            setState(() {
+//              sheet.sheetImage = "assets/images/reward.png";
+              lastDone = sheet.sheetNumber;
+//              print("last $lastDone");
+            });
+          }
+
+        }
+        else{
+          setState(() {
+//            sheet.sheetImage = "assets/images/flower.png";
+          });
+        }
       } else {
         sheet.done = false;
-
-        if(sheet.sheetNumber==1||(sheet.sheetNumber!=1&&lastDone!=null&&sheet.sheetNumber==(lastDone+1)))
-          {
-            sheet.sheetImage="assets/images/flower.png";
-          }
-        else{
-          sheet.sheetImage="assets/images/lock.png";
-        }
+//
+//        if((lastDone!=null&&sheet.sheetNumber==lastDone+1)||sheet.sheetNumber==1)
+//        {
+//            sheet.sheetImage="assets/images/flower.png";
+//
+//        }
+//        else if((lastDone!=null&&sheet.sheetNumber!=lastDone+1))
+//        {
+//            sheet.sheetImage="assets/images/lock.png";
+//
+//        }
+//        else{
+//        sheet.sheetImage="assets/images/lock.png";
+//        }
       }
       sheets.add(sheet);
       setState(() {
@@ -90,6 +109,8 @@ class _EnterySheetsState extends State<EnterySheets> {
 
   @override
   Widget build(BuildContext context) {
+    sheets.sort((a,b)=>a.sheetNumber.compareTo(b.sheetNumber));
+
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -101,16 +122,18 @@ class _EnterySheetsState extends State<EnterySheets> {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, index) {
+                  (context, index) {
                 return (Ink(
                   color: Color(sheets[index].sheetColor),
                   child: ListTile(
-                     leading: Container(
-                       height: 35.0,
-                       width: 35.0,
-                       child: Image.asset(
-                          sheets[index].sheetImage),
-                     ),
+                    leading: Container(
+                      height: 35.0,
+                      width: 35.0,
+                      child: sheets[index].done?Image.asset("assets/images/reward.png"):((lastDone!=0&&sheets[index].sheetNumber==lastDone+1)||sheets[index].sheetNumber==1)?
+                      Image.asset("assets/images/flower.png"):Image.asset("assets/images/lock.png")
+//                      Image.asset(
+//                          sheets[index].sheetImage),
+                    ),
                     title: Center(
                       child: Text(
                           "${sheets[index].sheetTitle}",
@@ -119,38 +142,48 @@ class _EnterySheetsState extends State<EnterySheets> {
                               fontSize: 20,
                               decorationThickness: 2.85)),
                     ),
-                    onTap: () {
-                    if(lastDone!=null&&sheets[index].sheetNumber==lastDone+1||sheets[index].sheetNumber==1)
-                     {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                MyHomePage(title: sheets[index].sheetIdName,sheetName: sheets[index].sheetTitle,)),
-                      );
-                    }
-                         else {
-                           Alert(
-                               context: context,
-                               title:
-                                   "لا يمكنك فتح تلك الصفحة دون اكمال السابقة",
-                               content: Column(
-                                 children: <Widget>[
-                                   Lottie.asset(
-                                     'assets/animations/cant.json',
-                                     width: 300,
-                                     height: 300,
-                                     fit: BoxFit.fill,
-                                   ),
-                                 ],
-                               ),
-                               buttons: [
-                                 DialogButton(
-                                   onPressed: () => Navigator.pop(context),
-                                   child: Text("حسنا"),
-                                 )
-                               ]).show();
-                         }
+                    onTap: () async{
+                      if((lastDone!=0&&sheets[index].sheetNumber==lastDone+1)||sheets[index].sheetNumber==1)
+                      {
+                        sheets[index].done=await
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MyHomePage(title: sheets[index].sheetIdName,sheetName: sheets[index].sheetTitle,)),
+                        );
+                        if(sheets[index].done)
+                          {
+                            setState(() {
+                              lastDone=lastDone+1;
+                              sheets.sort((a,b)=>a.sheetNumber.compareTo(b.sheetNumber));
+
+
+                            });
+                          }
+                      }
+                      else {
+                        Alert(
+                            context: context,
+                            title:
+                            "لا يمكنك فتح تلك الصفحة دون اكمال السابقة",
+                            content: Column(
+                              children: <Widget>[
+                                Lottie.asset(
+                                  'assets/animations/cant.json',
+                                  width: 300,
+                                  height: 300,
+                                  fit: BoxFit.fill,
+                                ),
+                              ],
+                            ),
+                            buttons: [
+                              DialogButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("حسنا"),
+                              )
+                            ]).show();
+                      }
                       // } else {
                       //   Navigator.push(
                       //       context,
