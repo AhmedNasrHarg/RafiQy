@@ -16,7 +16,7 @@ class Sheet
       sheetTitle: doc["sheetTitle"],
       sheetIdName: doc["sheetIdName"],
       sheetColor: doc["sheetColor"],
-      sheetImage: "assets/images/flower.png",
+//      sheetImage: doc["sheet"],
       sheetNumber: doc["sheetNumber"]
     );
   }

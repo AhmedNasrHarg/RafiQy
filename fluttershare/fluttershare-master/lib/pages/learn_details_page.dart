@@ -39,6 +39,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
   VideoPlayerController _videoPlayerController;
   var videoURL;
   bool connetcting;
+  String isDoneButton=" انهيت الدرس";
 
   var is_done = false;
   var num_q;
@@ -48,28 +49,48 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
   var topic_image;
   var topic_name;
   var video_url;
+  List<String> done = [];
 
-  void isTopicDone() {
-    topicRef.getDocuments().then((QuerySnapshot snapshot) {
+  Future<void> getDoneTopics() async {
+    await userRef
+        .document(currentUser.id)
+        .collection("done_topics")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
+        print('${f.data}}');
         setState(() {
-          if (f.data['topic_id'] == topic.topicId) {
-            is_done = f.data['is_done'];
-            num_q = f.data['num_q'];
-            num_q_read = f.data['num_q_read'];
-            topic_color = f.data['topic_color'];
-            topic_id = f.data['topic_id'];
-            topic_image = f.data['topic_image'];
-            topic_name = f.data['topic_name'];
-            video_url = f.data['video_url'];
-            print(topic_name);
-            print(f.data['is_done']);
-          }
+          done = new List<String>.from(f.data['done']);
+//                f.data['favourite'].cast<int>();
         });
-
-        print('jjjjjjjjjjjjjjjjjjjjj');
       });
+      ;
     });
+  }
+
+  checkIsDone() async {
+    await getDoneTopics();
+    isDone();
+  }
+
+  isDone() {
+    setState(() {
+      for (int i = 0; i < done.length; i++) {
+        if (done[i] == topic.topicId) {
+          is_done = true;
+          break;
+        }
+      }
+    });
+  }
+
+  //to update our done
+  addDone(List done) async {
+    await userRef
+        .document(currentUser.id)
+        .collection("done_topics")
+        .document("don")
+        .setData({"done": done});
   }
 
   @override
@@ -77,7 +98,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
     _checkInternetConnectivity();
     videoURL = topic.videoURL;
     getQuestions();
-    isTopicDone();
+    checkIsDone();
 
     _videoPlayerController = VideoPlayerController.network(videoURL)
       ..initialize().then((_) {
@@ -88,7 +109,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
 
   getQuestions() async {
     final questionRef =
-        Firestore.instance.collection("topic/${topic.topicId}/topic_qa");
+    Firestore.instance.collection("topic/${topic.topicId}/topic_qa");
 //    print("hereeeeee topic/${topic.topicId}/topic_qa");
     await questionRef.getDocuments().then((element) {
       topicImages.clear();
@@ -139,75 +160,77 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
         title: Text(topic.topicName),
 //          (DemoLocalization.of(context).getTranslatedValues('home_page')),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NotePage(
+          Row(
+
+            children: <Widget>[
+              Text("ملاحظاتي",style: TextStyle(color: Colors.white),),
+              IconButton(
+                icon: Icon(Icons.book),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotePage(
                           topic_id: topic.topicId,
                         ))),
+              ),
+            ],
+
           )
         ],
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: 1000,
+          height: MediaQuery.of(context).size.height,
           child: Column(
             children: <Widget>[
               _videoPlayerController.value.initialized
                   ? AspectRatio(
-                      aspectRatio: _videoPlayerController.value.aspectRatio,
-                      child: VideoPlayer(_videoPlayerController),
-                    )
+                aspectRatio: _videoPlayerController.value.aspectRatio,
+                child: VideoPlayer(_videoPlayerController),
+              )
                   : Container(),
               Visibility(
                 child: CarouselSlider(
                     options: CarouselOptions(height: 300),
                     items: topicImages
                         .map((item) => Container(
-                              child: GestureDetector(
-                                child: Center(
-                                    child: Image(
-                                  image: NetworkImage(item),
-                                )),
-                                onTap: () {
+                      child: GestureDetector(
+                        child: Center(
+                            child: Image(
+                              image: NetworkImage(item),
+                            )),
+                        onTap: () {
 //                            print("tapped");
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ImageViewer(item)));
-                                },
-                              ),
-                              height: 400,
-                            ))
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ImageViewer(item)));
+                        },
+                      ),
+                      height: 400,
+                    ))
                         .toList()),
                 visible: vis,
               ),
-              CheckboxListTile(
-                title: Text("is Topic Done"),
-                value: is_done,
-                onChanged: (newValue) {
-                  setState(() {
-                    is_done = !is_done;
-                    //firebase
-                    print(topicRef.document(topic.topicId));
-//                    topicRef.document(topic.topicId).setData({
-//                      'is_done': is_done,
-//                      'num_q': num_q,
-//                      'num_q_read': num_q_read,
-//                      'topic_color': topic_color,
-//                      'topic_id': topic_id,
-//                      'topic_image': topic_image,
-//                      'topic_name': topic_name,
-//                      'video_url': video_url
-//                    });
-                  });
-                },
-                controlAffinity:
-                    ListTileControlAffinity.leading, //  <-- leading Checkbox
-              ),
+//              CheckboxListTile(
+//                title: Text("is Topic Done"),
+//                value: is_done,
+//                onChanged: (newValue) {
+//                  setState(() async {
+//                    is_done = !is_done;
+//                    if (is_done) {
+//                      done.add(topic.topicId);
+//                      await addDone(done);
+//                    } else {
+//                      done.remove(topic.topicId);
+//                      await addDone(done);
+//                    }
+//                  });
+//                },
+//                controlAffinity:
+//                ListTileControlAffinity.leading, //  <-- leading Checkbox
+//              ),
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index) =>
@@ -215,7 +238,31 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                   itemCount: dataQuestions.length,
                 ),
               ),
+              MaterialButton(
 
+                child: Text(isDoneButton,style: (TextStyle(color: Colors.white)),),
+                color: Colors.teal,
+                onPressed:is_done?
+                (){
+                  setState(() {
+                    is_done = false;
+                    done.remove(topic.topicId);
+                    addDone(done);
+                    isDoneButton=" انهيت الدرس";
+                  });
+                }
+                    :() {
+                  setState(() {
+                    is_done = true;
+                    done.add(topic.topicId);
+                    addDone(done);
+                    isDoneButton="مراجعة الدرس";
+
+                  });
+                },
+
+
+              ),
               // , Text("Test")
             ],
           ),
