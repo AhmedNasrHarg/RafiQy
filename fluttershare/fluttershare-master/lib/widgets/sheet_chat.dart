@@ -240,8 +240,8 @@ class _MyHomePageState extends State<MyHomePage> {
     await getBodyResponseSheet();
     if (documentSnapshot.exists) {
       bool isDone = documentSnapshot['isDone'];
-      if (isDone) {
-        Navigator.pop(context);
+      if (isDone && widget.title == 'bodyResponseSheet') {
+        Navigator.pop(context,true);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HumanBody()),
