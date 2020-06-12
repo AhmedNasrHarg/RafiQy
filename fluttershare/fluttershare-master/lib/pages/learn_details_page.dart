@@ -39,6 +39,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
   VideoPlayerController _videoPlayerController;
   var videoURL;
   bool connetcting;
+  String isDoneButton=" انهيت الدرس";
 
   var is_done = false;
   var num_q;
@@ -108,7 +109,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
 
   getQuestions() async {
     final questionRef =
-        Firestore.instance.collection("topic/${topic.topicId}/topic_qa");
+    Firestore.instance.collection("topic/${topic.topicId}/topic_qa");
 //    print("hereeeeee topic/${topic.topicId}/topic_qa");
     await questionRef.getDocuments().then((element) {
       topicImages.clear();
@@ -152,8 +153,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
 //print("${dataQuestions[0].question}");
 //print("${dataQuestions[0]}");
     // TODO: implement build
-bool topicDone;
-//topicDone=done.contains(element)
+
 //  print("topic id ${topic.topicId}");
     return Scaffold(
       appBar: AppBar(
@@ -166,8 +166,8 @@ bool topicDone;
                 context,
                 MaterialPageRoute(
                     builder: (context) => NotePage(
-                          topic_id: topic.topicId,
-                        ))),
+                      topic_id: topic.topicId,
+                    ))),
           )
         ],
       ),
@@ -178,35 +178,52 @@ bool topicDone;
             children: <Widget>[
               _videoPlayerController.value.initialized
                   ? AspectRatio(
-                      aspectRatio: _videoPlayerController.value.aspectRatio,
-                      child: VideoPlayer(_videoPlayerController),
-                    )
+                aspectRatio: _videoPlayerController.value.aspectRatio,
+                child: VideoPlayer(_videoPlayerController),
+              )
                   : Container(),
               Visibility(
                 child: CarouselSlider(
                     options: CarouselOptions(height: 300),
                     items: topicImages
                         .map((item) => Container(
-                              child: GestureDetector(
-                                child: Center(
-                                    child: Image(
-                                  image: NetworkImage(item),
-                                )),
-                                onTap: () {
+                      child: GestureDetector(
+                        child: Center(
+                            child: Image(
+                              image: NetworkImage(item),
+                            )),
+                        onTap: () {
 //                            print("tapped");
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ImageViewer(item)));
-                                },
-                              ),
-                              height: 400,
-                            ))
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ImageViewer(item)));
+                        },
+                      ),
+                      height: 400,
+                    ))
                         .toList()),
                 visible: vis,
               ),
-
+//              CheckboxListTile(
+//                title: Text("is Topic Done"),
+//                value: is_done,
+//                onChanged: (newValue) {
+//                  setState(() async {
+//                    is_done = !is_done;
+//                    if (is_done) {
+//                      done.add(topic.topicId);
+//                      await addDone(done);
+//                    } else {
+//                      done.remove(topic.topicId);
+//                      await addDone(done);
+//                    }
+//                  });
+//                },
+//                controlAffinity:
+//                ListTileControlAffinity.leading, //  <-- leading Checkbox
+//              ),
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index) =>
@@ -216,52 +233,29 @@ bool topicDone;
               ),
               MaterialButton(
 
-                child: Text("انهيت الدرس",style: (TextStyle(color: Colors.white)),),
+                child: Text(isDoneButton,style: (TextStyle(color: Colors.white)),),
                 color: Colors.teal,
-                onPressed:is_done?null:()
-                {
-                setState(() {
-                is_done = true;
-                done.add(topic.topicId);
-                addDone(done);
-                });
+                onPressed:is_done?
+                (){
+                  setState(() {
+                    is_done = false;
+                    done.remove(topic.topicId);
+                    addDone(done);
+                    isDoneButton=" انهيت الدرس";
+                  });
+                }
+                    :() {
+                  setState(() {
+                    is_done = true;
+                    done.add(topic.topicId);
+                    addDone(done);
+                    isDoneButton="مراجعة الدرس";
+
+                  });
                 },
 
 
               ),
-//              CheckboxListTile(
-//                title: Text("is Topic Done"),
-//                value: is_done,
-//                onChanged: (newValue) {
-//                  setState(() {
-//                    is_done = !is_done;
-//                    if(is_done){
-//                      done.add(topic.topicId);
-//                      addDone(done);
-//                    }
-//                    else{
-//                      done.remove(topic.topicId);
-//                      addDone(done);
-//                    }
-////                    print(is_done); //firebase
-////                    print(topic.topicId);
-////                    print(topicRef.document(topic.topicId));
-////                    topicRef.document(topic.topicId).setData({
-////                      'is_done': is_done,
-////                      'num_q': num_q,
-////                      'num_q_read': num_q_read,
-////                      'topic_color': topic_color,
-////                      'topic_id': topic_id,
-////                      'topic_image': topic_image,
-////                      'topic_name': topic_name,
-////                      'video_url': video_url
-////                    });
-//                  });
-//                },
-//                controlAffinity:
-//                ListTileControlAffinity.leading, //  <-- leading Checkbox
-//              ),
-
               // , Text("Test")
             ],
           ),
