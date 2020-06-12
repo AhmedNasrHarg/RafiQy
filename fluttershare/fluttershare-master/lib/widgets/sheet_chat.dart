@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/question.dart';
+import 'package:fluttershare/pages/chillzone.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/human_body.dart';
 import 'package:fluttershare/widgets/chat_bubble.dart';
@@ -32,6 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String message = '';
   List sheet = [];
   int i = 0;
+  int returnTo = 0;
   var bodyResponseSheet = <Question>[];
   List<Message> oldChat1 = [];
   var isBotTyping = false;
@@ -64,9 +66,28 @@ class _MyHomePageState extends State<MyHomePage> {
       case "انتهيت":
         return sheetDone;
         break;
+      case "اذهب":
+        return visit;
+        break;
+      case "استمرار":
+        return continueQestions;
+        break;
+      case "موقف آخر":
+        return jumpTo;
+        break;
       default:
         return notFound;
     }
+  }
+
+  jumpTo() async {
+    userMessage('موقف آخر');
+    await saveChat();
+    await saveLogSheetOutput();
+    i = returnTo;
+    setState(() {
+      nextBotMessage();
+    });
   }
 
   watch() async {
@@ -76,6 +97,21 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       nextBotMessage();
     });
+  }
+
+  continueQestions() async {
+    userMessage('استمرار');
+    await saveChat();
+    setState(() {
+      nextBotMessage();
+    });
+  }
+
+  visit() async {
+    userMessage('اذهب');
+    await saveChat();
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ChillZone()));
   }
 
   nextQuestion() async {
@@ -117,7 +153,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   sheetDone() async {
     // userMessage('انتهيت');
-
+    if(widget.title == "logSheet"){
+      await saveLogSheetOutput();
+    }
     showDoneCongrats();
     await saveChat(isDone: true);
   }
@@ -159,20 +197,21 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  getQuestions() async {
-    await sheetsRef.document(widget.title).get().then((value) {
-      print(value.data);
-      setState(() {
-        sheet = value.data['questions'];
-      });
-    });
-  }
+  // getQuestions() async {
+  //   await sheetsRef.document(widget.title).get().then((value) {
+  //     print(value.data);
+  //     setState(() {
+  //       sheet = value.data['questions'];
+  //     });
+  //   });
+  // }
 
   getBodyResponseSheet() async {
     setState(() {
       isLoading = true;
     });
     await sheetsRef.document(widget.title).get().then((value) {
+      returnTo = value.data['returnTo'];
       value.data['questions'].forEach((e) {
         var q = Map<String, dynamic>.from(e);
         Question qst = Question.fromJson(q);
@@ -196,6 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .collection("completedSheets")
         .document(widget.title + "Log")
         .get();
+    await getBodyResponseSheet();
     if (documentSnapshot.exists) {
       bool isDone = documentSnapshot['isDone'];
       if (isDone) {
@@ -209,7 +249,6 @@ class _MyHomePageState extends State<MyHomePage> {
         print("Exist");
       }
     }
-    await getBodyResponseSheet();
   }
 
   void getOldChat(DocumentSnapshot documentSnapshot) {
@@ -217,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
     for (int j = 0; j <= documentSnapshot['lastAnsIndex']; j++) {
       oldChat.add(documentSnapshot['answer$j']);
     }
-    // print(old)
+    print(oldChat);
     for (int j = 0; j <= documentSnapshot['lastAnsIndex']; j++) {
       if (oldChat[j] != null && oldChat[j].isNotEmpty) {
         if (j == 0) {
@@ -248,6 +287,37 @@ class _MyHomePageState extends State<MyHomePage> {
     // print(oldChat[0] + oldChat[1]+ oldChat[3]);
   }
 
+  saveLogSheetOutput() async {
+    DocumentSnapshot sheetlog = await userRef
+        .document(currentUser.id)
+        .collection('completedSheets')
+        .document(widget.title + "Log")
+        .get();
+
+    await userRef
+        .document(currentUser.id)
+        .collection('logSheetOutput')
+        .document(DateTime.now().millisecondsSinceEpoch.toString())
+        .get()
+        .then((DocumentSnapshot value) async {
+      for (int i = 8; i <= 12; i++) {
+        if (i != 8) {
+           value.reference.updateData({'answer$i': sheetlog['answer$i']});
+        } else {
+           value.reference.setData({'answer$i': sheetlog['answer$i']});
+        }
+      }
+    });
+
+    // for (int i = 8; i <= 12; i++) {
+    //   if (i != 8) {
+    //     await sheetOutput.reference.updateData({'answer$i': sheetlog['answer$i']});
+    //   } else {
+    //     await sheetOutput.reference.setData({'answer$i': sheetlog['answer$i']});
+    //   }
+    // }
+  }
+
   saveChat({isDone = false}) async {
     DocumentSnapshot sheetlog = await userRef
         .document(currentUser.id)
@@ -256,29 +326,27 @@ class _MyHomePageState extends State<MyHomePage> {
         .get();
 
     if (sheetlog.exists) {
-      if (sheetlog['answer$i'] == null) {
-        if (bodyResponseSheet[i].items != null) {
-          chatLog.clear();
-          checkedItems.forEach((e) {
-            if (e.media != null)
-              chatLog.add({
-                'name': e.name,
-                'type': e.type,
-                'media': e.media,
-              });
-            else
-              chatLog.add({
-                'name': e.name,
-                'type': e.type,
-              });
-          });
-          sheetlog.reference
-              .updateData({'answer$i': chatLog, "isDone": isDone});
-        } else {
-          sheetlog.reference
-              .updateData({'answer$i': chatLog, "isDone": isDone});
-        }
+      // if (sheetlog['answer$i'] == null) {
+      if (bodyResponseSheet[i].items != null) {
+        chatLog.clear();
+        checkedItems.forEach((e) {
+          if (e.media != null)
+            chatLog.add({
+              'name': e.name,
+              'type': e.type,
+              'media': e.media,
+            });
+          else
+            chatLog.add({
+              'name': e.name,
+              'type': e.type,
+            });
+        });
+        sheetlog.reference.updateData({'answer$i': chatLog, "isDone": isDone});
+      } else {
+        sheetlog.reference.updateData({'answer$i': chatLog, "isDone": isDone});
       }
+      // }
     } else {
       sheetlog.reference.setData({'answer$i': chatLog, "isDone": isDone});
     }
@@ -511,8 +579,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ? () {}
                                           : () async {
                                               userMessage('تم');
-                                              print("i=$i, sheet = ${bodyResponseSheet.length}");
-                                              if (i+1 >=
+                                              print(
+                                                  "i=$i, sheet = ${bodyResponseSheet.length}");
+                                              if (i + 1 >=
                                                   bodyResponseSheet.length) {
                                                 await sheetDone();
                                               } else {

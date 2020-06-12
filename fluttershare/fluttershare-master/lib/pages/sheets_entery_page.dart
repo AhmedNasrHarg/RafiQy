@@ -120,37 +120,35 @@ class _EnterySheetsState extends State<EnterySheets> {
                               decorationThickness: 2.85)),
                     ),
                     onTap: () {
-                    if(lastDone!=null&&sheets[index].sheetNumber==lastDone+1||sheets[index].sheetNumber==1)
-                     {
+                  //  if(lastDone!=null&&sheets[index].sheetNumber==lastDone+1||sheets[index].sheetNumber==1){
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 MyHomePage(title: sheets[index].sheetIdName,sheetName: sheets[index].sheetTitle,)),
                       );
-                    }
-                         else {
-                           Alert(
-                               context: context,
-                               title:
-                                   "لا يمكنك فتح تلك الصفحة دون اكمال السابقة",
-                               content: Column(
-                                 children: <Widget>[
-                                   Lottie.asset(
-                                     'assets/animations/cant.json',
-                                     width: 300,
-                                     height: 300,
-                                     fit: BoxFit.fill,
-                                   ),
-                                 ],
-                               ),
-                               buttons: [
-                                 DialogButton(
-                                   onPressed: () => Navigator.pop(context),
-                                   child: Text("حسنا"),
-                                 )
-                               ]).show();
-                         }
+                    // }else {
+                        //    Alert(
+                        //        context: context,
+                        //        title:
+                        //            "لا يمكنك فتح تلك الصفحة دون اكمال السابقة",
+                        //        content: Column(
+                        //          children: <Widget>[
+                        //            Lottie.asset(
+                        //              'assets/animations/cant.json',
+                        //              width: 300,
+                        //              height: 300,
+                        //              fit: BoxFit.fill,
+                        //            ),
+                        //          ],
+                        //        ),
+                        //        buttons: [
+                        //          DialogButton(
+                        //            onPressed: () => Navigator.pop(context),
+                        //            child: Text("حسنا"),
+                        //          )
+                        //        ]).show();
+                        //  }
                       // } else {
                       //   Navigator.push(
                       //       context,
