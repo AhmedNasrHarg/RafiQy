@@ -75,7 +75,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
   isDone() {
     setState(() {
       for (int i = 0; i < done.length; i++) {
-        if (done[i] == topic_id) {
+        if (done[i] == topic.topicId) {
           is_done = true;
           break;
         }
@@ -209,14 +209,14 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                 title: Text("is Topic Done"),
                 value: is_done,
                 onChanged: (newValue) {
-                  setState(() {
+                  setState(() async {
                     is_done = !is_done;
                     if (is_done) {
                       done.add(topic.topicId);
-                      addDone(done);
+                      await addDone(done);
                     } else {
                       done.remove(topic.topicId);
-                      addDone(done);
+                      await addDone(done);
                     }
                   });
                 },
