@@ -160,14 +160,21 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
         title: Text(topic.topicName),
 //          (DemoLocalization.of(context).getTranslatedValues('home_page')),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NotePage(
-                      topic_id: topic.topicId,
-                    ))),
+          Row(
+
+            children: <Widget>[
+              Text("ملاحظاتي",style: TextStyle(color: Colors.white),),
+              IconButton(
+                icon: Icon(Icons.book),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotePage(
+                          topic_id: topic.topicId,
+                        ))),
+              ),
+            ],
+
           )
         ],
       ),
