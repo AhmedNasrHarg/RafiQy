@@ -74,14 +74,15 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
 
   isDone() {
     setState(() {
-      for(int i=0;i<done.length;i++){
-          if(done[i]==topic_id){
-            is_done=true;
-            break;
-          }
+      for (int i = 0; i < done.length; i++) {
+        if (done[i] == topic.topicId) {
+          is_done = true;
+          break;
+        }
       }
     });
   }
+
   //to update our done
   addDone(List done) async {
     await userRef
@@ -205,6 +206,7 @@ bool topicDone;
                         .toList()),
                 visible: vis,
               ),
+
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index) =>
