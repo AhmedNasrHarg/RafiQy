@@ -264,17 +264,17 @@ class _ChillGridState extends State<ChillGrid> {
                 )
             );
           })),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor:Colors.teal,
-          onPressed: () {
-            showSuggestionsDialog();
-
-          },
-          child: Column(children:<Widget>[
-            Icon(Icons.mood,color: Colors.white,)
-            ,Text("اقترح",style: TextStyle(color: Colors.white),)
-          ],),
-        )
+//        floatingActionButton: FloatingActionButton(
+//          backgroundColor:Colors.teal,
+//          onPressed: () {
+//            showSuggestionsDialog();
+//
+//          },
+//          child: Column(children:<Widget>[
+//            Icon(Icons.mood,color: Colors.white,)
+//            ,Text("اقترح",style: TextStyle(color: Colors.white),)
+//          ],),
+//        )
     );
   }
 
