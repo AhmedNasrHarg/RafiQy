@@ -78,9 +78,11 @@ class _EnterySheetsState extends State<EnterySheets> {
 //        }
       }
       sheets.add(sheet);
-      setState(() {
-        sheets = sheets;
-      });
+      if(mounted) {
+        setState(() {
+          sheets = sheets;
+        });
+      }
     });
 
   }

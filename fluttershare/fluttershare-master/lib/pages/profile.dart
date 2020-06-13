@@ -227,24 +227,39 @@ super.dispose();
                 // alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(top: 12.0),
                 child: Center(
-                  child: Text(
-                    user.username,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22.0,
+                  child:
+                  Row(children: <Widget>[
+                    Text(
+                      user.username,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22.0,
+                      ),
                     ),
+
+                    Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
+                        ,width: 30
+                        , height: 30
+                        ,controller: controller,
+                        onLoaded: (composition)
+                        {
+                          setState(() {
+                            controller.duration=composition.duration*2;
+                          });
+                        }
+                    ),
+                    Container(
+                      // alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.only(top: 2.0),
+                      child: Text(
+                        user.bio,
+                      ),
+                    ),
+                  ],
                   ),
                 ),
               ),
-              Center(
-                child: Container(
-                  // alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 2.0),
-                  child: Text(
-                    user.bio,
-                  ),
-                ),
-              ),
+
             ],
           ),
         );
@@ -373,17 +388,17 @@ super.dispose();
 
       )
       ,
-      Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
-    ,width: 200
-    , height: 200
-    ,controller: controller,
-    onLoaded: (composition)
-    {
-    setState(() {
-    controller.duration=composition.duration*2;
-    });
-    }
-    )
+//      Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
+//    ,width: 200
+//    , height: 200
+//    ,controller: controller,
+//    onLoaded: (composition)
+//    {
+//    setState(() {
+//    controller.duration=composition.duration*2;
+//    });
+//    }
+//    )
     ],
   );
 
@@ -511,4 +526,5 @@ super.dispose();
 
 
   }
+
 }
