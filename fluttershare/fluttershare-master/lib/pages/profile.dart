@@ -28,7 +28,9 @@ class _ProfileState extends State<Profile>with TickerProviderStateMixin {
   int postCount = 0;
   List<Article> posts = [];
   List<Article> temp;
-  int completed=0;
+  int completedSheets=0;
+  int completedTopics=0;
+  int numUsed=0;
   AnimationController controller;
   void _changeLanguage(Language language) async {
     Locale _temp = await setLocale(language.languageCode);
@@ -54,6 +56,7 @@ class _ProfileState extends State<Profile>with TickerProviderStateMixin {
       });
     getDoneTopics();
     getCompletedDocs();
+    getNumberUsed();
   }
 
   @override
@@ -285,55 +288,92 @@ super.dispose();
 
   buildUserProfile() {
 
-  return completed==0?
-  Card(
-
-    color: Colors.teal[100],
-    child: Row(
-      children: <Widget>[
-        Text("هيا تشجع لاكمال الدرس الاول",
-          style: TextStyle(
-            fontFamily: Localizations.localeOf(context).languageCode == "ar"
-                ? "Lemonada"
-                : "Signatra",
-          ),),
-        Lottie.network("https://assets4.lottiefiles.com/packages/lf20_zm1z76.json",width: 100,height: 100)
-
-//            Image.asset("assets/images/flower.png")
-      ],
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-    ),
-  ):
-    Container(
+  return
+//    completed==0?
+//  Card(
+//
 //    color: Colors.teal[100],
-//    height: MediaQuery.of(context).size.height,
-    child:
+//    child: Row(
+//      children: <Widget>[
+//        Text("هيا تشجع لاكمال الدرس الاول",
+//          style: TextStyle(
+//            fontFamily: Localizations.localeOf(context).languageCode == "ar"
+//                ? "Lemonada"
+//                : "Signatra",
+//          ),),
+//        Lottie.network("https://assets4.lottiefiles.com/packages/lf20_zm1z76.json",width: 100,height: 100)
+//
+////            Image.asset("assets/images/flower.png")
+//      ],
+//      mainAxisAlignment: MainAxisAlignment.spaceAround,
+//    ),
+//  )
+//      :
+  Column(
 
-            Column(
-
-              children: <Widget>[
-                Card(
-//                  color: Colors.teal[100],
-
-                  child: Text("لقد انهيت الدرس الاول",
-      style: TextStyle(
-      fontFamily: Localizations.localeOf(context).languageCode == "ar"
-          ? "Tajwal"
-          : "Signatra",
+    children: <Widget>[
+      Card(
+        color: Colors.teal[100],
+    elevation: 10,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children:<Widget>[
+            Text(completedTopics==0?"هيا تشجع لاكمال الدرس الاول":"لقد انهيت $completedTopics من الدروس ",
+                style: TextStyle(
+                  fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                      ? "Tajwal"
+                      : "Signatra",
 //        color: Colors.white
-      )),
-                ),
-                Card(
-//                  color: Colors.teal[100],
-                  child: Text("لقد انهيت المهمة الاولي",
-                      style: TextStyle(
-                        fontFamily: Localizations.localeOf(context).languageCode == "ar"
-                            ? "Tajwal"
-                            : "Signatra",
-//                        color: Colors.white
-                      )),
-                ),
-                Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
+                )),
+            Lottie.asset(completedTopics==0?"assets/animations/muscle.json":"assets/animations/12833-planta-3.json",width: 100,height: 100)
+
+          ]
+        ),
+
+      ),
+      Card(
+        color: Colors.teal[100],
+        elevation: 10,
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children:<Widget>[
+              Text(completedSheets==0?"هيا تشجع لاكمال أول مهمة":"لقد انهيت $completedSheets من المهمات ",
+                  style: TextStyle(
+                    fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                        ? "Tajwal"
+                        : "Signatra",
+//        color: Colors.white
+                  )),
+              Lottie.asset(completedSheets==0?"assets/animations/muscle.json":"assets/animations/bar.json",width: 100,height: 100)
+
+            ]
+        ),
+
+      ),
+      Card(
+        color: Colors.indigo[700],
+        elevation: 10,
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children:<Widget>[
+              Text(numUsed==0?"لم تستخدم منطقة الاسترخاء بعد":"لقد استخدمت $numUsed من منطقة الاسترخاء ",
+                  style: TextStyle(
+                    fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                        ? "Tajwal"
+                        : "Signatra",
+        color: Colors.white
+                  )),
+             numUsed==0? Image.asset("assets/images/sad_tree.png",width: 100,height: 100,):Lottie.asset("assets/animations/music.json",width: 100,height: 100)
+
+            ]
+        ),
+
+      )
+      ,
+      Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
     ,width: 200
     , height: 200
     ,controller: controller,
@@ -344,28 +384,12 @@ super.dispose();
     });
     }
     )
-              ],
-            )
-//        Lottie.network("https://assets4.lottiefiles.com/packages/lf20_zm1z76.json",width: 200,height: 200)
-
-
-//              ,Card(
-//          color: Colors.teal[100],
-//        child: Row(
-//          children: <Widget>[
-//            Text("هيا تشجع لاكمال الدرس الاول",
-//            style: TextStyle(
-//              fontFamily: Localizations.localeOf(context).languageCode == "ar"
-//                  ? "Lemonada"
-//                  : "Signatra",
-//            ),),
-////            Image.asset("assets/images/flower.png")
-//          ],
-//        ),
-//      )
-
-
+    ],
   );
+
+
+
+
   }
 
   ListView buildProfile() {
@@ -437,10 +461,10 @@ super.dispose();
             .collection("completedSheets").getDocuments()
          .then((QuerySnapshot snapshot) {
        snapshot.documents.forEach((f) {
-         print('${f.data}}');
          setState(() {
-           completed=completed+1;
-           print("Completed $completed");
+           completedSheets=completedSheets+1;
+           print("Completed $completedSheets");
+           controller.value +=(1/6);
 
          });
        });
@@ -458,14 +482,33 @@ super.dispose();
         .getDocuments()
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
-        print('${f.data}}');
         setState(() {
           var c = new List<String>.from(f.data['done']);
-        completed=completed+c.length;
-        print("Completed $completed");
+        completedTopics=completedTopics+c.length;
+        controller.value+=(1/6);
+        print("Completed $completedTopics");
         });
       });
       ;
     });
+  }
+
+  getNumberUsed()async
+  {
+    await userRef
+        .document(currentUser.id)
+        .collection("number_used_chill")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        setState(() {
+          numUsed=numUsed+1;
+        });
+      });
+      ;
+    });
+
+
+
   }
 }
