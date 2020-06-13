@@ -8,6 +8,7 @@ import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/post.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/home.dart';
+import 'package:fluttershare/pages/profile.dart';
 import 'package:fluttershare/widgets/custom_image.dart';
 import 'package:fluttershare/widgets/header.dart';
 import 'package:fluttershare/widgets/progress.dart';
@@ -52,11 +53,10 @@ class _ArticleState extends State<Article> {
   _ArticleState({this.post, this.likes, this.likesCount});
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     checkPostVerified();
   }
-
 
   buildPostHeader() {
     return FutureBuilder(
@@ -72,7 +72,7 @@ class _ArticleState extends State<Article> {
             backgroundColor: Colors.grey,
           ),
           title: GestureDetector(
-            onTap: () => print("showing profile"),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(profileId: post.authorId))),
             child: Text(
               user.username,
               style:
@@ -144,6 +144,15 @@ class _ArticleState extends State<Article> {
     );
   }
 
+  showComments(BuildContext context, {Post post}) async {
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Comments(post: post)));
+        await checkPostVerified();
+        // setState(()  {
+        //     isTottalyVefified = isTottalyVefified;
+        // });
+  }
+
   buildPostContent() {
     return Column(
       children: <Widget>[
@@ -166,11 +175,13 @@ class _ArticleState extends State<Article> {
               padding: EdgeInsets.only(right: 20.0),
             ),
             GestureDetector(
-              onTap: () => showComments(context, post: post),
+              onTap: () {
+                showComments(context, post: post);
+              },
               child: Icon(
                 Icons.chat,
                 size: 28.0,
-                color: isTottalyVefified?  Colors.blue[900] : Colors.red[900],
+                color: isTottalyVefified ? Colors.blue[900] : Colors.red[900],
               ),
             ),
             Padding(
@@ -200,7 +211,6 @@ class _ArticleState extends State<Article> {
                 ),
               ),
             ),
-           
           ],
         ),
         Row(
@@ -211,9 +221,9 @@ class _ArticleState extends State<Article> {
                 margin: EdgeInsets.only(
                     left: 20.0, bottom: widget.isProfile ? 8.0 : 0.0),
                 child: Text(
-                  "$likesCount ${getTranslated(context,"like")}",
-                  style:
-                      TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                  "$likesCount ${getTranslated(context, "like")}",
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -239,19 +249,20 @@ class _ArticleState extends State<Article> {
     );
   }
 
-  checkPostVerified() async{
-    QuerySnapshot snapshot = await
-    userRef
-    .document(currentUserId)
-    .collection("userPosts")
-    .document(post.postId)
-    .collection("comments")
-    .getDocuments();
-    for(int i =0; i< snapshot.documents.length; i++){
-      if(snapshot.documents[i]["isVerified"]){
+  checkPostVerified() async {
+    QuerySnapshot snapshot = await userRef
+        .document(currentUserId)
+        .collection("userPosts")
+        .document(post.postId)
+        .collection("comments")
+        .getDocuments();
+    for (int i = 0; i < snapshot.documents.length; i++) {
+      if (snapshot.documents[i]["isVerified"]) {
+        setState(() {
+          isTottalyVefified = true;
+        });
         continue;
-      }
-      else{
+      } else {
         setState(() {
           isTottalyVefified = false;
         });
@@ -285,10 +296,4 @@ class _ArticleState extends State<Article> {
       ),
     );
   }
-}
-
-showComments(BuildContext context, {Post post}) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) {
-    return Comments(post: post);
-  }));
 }

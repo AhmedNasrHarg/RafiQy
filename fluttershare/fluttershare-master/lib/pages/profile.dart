@@ -24,11 +24,17 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile>with TickerProviderStateMixin {
   String currentUserId = currentUser.id;
+  bool isFollowing = false;
   bool isLoading = false;
   int postCount = 0;
+  int followerCount = 0;
+  int followingCount = 0;
   List<Article> posts = [];
   List<Article> temp;
-  int completed=0;
+  bool isProfileOwner;
+  int completedSheets=0;
+  int completedTopics=0;
+  int numUsed=0;
   AnimationController controller;
   void _changeLanguage(Language language) async {
     Locale _temp = await setLocale(language.languageCode);
@@ -40,8 +46,14 @@ class _ProfileState extends State<Profile>with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    if (currentUser.isAdmin) {
+    isProfileOwner = currentUserId == widget.profileId;
+    if (currentUser.isAdmin || !isProfileOwner) {
       getAdminPosts();
+      chechIfFollowing();
+    } if (currentUser.isAdmin) {
+      getFollowers();
+    } else if (!currentUser.isAdmin) {
+      getFollowing();
     }
 
     controller = AnimationController(vsync: this)
@@ -54,6 +66,7 @@ class _ProfileState extends State<Profile>with TickerProviderStateMixin {
       });
     getDoneTopics();
     getCompletedDocs();
+    getNumberUsed();
   }
 
   @override
@@ -62,12 +75,47 @@ controller.dispose();
 super.dispose();
   }
 
+  chechIfFollowing() async {
+    DocumentSnapshot doc = await followerRef
+        .document(widget.profileId)
+        .collection("userFollowers")
+        .document(currentUserId)
+        .get();
+
+    setState(() {
+      isFollowing = doc.exists;
+    });
+  }
+
+  getFollowers() async {
+    QuerySnapshot snapshot =  await followerRef
+    .document(widget.profileId)
+    .collection("userFollowers")
+    .getDocuments();
+
+    setState(() {
+      followerCount = snapshot.documents.length;
+    });
+  }
+
+  getFollowing() async {
+    QuerySnapshot snapshot = await followingRef
+    .document(widget.profileId)
+    .collection("userFollowing")
+    .getDocuments();
+
+    setState(() {
+      followingCount = snapshot.documents.length;
+    });
+  }
+
   getAdminPosts() async {
     setState(() {
       isLoading = true;
     });
+    String docId = isProfileOwner ? currentUserId : widget.profileId;
     QuerySnapshot snapshot = await userRef
-        .document(currentUserId)
+        .document(docId)
         .collection("userPosts")
         .orderBy("timestamp", descending: true)
         .getDocuments();
@@ -92,7 +140,6 @@ super.dispose();
       });
     }
   }
-  
 
   buildCountColumn(String label, int count) {
     return Column(
@@ -125,7 +172,7 @@ super.dispose();
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           buildCountColumn(getTranslated(context, "articles"), postCount),
-          buildCountColumn(getTranslated(context, "followers"), 0)
+          buildCountColumn(getTranslated(context, "followers"), followerCount)
         ],
       );
     } else {
@@ -133,7 +180,7 @@ super.dispose();
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          buildCountColumn(getTranslated(context, "following"), 0),
+          buildCountColumn(getTranslated(context, "following"), followingCount),
         ],
       );
     }
@@ -161,13 +208,15 @@ super.dispose();
           height: 27.0,
           child: Text(
             text,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: isFollowing ? Colors.black : Colors.white,
+                fontWeight: FontWeight.bold),
           ),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Colors.blue,
+              color: isFollowing ? Colors.white : Colors.blue,
               border: Border.all(
-                color: Colors.blue,
+                color: isFollowing ? Colors.grey : Colors.blue,
               ),
               borderRadius: BorderRadius.circular(5.0)),
         ),
@@ -179,8 +228,62 @@ super.dispose();
     // viewing your own profile - should show profile button
     bool isProfileOwner = currentUserId == widget.profileId;
     if (isProfileOwner) {
-      return buildButton(text: getTranslated(context, "edit_profile"), function: editProfile);
+      return buildButton(
+          text: getTranslated(context, "edit_profile"), function: editProfile);
+    } else if (isFollowing) {
+      return buildButton(
+          text: getTranslated(context, "unfollow"),
+          function: handleUnfollowUser);
+    } else if (!isFollowing) {
+      return buildButton(
+          text: getTranslated(context, "follow"), function: handleFollowUser);
     }
+  }
+
+  handleUnfollowUser() {
+    setState(() {
+      isFollowing = false;
+    });
+    // remove follower
+    followerRef
+        .document(widget.profileId)
+        .collection("userFollowers")
+        .document(currentUserId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+    // remove following
+    followingRef
+        .document(currentUserId)
+        .collection("userFollowing")
+        .document(widget.profileId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+  }
+
+  handleFollowUser() {
+    setState(() {
+      isFollowing = true;
+    });
+    // Make auth user follower of THAT user (update THEIR followers collection)
+    followerRef
+        .document(widget.profileId)
+        .collection("userFollowers")
+        .document(currentUserId)
+        .setData({});
+    // Put THAT user on YOUR following collection (update your following collection)
+    followingRef
+        .document(currentUserId)
+        .collection("userFollowing")
+        .document(widget.profileId)
+        .setData({});
   }
 
   buildProfileHeader() {
@@ -276,64 +379,96 @@ super.dispose();
     return Column(
       children: posts,
     );
-    // return Column(
-    //   children: <Widget>[
-    //     Text("Pending comments"),
-    //   ],
-    // );
   }
 
   buildUserProfile() {
 
-  return completed==0?
-  Card(
-
-    color: Colors.teal[100],
-    child: Row(
-      children: <Widget>[
-        Text("هيا تشجع لاكمال الدرس الاول",
-          style: TextStyle(
-            fontFamily: Localizations.localeOf(context).languageCode == "ar"
-                ? "Lemonada"
-                : "Signatra",
-          ),),
-        Lottie.network("https://assets4.lottiefiles.com/packages/lf20_zm1z76.json",width: 100,height: 100)
-
-//            Image.asset("assets/images/flower.png")
-      ],
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-    ),
-  ):
-    Container(
+  return
+//    completed==0?
+//  Card(
+//
 //    color: Colors.teal[100],
-//    height: MediaQuery.of(context).size.height,
-    child:
+//    child: Row(
+//      children: <Widget>[
+//        Text("هيا تشجع لاكمال الدرس الاول",
+//          style: TextStyle(
+//            fontFamily: Localizations.localeOf(context).languageCode == "ar"
+//                ? "Lemonada"
+//                : "Signatra",
+//          ),),
+//        Lottie.network("https://assets4.lottiefiles.com/packages/lf20_zm1z76.json",width: 100,height: 100)
+//
+////            Image.asset("assets/images/flower.png")
+//      ],
+//      mainAxisAlignment: MainAxisAlignment.spaceAround,
+//    ),
+//  )
+//      :
+  Column(
 
-            Column(
-
-              children: <Widget>[
-                Card(
-//                  color: Colors.teal[100],
-
-                  child: Text("لقد انهيت الدرس الاول",
-      style: TextStyle(
-      fontFamily: Localizations.localeOf(context).languageCode == "ar"
-          ? "Tajwal"
-          : "Signatra",
+    children: <Widget>[
+      Card(
+        color: Colors.teal[100],
+    elevation: 10,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children:<Widget>[
+            Text(completedTopics==0?"هيا تشجع لاكمال الدرس الاول":"لقد انهيت $completedTopics من الدروس ",
+                style: TextStyle(
+                  fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                      ? "Tajwal"
+                      : "Signatra",
 //        color: Colors.white
-      )),
-                ),
-                Card(
-//                  color: Colors.teal[100],
-                  child: Text("لقد انهيت المهمة الاولي",
-                      style: TextStyle(
-                        fontFamily: Localizations.localeOf(context).languageCode == "ar"
-                            ? "Tajwal"
-                            : "Signatra",
-//                        color: Colors.white
-                      )),
-                ),
-                Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
+                )),
+            Lottie.asset(completedTopics==0?"assets/animations/muscle.json":"assets/animations/12833-planta-3.json",width: 100,height: 100)
+
+          ]
+        ),
+
+      ),
+      Card(
+        color: Colors.teal[100],
+        elevation: 10,
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children:<Widget>[
+              Text(completedSheets==0?"هيا تشجع لاكمال أول مهمة":"لقد انهيت $completedSheets من المهمات ",
+                  style: TextStyle(
+                    fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                        ? "Tajwal"
+                        : "Signatra",
+//        color: Colors.white
+                  )),
+              Lottie.asset(completedSheets==0?"assets/animations/muscle.json":"assets/animations/bar.json",width: 100,height: 100)
+
+            ]
+        ),
+
+      ),
+      Card(
+        color: Colors.indigo[700],
+        elevation: 10,
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children:<Widget>[
+              Text(numUsed==0?"لم تستخدم منطقة الاسترخاء بعد":"لقد استخدمت $numUsed من منطقة الاسترخاء ",
+                  style: TextStyle(
+                    fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                        ? "Tajwal"
+                        : "Signatra",
+        color: Colors.white
+                  )),
+             numUsed==0? Image.asset("assets/images/sad_tree.png",width: 100,height: 100,):Lottie.asset("assets/animations/music.json",width: 100,height: 100)
+
+            ]
+        ),
+
+      )
+      ,
+      Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
     ,width: 200
     , height: 200
     ,controller: controller,
@@ -344,36 +479,23 @@ super.dispose();
     });
     }
     )
-              ],
-            )
-//        Lottie.network("https://assets4.lottiefiles.com/packages/lf20_zm1z76.json",width: 200,height: 200)
-
-
-//              ,Card(
-//          color: Colors.teal[100],
-//        child: Row(
-//          children: <Widget>[
-//            Text("هيا تشجع لاكمال الدرس الاول",
-//            style: TextStyle(
-//              fontFamily: Localizations.localeOf(context).languageCode == "ar"
-//                  ? "Lemonada"
-//                  : "Signatra",
-//            ),),
-////            Image.asset("assets/images/flower.png")
-//          ],
-//        ),
-//      )
-
-
+    ],
   );
+
+
+
+
   }
 
   ListView buildProfile() {
+    bool isProfileOwner = currentUserId == widget.profileId;
     return ListView(
       children: <Widget>[
         buildProfileHeader(),
         Divider(),
-        currentUser.isAdmin ? buildAdminProfile() : buildUserProfile(),
+        currentUser.isAdmin
+            ? buildAdminProfile()
+            : isProfileOwner ? buildUserProfile() : buildAdminProfile(),
       ],
     );
   }
@@ -390,7 +512,9 @@ super.dispose();
               fontFamily: Localizations.localeOf(context).languageCode == "ar"
                   ? "Lemonada"
                   : "Signatra",
-              fontSize: Localizations.localeOf(context).languageCode == "ar" ? 30.0 : 50.0,
+              fontSize: Localizations.localeOf(context).languageCode == "ar"
+                  ? 30.0
+                  : 50.0,
             ),
           ),
 //          (DemoLocalization.of(context).getTranslatedValues('home_page')),
@@ -437,10 +561,10 @@ super.dispose();
             .collection("completedSheets").getDocuments()
          .then((QuerySnapshot snapshot) {
        snapshot.documents.forEach((f) {
-         print('${f.data}}');
          setState(() {
-           completed=completed+1;
-           print("Completed $completed");
+           completedSheets=completedSheets+1;
+           print("Completed $completedSheets");
+           controller.value +=(1/6);
 
          });
        });
@@ -458,14 +582,33 @@ super.dispose();
         .getDocuments()
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
-        print('${f.data}}');
         setState(() {
           var c = new List<String>.from(f.data['done']);
-        completed=completed+c.length;
-        print("Completed $completed");
+        completedTopics=completedTopics+c.length;
+        controller.value+=(1/6);
+        print("Completed $completedTopics");
         });
       });
       ;
     });
+  }
+
+  getNumberUsed()async
+  {
+    await userRef
+        .document(currentUser.id)
+        .collection("number_used_chill")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        setState(() {
+          numUsed=numUsed+1;
+        });
+      });
+      ;
+    });
+
+
+
   }
 }

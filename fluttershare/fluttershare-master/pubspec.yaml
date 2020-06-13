@@ -131,3 +131,7 @@ flutter:
     - assets/images/heart.png
     - assets/images/stomach.png
     - assets/images/contact.png
+    - assets/animations/music.json
+    - assets/animations/flower.json
+    - assets/animations/muscle.json
+    - assets/images/sad_tree.png
