@@ -77,12 +77,11 @@ class _EnterySheetsState extends State<EnterySheets> {
 //        }
       }
       sheets.add(sheet);
-      if(mounted){
+      if (mounted) {
         setState(() {
-        sheets = sheets;
-      });
+          sheets = sheets;
+        });
       }
-      
     });
   }
 //  setImages()
@@ -148,28 +147,29 @@ class _EnterySheetsState extends State<EnterySheets> {
                               fontSize: 20,
                               decorationThickness: 2.85)),
                     ),
-                    onTap: () async{
-                      if(((lastDone!=0&&lastDone<=sheets[index].sheetNumber)||(sheets[index].sheetNumber==lastDone))||sheets[index].sheetNumber==1)
-                      {
-                        var done=await
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyHomePage(title: sheets[index].sheetIdName,sheetName: sheets[index].sheetTitle,)),
-                        )??false;
-                        if(done&&lastDone<=sheets.length)
-                          {
-                            setState(() {
-                              sheets[index].done=true;
-                              lastDone=lastDone+1;
-                              sheets.sort((a,b)=>a.sheetNumber.compareTo(b.sheetNumber));
-
-
-                            });
-                          }
-                      }
-                      else {
+                    onTap: () async {
+                      if (((lastDone != 0 &&
+                                  lastDone <= sheets[index].sheetNumber) ||
+                              (sheets[index].sheetNumber == lastDone)) ||
+                          sheets[index].sheetNumber == 1) {
+                        var done = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyHomePage(
+                                        title: sheets[index].sheetIdName,
+                                        sheetName: sheets[index].sheetTitle,
+                                      )),
+                            ) ??
+                            false;
+                        if (done && lastDone <= sheets.length) {
+                          setState(() {
+                            sheets[index].done = true;
+                            lastDone = lastDone + 1;
+                            sheets.sort((a, b) =>
+                                a.sheetNumber.compareTo(b.sheetNumber));
+                          });
+                        }
+                      } else {
                         Alert(
                             context: context,
                             title: "لا يمكنك فتح تلك الصفحة دون اكمال السابقة",
