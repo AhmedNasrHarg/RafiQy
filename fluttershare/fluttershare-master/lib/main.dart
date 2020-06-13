@@ -80,9 +80,9 @@ Future<void> main() async {
 //    title: 'Navigation Basics',
 //    debugShowCheckedModeBanner: false,
 //    home:
-    MyApp()
+      MyApp()
 //  )
-  );
+      );
 }
 
 class MyApp extends StatefulWidget {
@@ -96,7 +96,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   Locale _locale;
   final MethodChannel platform =
       MethodChannel('crossingthestreams.io/resourceResolver');
@@ -171,8 +170,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    didReceiveLocalNotificationSubject.close();
-    selectNotificationSubject.close();
+//    didReceiveLocalNotificationSubject.close();
+//    selectNotificationSubject.close();
     super.dispose();
   }
 
