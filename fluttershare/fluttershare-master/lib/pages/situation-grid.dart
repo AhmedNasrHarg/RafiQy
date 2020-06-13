@@ -27,6 +27,9 @@ class DateGridState extends State<SituationGrid> {
       _time = picked;
       print(picked);
       //delete previous & add new
+      _requestIOSPermissions();
+      _configureDidReceiveLocalNotificationSubject();
+      _configureSelectNotificationSubject();
       _showDailyAtTime();
       //remember to delete previous
       //note maybe same id means update
@@ -39,9 +42,6 @@ class DateGridState extends State<SituationGrid> {
   void initState() {
     super.initState();
     getdates();
-    _requestIOSPermissions();
-    _configureDidReceiveLocalNotificationSubject();
-    _configureSelectNotificationSubject();
   }
 
   void _requestIOSPermissions() {
@@ -58,6 +58,7 @@ class DateGridState extends State<SituationGrid> {
   void _configureDidReceiveLocalNotificationSubject() {
     didReceiveLocalNotificationSubject.stream
         .listen((ReceivedNotification receivedNotification) async {
+      print('jkkjj');
       await showDialog(
         context: context,
         builder: (BuildContext context) => CupertinoAlertDialog(
@@ -77,7 +78,8 @@ class DateGridState extends State<SituationGrid> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => MyHomePage(
-                      title: 'Bot',
+                      title: 'logSheet',
+                      sheetName: 'سِجِل الخواطر والمشاعر',
                     ),
                   ),
                 );
@@ -91,6 +93,7 @@ class DateGridState extends State<SituationGrid> {
 
   void _configureSelectNotificationSubject() {
     selectNotificationSubject.stream.listen((String payload) async {
+      print('iii');
       await Navigator.push(
         context,
         MaterialPageRoute(
@@ -113,8 +116,28 @@ class DateGridState extends State<SituationGrid> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'show daily title',
-        'Do not miss your sheet!', time, platformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
+        0,
+        'Log Sheet Remainder',
+        'Do not miss your sheet!',
+        time,
+        platformChannelSpecifics);
+  }
+
+  Future selectNotification(String payload) async {
+    if (payload != null) {
+      print('notification nasr payload: ' + payload);
+    }
+    print('hhh');
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MyHomePage(
+                title: 'logSheet',
+                sheetName: 'سِجِل الخواطر والمشاعر',
+              )),
+    );
+    print('pppppp');
   }
 
   getdates() async {
@@ -172,6 +195,13 @@ class DateGridState extends State<SituationGrid> {
       widgets.add(card);
     }
     return widgets;
+  }
+
+  void dispose() {
+    didReceiveLocalNotificationSubject.close();
+    selectNotificationSubject.close();
+    print('dispose');
+    super.dispose();
   }
 
   @override
@@ -259,11 +289,11 @@ class DateGridState extends State<SituationGrid> {
                             fontSize: 18,
                           ),
                         ),
-                        // IconButton(
-                        //     icon: Icon(Icons.access_alarm),
-                        //     onPressed: () {
-                        //       selectTime(context);
-                        //     }),
+                        IconButton(
+                            icon: Icon(Icons.access_alarm),
+                            onPressed: () {
+                              selectTime(context);
+                            }),
                       ],
                     ),
                     padding: EdgeInsets.all(8),
