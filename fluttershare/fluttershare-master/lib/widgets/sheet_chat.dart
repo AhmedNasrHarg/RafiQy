@@ -5,6 +5,7 @@ import 'package:fluttershare/models/question.dart';
 import 'package:fluttershare/pages/chillzone.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/human_body.dart';
+import 'package:fluttershare/pages/situation-grid.dart';
 import 'package:fluttershare/widgets/chat_bubble.dart';
 import 'package:fluttershare/widgets/check_list.dart';
 import 'package:fluttershare/widgets/progress.dart';
@@ -14,10 +15,12 @@ import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, this.sheetName}) : super(key: key);
+  MyHomePage({Key key, this.title, this.sheetName, this.deleteLast})
+      : super(key: key);
 
   final String title;
   final String sheetName;
+  bool deleteLast = false;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -153,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   sheetDone() async {
     // userMessage('انتهيت');
-    if(widget.title == "logSheet"){
+    if (widget.title == "logSheet") {
       await saveLogSheetOutput();
     }
     showDoneCongrats();
@@ -179,8 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
           DialogButton(
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context,true);
-
+              Navigator.pop(context, true);
             },
             child: Text("التالي"),
           )
@@ -240,11 +242,23 @@ class _MyHomePageState extends State<MyHomePage> {
     await getBodyResponseSheet();
     if (documentSnapshot.exists) {
       bool isDone = documentSnapshot['isDone'];
-      if (isDone && widget.title == 'bodyResponseSheet') {
-        Navigator.pop(context,true);
+      if (widget.deleteLast != null && widget.deleteLast) {
+        userRef
+            .document(currentUser.id)
+            .collection('completedSheets')
+            .document(widget.title + "Log")
+            .delete();
+      } else if (isDone && widget.title == 'bodyResponseSheet') {
+        Navigator.pop(context);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HumanBody()),
+        );
+      } else if (isDone && widget.title == 'logSheet') {
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SituationGrid()),
         );
       } else {
         getOldChat(documentSnapshot);
@@ -304,9 +318,9 @@ class _MyHomePageState extends State<MyHomePage> {
         .then((DocumentSnapshot value) async {
       for (int i = 8; i <= 12; i++) {
         if (i != 8) {
-           value.reference.updateData({'answer$i': sheetlog['answer$i']});
+          value.reference.updateData({'answer$i': sheetlog['answer$i']});
         } else {
-           value.reference.setData({'answer$i': sheetlog['answer$i']});
+          value.reference.setData({'answer$i': sheetlog['answer$i']});
         }
       }
     });

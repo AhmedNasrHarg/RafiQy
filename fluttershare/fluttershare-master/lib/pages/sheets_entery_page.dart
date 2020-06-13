@@ -18,13 +18,14 @@ class EnterySheets extends StatefulWidget {
 
 class _EnterySheetsState extends State<EnterySheets> {
   List<Sheet> sheets = [];
-  List<String>sheetImages=[];
-  int lastDone=0;
+  List<String> sheetImages = [];
+  int lastDone = 0;
   @override
   void initState() {
     super.initState();
     getSheets();
   }
+
 //getAll()
 //async {
 //  await getSheets();
@@ -45,17 +46,15 @@ class _EnterySheetsState extends State<EnterySheets> {
           .get();
       if (completeDoc.exists) {
         sheet.done = completeDoc["isDone"];
-        if(sheet.done) {
-          if(mounted) {
+        if (sheet.done) {
+          if (mounted) {
             setState(() {
 //              sheet.sheetImage = "assets/images/reward.png";
               lastDone = sheet.sheetNumber;
 //              print("last $lastDone");
             });
           }
-
-        }
-        else{
+        } else {
           setState(() {
 //            sheet.sheetImage = "assets/images/flower.png";
           });
@@ -82,7 +81,6 @@ class _EnterySheetsState extends State<EnterySheets> {
         sheets = sheets;
       });
     });
-
   }
 //  setImages()
 //  {
@@ -109,7 +107,7 @@ class _EnterySheetsState extends State<EnterySheets> {
 
   @override
   Widget build(BuildContext context) {
-    sheets.sort((a,b)=>a.sheetNumber.compareTo(b.sheetNumber));
+    sheets.sort((a, b) => a.sheetNumber.compareTo(b.sheetNumber));
 
     return Scaffold(
       body: CustomScrollView(
@@ -122,51 +120,62 @@ class _EnterySheetsState extends State<EnterySheets> {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 return (Ink(
                   color: Color(sheets[index].sheetColor),
                   child: ListTile(
                     leading: Container(
-                      height: 35.0,
-                      width: 35.0,
-                      child: sheets[index].done?Image.asset("assets/images/reward.png"):((lastDone!=0&&sheets[index].sheetNumber==lastDone+1)||sheets[index].sheetNumber==1)?
-                      Image.asset("assets/images/flower.png"):Image.asset("assets/images/lock.png")
+                        height: 35.0,
+                        width: 35.0,
+                        child: sheets[index].done
+                            ? Image.asset("assets/images/reward.png")
+                            : ((lastDone != 0 &&
+                                        sheets[index].sheetNumber ==
+                                            lastDone + 1) ||
+                                    sheets[index].sheetNumber == 1)
+                                ? Image.asset("assets/images/flower.png")
+                                : Image.asset("assets/images/lock.png")
 //                      Image.asset(
 //                          sheets[index].sheetImage),
-                    ),
+                        ),
                     title: Center(
-                      child: Text(
-                          "${sheets[index].sheetTitle}",
+                      child: Text("${sheets[index].sheetTitle}",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                               decorationThickness: 2.85)),
                     ),
-                    onTap: () async{
-                      if(((lastDone!=0&&sheets[index].sheetNumber==lastDone+1)||(sheets[index].sheetNumber==lastDone))||sheets[index].sheetNumber==1)
-                      {
-                        sheets[index].done=await
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyHomePage(title: sheets[index].sheetIdName,sheetName: sheets[index].sheetTitle,)),
-                        )??false;
-                        if(sheets[index].done)
-                          {
-                            setState(() {
-                              lastDone=lastDone+1;
-                              sheets.sort((a,b)=>a.sheetNumber.compareTo(b.sheetNumber));
-
-
-                            });
-                          }
-                      }
-                      else {
+                    onTap: () async {
+                      print(lastDone.toString() +
+                          "   " +
+                          sheets[index].sheetNumber.toString() +
+                          '         ' +
+                          sheets[index].done.toString());
+                      if (((lastDone != 0 &&
+                                  lastDone <= sheets[index].sheetNumber) ||
+                              (sheets[index].sheetNumber == lastDone)) ||
+                          sheets[index].sheetNumber == 1) {
+                        var done = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyHomePage(
+                                        title: sheets[index].sheetIdName,
+                                        sheetName: sheets[index].sheetTitle,
+                                      )),
+                            ) ??
+                            false;
+                        if (done && lastDone <= sheets.length) {
+                          setState(() {
+                            sheets[index].done = true;
+                            lastDone = lastDone + 1;
+                            sheets.sort((a, b) =>
+                                a.sheetNumber.compareTo(b.sheetNumber));
+                          });
+                        }
+                      } else {
                         Alert(
                             context: context,
-                            title:
-                            "لا يمكنك فتح تلك الصفحة دون اكمال السابقة",
+                            title: "لا يمكنك فتح تلك الصفحة دون اكمال السابقة",
                             content: Column(
                               children: <Widget>[
                                 Lottie.asset(
@@ -211,6 +220,4 @@ class _EnterySheetsState extends State<EnterySheets> {
 //  _showWellcomeDialog();
     super.didChangeDependencies();
   }
-
-
 }
