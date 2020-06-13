@@ -107,10 +107,12 @@ getUsetItemsImages();
         .collection("userInteractiveChill").document("${itemChill.item_id}");
 
     chillItemRef.get().then((value) {
-      userImages = new List<String>.from(value["userImages"]);
-      setState(() {
-        userImages=userImages;
-      });
+      if(value.exists) {
+        userImages = new List<String>.from(value["userImages"]);
+        setState(() {
+          userImages = userImages;
+        });
+      }
     });
 //        .getDocuments().then((QuerySnapshot snapshot) {
 //      var data=snapshot.documents.(itemChill.item_id).data;
