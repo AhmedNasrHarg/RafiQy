@@ -24,10 +24,14 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String currentUserId = currentUser.id;
+  bool isFollowing = false;
   bool isLoading = false;
   int postCount = 0;
+  int followerCount = 0;
+  int followingCount = 0;
   List<Article> posts = [];
   List<Article> temp;
+  bool isProfileOwner;
   void _changeLanguage(Language language) async {
     Locale _temp = await setLocale(language.languageCode);
 
@@ -38,17 +42,58 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    if (currentUser.isAdmin) {
+    isProfileOwner = currentUserId == widget.profileId;
+    if (currentUser.isAdmin || !isProfileOwner) {
       getAdminPosts();
+      chechIfFollowing();
+    } if (currentUser.isAdmin) {
+      getFollowers();
+    } else if (!currentUser.isAdmin) {
+      getFollowing();
     }
+  }
+
+  chechIfFollowing() async {
+    DocumentSnapshot doc = await followerRef
+        .document(widget.profileId)
+        .collection("userFollowers")
+        .document(currentUserId)
+        .get();
+
+    setState(() {
+      isFollowing = doc.exists;
+    });
+  }
+
+  getFollowers() async {
+    QuerySnapshot snapshot =  await followerRef
+    .document(widget.profileId)
+    .collection("userFollowers")
+    .getDocuments();
+
+    setState(() {
+      followerCount = snapshot.documents.length;
+    });
+  }
+
+  getFollowing() async {
+    QuerySnapshot snapshot = await followingRef
+    .document(widget.profileId)
+    .collection("userFollowing")
+    .getDocuments();
+
+    setState(() {
+      followingCount = snapshot.documents.length;
+    });
   }
 
   getAdminPosts() async {
     setState(() {
       isLoading = true;
     });
+    String docId = isProfileOwner ? currentUserId : widget.profileId;
     QuerySnapshot snapshot = await userRef
-        .document(currentUserId)
+        .document(docId)
         .collection("userPosts")
         .orderBy("timestamp", descending: true)
         .getDocuments();
@@ -73,7 +118,6 @@ class _ProfileState extends State<Profile> {
       });
     }
   }
-  
 
   buildCountColumn(String label, int count) {
     return Column(
@@ -106,7 +150,7 @@ class _ProfileState extends State<Profile> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           buildCountColumn(getTranslated(context, "articles"), postCount),
-          buildCountColumn(getTranslated(context, "followers"), 0)
+          buildCountColumn(getTranslated(context, "followers"), followerCount)
         ],
       );
     } else {
@@ -114,7 +158,7 @@ class _ProfileState extends State<Profile> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          buildCountColumn(getTranslated(context, "following"), 0),
+          buildCountColumn(getTranslated(context, "following"), followingCount),
         ],
       );
     }
@@ -142,13 +186,15 @@ class _ProfileState extends State<Profile> {
           height: 27.0,
           child: Text(
             text,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: isFollowing ? Colors.black : Colors.white,
+                fontWeight: FontWeight.bold),
           ),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Colors.blue,
+              color: isFollowing ? Colors.white : Colors.blue,
               border: Border.all(
-                color: Colors.blue,
+                color: isFollowing ? Colors.grey : Colors.blue,
               ),
               borderRadius: BorderRadius.circular(5.0)),
         ),
@@ -160,8 +206,62 @@ class _ProfileState extends State<Profile> {
     // viewing your own profile - should show profile button
     bool isProfileOwner = currentUserId == widget.profileId;
     if (isProfileOwner) {
-      return buildButton(text: getTranslated(context, "edit_profile"), function: editProfile);
+      return buildButton(
+          text: getTranslated(context, "edit_profile"), function: editProfile);
+    } else if (isFollowing) {
+      return buildButton(
+          text: getTranslated(context, "unfollow"),
+          function: handleUnfollowUser);
+    } else if (!isFollowing) {
+      return buildButton(
+          text: getTranslated(context, "follow"), function: handleFollowUser);
     }
+  }
+
+  handleUnfollowUser() {
+    setState(() {
+      isFollowing = false;
+    });
+    // remove follower
+    followerRef
+        .document(widget.profileId)
+        .collection("userFollowers")
+        .document(currentUserId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+    // remove following
+    followingRef
+        .document(currentUserId)
+        .collection("userFollowing")
+        .document(widget.profileId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+  }
+
+  handleFollowUser() {
+    setState(() {
+      isFollowing = true;
+    });
+    // Make auth user follower of THAT user (update THEIR followers collection)
+    followerRef
+        .document(widget.profileId)
+        .collection("userFollowers")
+        .document(currentUserId)
+        .setData({});
+    // Put THAT user on YOUR following collection (update your following collection)
+    followingRef
+        .document(currentUserId)
+        .collection("userFollowing")
+        .document(widget.profileId)
+        .setData({});
   }
 
   buildProfileHeader() {
@@ -257,11 +357,6 @@ class _ProfileState extends State<Profile> {
     return Column(
       children: posts,
     );
-    // return Column(
-    //   children: <Widget>[
-    //     Text("Pending comments"),
-    //   ],
-    // );
   }
 
   buildUserProfile() {
@@ -281,11 +376,14 @@ class _ProfileState extends State<Profile> {
   }
 
   ListView buildProfile() {
+    bool isProfileOwner = currentUserId == widget.profileId;
     return ListView(
       children: <Widget>[
         buildProfileHeader(),
         Divider(),
-        currentUser.isAdmin ? buildAdminProfile() : buildUserProfile(),
+        currentUser.isAdmin
+            ? buildAdminProfile()
+            : isProfileOwner ? buildUserProfile() : buildAdminProfile(),
       ],
     );
   }
@@ -302,7 +400,9 @@ class _ProfileState extends State<Profile> {
               fontFamily: Localizations.localeOf(context).languageCode == "ar"
                   ? "Lemonada"
                   : "Signatra",
-              fontSize: Localizations.localeOf(context).languageCode == "ar" ? 30.0 : 50.0,
+              fontSize: Localizations.localeOf(context).languageCode == "ar"
+                  ? 30.0
+                  : 50.0,
             ),
           ),
 //          (DemoLocalization.of(context).getTranslatedValues('home_page')),
