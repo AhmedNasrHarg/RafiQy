@@ -77,6 +77,9 @@ flutter:
     - family: Lemonada
       fonts:
         - asset: assets/fonts/Lemonada.ttf
+    - family: Tajwal
+      fonts:
+       - asset: assets/fonts/Tajwal.ttf
   assets:
     - assets/images/google_signin_button.png
     - lib/lang/en.json
@@ -128,3 +131,7 @@ flutter:
     - assets/images/heart.png
     - assets/images/stomach.png
     - assets/images/contact.png
+    - assets/animations/music.json
+    - assets/animations/flower.json
+    - assets/animations/muscle.json
+    - assets/images/sad_tree.png

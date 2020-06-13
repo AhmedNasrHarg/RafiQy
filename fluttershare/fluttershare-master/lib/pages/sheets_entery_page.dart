@@ -146,18 +146,19 @@ class _EnterySheetsState extends State<EnterySheets> {
                               decorationThickness: 2.85)),
                     ),
                     onTap: () async{
-                      if((lastDone!=0&&sheets[index].sheetNumber==lastDone+1)||sheets[index].sheetNumber==1)
+                      if(((lastDone!=0&&lastDone<=sheets[index].sheetNumber)||(sheets[index].sheetNumber==lastDone))||sheets[index].sheetNumber==1)
                       {
-                        sheets[index].done=await
+                        var done=await
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   MyHomePage(title: sheets[index].sheetIdName,sheetName: sheets[index].sheetTitle,)),
-                        );
-                        if(sheets[index].done)
+                        )??false;
+                        if(done&&lastDone<=sheets.length)
                           {
                             setState(() {
+                              sheets[index].done=true;
                               lastDone=lastDone+1;
                               sheets.sort((a,b)=>a.sheetNumber.compareTo(b.sheetNumber));
 

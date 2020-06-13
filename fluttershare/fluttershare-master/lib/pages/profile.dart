@@ -22,7 +22,7 @@ class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Profile>with TickerProviderStateMixin {
   String currentUserId = currentUser.id;
   bool isFollowing = false;
   bool isLoading = false;
@@ -32,6 +32,10 @@ class _ProfileState extends State<Profile> {
   List<Article> posts = [];
   List<Article> temp;
   bool isProfileOwner;
+  int completedSheets=0;
+  int completedTopics=0;
+  int numUsed=0;
+  AnimationController controller;
   void _changeLanguage(Language language) async {
     Locale _temp = await setLocale(language.languageCode);
 
@@ -51,6 +55,24 @@ class _ProfileState extends State<Profile> {
     } else if (!currentUser.isAdmin) {
       getFollowing();
     }
+
+    controller = AnimationController(vsync: this)
+      ..value = 0.0
+      ..addListener(() {
+        setState(() {
+//          controller.stop();
+          // Rebuild the widget at each frame to update the "progress" label.
+        });
+      });
+    getDoneTopics();
+    getCompletedDocs();
+    getNumberUsed();
+  }
+
+  @override
+  void dispose() {
+controller.dispose();
+super.dispose();
   }
 
   chechIfFollowing() async {
@@ -360,19 +382,109 @@ class _ProfileState extends State<Profile> {
   }
 
   buildUserProfile() {
-    return Column(
-      children: <Widget>[
-        Text(getTranslated(context, "still_working"),
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.amber,
-            )),
-        Lottie.network(
-            "https://assets5.lottiefiles.com/packages/lf20_DYkRIb.json"),
-      ],
-    );
-//  return Text("hel");
+
+  return
+//    completed==0?
+//  Card(
+//
+//    color: Colors.teal[100],
+//    child: Row(
+//      children: <Widget>[
+//        Text("هيا تشجع لاكمال الدرس الاول",
+//          style: TextStyle(
+//            fontFamily: Localizations.localeOf(context).languageCode == "ar"
+//                ? "Lemonada"
+//                : "Signatra",
+//          ),),
+//        Lottie.network("https://assets4.lottiefiles.com/packages/lf20_zm1z76.json",width: 100,height: 100)
+//
+////            Image.asset("assets/images/flower.png")
+//      ],
+//      mainAxisAlignment: MainAxisAlignment.spaceAround,
+//    ),
+//  )
+//      :
+  Column(
+
+    children: <Widget>[
+      Card(
+        color: Colors.teal[100],
+    elevation: 10,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children:<Widget>[
+            Text(completedTopics==0?"هيا تشجع لاكمال الدرس الاول":"لقد انهيت $completedTopics من الدروس ",
+                style: TextStyle(
+                  fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                      ? "Tajwal"
+                      : "Signatra",
+//        color: Colors.white
+                )),
+            Lottie.asset(completedTopics==0?"assets/animations/muscle.json":"assets/animations/12833-planta-3.json",width: 100,height: 100)
+
+          ]
+        ),
+
+      ),
+      Card(
+        color: Colors.teal[100],
+        elevation: 10,
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children:<Widget>[
+              Text(completedSheets==0?"هيا تشجع لاكمال أول مهمة":"لقد انهيت $completedSheets من المهمات ",
+                  style: TextStyle(
+                    fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                        ? "Tajwal"
+                        : "Signatra",
+//        color: Colors.white
+                  )),
+              Lottie.asset(completedSheets==0?"assets/animations/muscle.json":"assets/animations/bar.json",width: 100,height: 100)
+
+            ]
+        ),
+
+      ),
+      Card(
+        color: Colors.indigo[700],
+        elevation: 10,
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children:<Widget>[
+              Text(numUsed==0?"لم تستخدم منطقة الاسترخاء بعد":"لقد استخدمت $numUsed من منطقة الاسترخاء ",
+                  style: TextStyle(
+                    fontFamily: Localizations.localeOf(context).languageCode == "ar"
+                        ? "Tajwal"
+                        : "Signatra",
+        color: Colors.white
+                  )),
+             numUsed==0? Image.asset("assets/images/sad_tree.png",width: 100,height: 100,):Lottie.asset("assets/animations/music.json",width: 100,height: 100)
+
+            ]
+        ),
+
+      )
+      ,
+      Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
+    ,width: 200
+    , height: 200
+    ,controller: controller,
+    onLoaded: (composition)
+    {
+    setState(() {
+    controller.duration=composition.duration*2;
+    });
+    }
+    )
+    ],
+  );
+
+
+
+
   }
 
   ListView buildProfile() {
@@ -440,5 +552,63 @@ class _ProfileState extends State<Profile> {
           backgroundColor: Theme.of(context).accentColor,
         ),
         body: buildProfile());
+  }
+  getCompletedDocs()async
+  {
+
+    await userRef
+            .document(currentUser.id)
+            .collection("completedSheets").getDocuments()
+         .then((QuerySnapshot snapshot) {
+       snapshot.documents.forEach((f) {
+         setState(() {
+           completedSheets=completedSheets+1;
+           print("Completed $completedSheets");
+           controller.value +=(1/6);
+
+         });
+       });
+       ;
+     });
+
+
+
+  }
+
+  Future<void> getDoneTopics() async {
+    await userRef
+        .document(currentUser.id)
+        .collection("done_topics")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        setState(() {
+          var c = new List<String>.from(f.data['done']);
+        completedTopics=completedTopics+c.length;
+        controller.value+=(1/6);
+        print("Completed $completedTopics");
+        });
+      });
+      ;
+    });
+  }
+
+  getNumberUsed()async
+  {
+    await userRef
+        .document(currentUser.id)
+        .collection("number_used_chill")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        setState(() {
+          numUsed=numUsed+1;
+        });
+      });
+      ;
+    });
+
+
+
   }
 }
