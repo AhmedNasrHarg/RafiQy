@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttershare/classes/chill_interactive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
@@ -16,7 +17,7 @@ class ChillInteractiveUpload extends StatefulWidget {
 
 class _ChillInteractiveUploadState extends State<ChillInteractiveUpload> {
   File imageFile;
-
+  TextEditingController imageTitleController = new TextEditingController();
   Future<void>pickImage(ImageSource imageSource)async{
     var selectedImage=await ImagePicker.pickImage(source: imageSource);
     setState(() {
@@ -61,6 +62,7 @@ class _ChillInteractiveUploadState extends State<ChillInteractiveUpload> {
               child:  imageFile==null?Text("No Selected Image"):Image.file(imageFile),
             ),
             TextField(
+              controller: imageTitleController,
             decoration: InputDecoration(
             border: InputBorder.none,
         hintText: 'ادخل عنوان للصورة'
@@ -75,10 +77,15 @@ class _ChillInteractiveUploadState extends State<ChillInteractiveUpload> {
       FloatingActionButton(child:
       Icon(Icons.play_arrow,color: Colors.white,),
         backgroundColor: Colors.teal,
-        onPressed: (){
-        var url=uploadImage(imageFile);
+        onPressed: () async {
+        var url=await uploadImage(imageFile);
+
         print("URL $url");
-      },),
+        String imageId = Uuid().v4();
+
+        Navigator.pop(context,url);
+      },
+      ),
 
     );
   }

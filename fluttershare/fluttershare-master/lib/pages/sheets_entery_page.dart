@@ -77,6 +77,7 @@ class _EnterySheetsState extends State<EnterySheets> {
 //        }
       }
       sheets.add(sheet);
+
       if (mounted) {
         setState(() {
           sheets = sheets;

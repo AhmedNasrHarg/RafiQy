@@ -20,28 +20,30 @@ class FlexibleSheetsBar extends StatelessWidget{
             children: <Widget>[
               Container(
                 color: Colors.teal[300],
-              child:Row(
-                
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Padding(
-                      
-                        padding: const EdgeInsets.only(left:10),
-                        child: new Text(
-                            "كل مهمة تقوم بها تجعلك شجرتك تنمو أفضل",
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0
-                            )
+              child:FittedBox(
+                child: Row(
+                  
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        
+                          padding: const EdgeInsets.only(left:10),
+                          child: new Text(
+                              "كل مهمة تقوم بها تجعلك شجرتك تنمو أفضل",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15.0
+                              )
+                          ),
                         ),
-                      ),
-                          Lottie.asset(
-                        'assets/animations/bar.json',
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.fill,
-                    )
-                  ]
+                            Lottie.asset(
+                          'assets/animations/bar.json',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fill,
+                      )
+                    ]
+                ),
               )
               )
 
