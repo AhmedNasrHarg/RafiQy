@@ -6,6 +6,7 @@ import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/post.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/edit_profile.dart';
+import 'package:fluttershare/pages/situation-grid.dart';
 import 'package:fluttershare/widgets/article.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/widgets/progress.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 
 import '../main.dart';
+import 'human_body.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
@@ -482,6 +484,24 @@ super.dispose();
 
       )
       ,
+      Card(
+        color: Colors.indigo[700],
+        elevation: 10,
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children:<Widget>[
+              MaterialButton(child: Text("سجل الخواطر",style: TextStyle(color: Colors.white),),onPressed: ()
+                {
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>SituationGrid()));
+                },),
+              MaterialButton(child: Text(" الاستجابات وردود الافعال",style: TextStyle(color: Colors.white),),onPressed: ()
+              {
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>HumanBody()));
+              },)            ]
+        ),
+
+      )
 //      Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
 //    ,width: 200
 //    , height: 200

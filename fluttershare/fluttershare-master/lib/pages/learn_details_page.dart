@@ -8,6 +8,8 @@ import 'package:fluttershare/classes/topic.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/note_page.dart';
+import 'package:fluttershare/widgets/chat_bubble.dart';
+import 'package:fluttershare/widgets/chat_bubble_video.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 
@@ -153,6 +155,8 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
 //print("lentof queston = ${dataQuestions.length}");
 //print("${dataQuestions[0].question}");
 //print("${dataQuestions[0]}");
+    print("url ${topic.videoURL}");
+
     // TODO: implement build
     isDoneButton=getTranslated(context, "finish_lesson");
 
@@ -180,17 +184,20 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
           )
         ],
       ),
+
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
           child: Column(
             children: <Widget>[
-              _videoPlayerController.value.initialized
-                  ? AspectRatio(
-                aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: VideoPlayer(_videoPlayerController),
-              )
-                  : Container(),
+//              _videoPlayerController.value.initialized
+//                  ? AspectRatio(
+//                aspectRatio: _videoPlayerController.value.aspectRatio,
+//                child: VideoPlayer(_videoPlayerController),
+//              )
+//                  : Container(),
+              BubbleVideo(videoUrl: topic.videoURL,)
+            ,
               Visibility(
                 child: CarouselSlider(
                     options: CarouselOptions(height: 200),
