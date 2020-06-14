@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttershare/pages/chillzone.dart';
+import 'package:fluttershare/pages/sheets_entery_page.dart';
 import 'package:fluttershare/pages/situation-details.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -54,6 +55,8 @@ class DateGridState extends State<SituationGrid> {
       _time = picked;
       print(picked);
       _showDailyAtTime();
+      _requestIOSPermissions();
+      _configureDidReceiveLocalNotificationSubject();
       _configureSelectNotificationSubject();
     });
   }
@@ -66,8 +69,6 @@ class DateGridState extends State<SituationGrid> {
     super.initState();
     context2 = this.context;
     getdates();
-    _requestIOSPermissions();
-    _configureDidReceiveLocalNotificationSubject();
 //    _configureSelectNotificationSubject();
   }
 
@@ -100,9 +101,9 @@ class DateGridState extends State<SituationGrid> {
               isDefaultAction: true,
               child: Text('Ok'),
               onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop();
+//                Navigator.of(context2, rootNavigator: true).pop();
                 await Navigator.push(
-                  context,
+                  context2,
                   MaterialPageRoute(
                     builder: (context) => MyHomePage(
                       title: 'logSheet',
@@ -126,16 +127,16 @@ class DateGridState extends State<SituationGrid> {
       print('context $context');
       print('context2 $context2');
       print('context3 ${_scaffold.currentContext}');
-//      if(context!=null)
-      Navigator.push(
-        context2,
-        MaterialPageRoute(
-            builder: (context) => MyHomePage(
-                  title: 'logSheet',
-                  sheetName: 'سِجِل الخواطر والمشاعر',
-                  deleteLast: true,
-                )),
-      );
+      if (context2 != null) ;
+//        Navigator.push(
+//          context2,
+//          MaterialPageRoute(
+//              builder: (context) => MyHomePage(
+//                    title: 'logSheet',
+//                    sheetName: 'سِجِل الخواطر والمشاعر',
+//                    deleteLast: true,
+//                  )),
+//        );
     });
   }
 
@@ -216,8 +217,8 @@ class DateGridState extends State<SituationGrid> {
   }
 
   void dispose() {
-//    didReceiveLocalNotificationSubject.close();
-//    selectNotificationSubject.close();
+    didReceiveLocalNotificationSubject.close();
+    selectNotificationSubject.close();
 //    print('dispose');
     super.dispose();
   }
