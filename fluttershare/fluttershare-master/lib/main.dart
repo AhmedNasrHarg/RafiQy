@@ -14,32 +14,11 @@ import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/learn.dart';
 import 'package:fluttershare/pages/learn_page.dart';
 import 'package:fluttershare/pages/profile.dart';
+import 'package:fluttershare/pages/situation-grid.dart';
 import 'package:fluttershare/widgets/chat_buttons.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:fluttershare/routes/custom_router.dart';
 import 'package:rxdart/rxdart.dart';
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
-    BehaviorSubject<ReceivedNotification>();
-final BehaviorSubject<String> selectNotificationSubject =
-    BehaviorSubject<String>();
-NotificationAppLaunchDetails notificationAppLaunchDetails;
-
-class ReceivedNotification {
-  final int id;
-  final String title;
-  final String body;
-  final String payload;
-
-  ReceivedNotification({
-    @required this.id,
-    @required this.title,
-    @required this.body,
-    @required this.payload,
-  });
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,9 +48,10 @@ Future<void> main() async {
   var initializationSettings = InitializationSettings(
       initializationSettingsAndroid, initializationSettingsIOS);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String payload) async {
+      onSelectNotification: (payload) async {
+    print('gggggggggggggggggggggggggg');
     if (payload != null) {
-      debugPrint('notification payload: ' + payload);
+      debugPrint('notification fff payload: ' + payload);
     }
     selectNotificationSubject.add(payload);
   });
