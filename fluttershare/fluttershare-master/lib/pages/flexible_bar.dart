@@ -48,7 +48,7 @@ class FlexibleAppBarWidget extends StatelessWidget{
                   ],),
               ),
               Container(
-                color: Colors.teal[400],
+                color: Colors.teal[300],
               child:
               FittedBox(
                 child: Row(

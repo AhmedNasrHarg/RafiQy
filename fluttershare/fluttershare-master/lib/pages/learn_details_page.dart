@@ -193,7 +193,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                   : Container(),
               Visibility(
                 child: CarouselSlider(
-                    options: CarouselOptions(height: 300),
+                    options: CarouselOptions(height: 200),
                     items: topicImages
                         .map((item) => Container(
                       child: GestureDetector(
@@ -210,7 +210,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                                       ImageViewer(item)));
                         },
                       ),
-                      height: 400,
+                      height: 300,
                     ))
                         .toList()),
                 visible: vis,
