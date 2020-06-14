@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/chill.dart';
 import 'package:fluttershare/classes/chill_interactive.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/chill_interactive_upload.dart';
 
 import 'home.dart';
@@ -55,7 +56,7 @@ getUsetItemsImages();
               );
 
           })
-      ):Center(child: Text("لا يوجد مشاركات بعد"),),
+      ):Center(child: Text(getTranslated(context, "no_images")),),
 
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal,
@@ -90,17 +91,7 @@ getUsetItemsImages();
   }
   getUsetItemsImages()async
   {
-//    QuerySnapshot snapshot =
-//    await chillRef.orderBy("user_item_id", descending: false).getDocuments();
-//    snapshot.documents.forEach((DocumentSnapshot doc) async {
-//      ChillInteractive chillItem = ChillInteractive.fromDocument(doc);
-//      userImages.add(chillItem);
-//      if (mounted) {
-//        setState(() {
-//          userImages = userImages;
-//        });
-//      }
-//    });
+
 
 
    DocumentReference chillItemRef= await userRef.document(currentUser.id)
@@ -114,12 +105,7 @@ getUsetItemsImages();
         });
       }
     });
-//        .getDocuments().then((QuerySnapshot snapshot) {
-//      var data=snapshot.documents.(itemChill.item_id).data;
-//      userImages=new List<ChillInteractive>.from(data["${itemChill.item_id}"]);
-//
-//
-//    }
+
 
 
 

@@ -5,8 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/learn_qa.dart';
 import 'package:fluttershare/classes/topic.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/note_page.dart';
+import 'package:fluttershare/widgets/chat_bubble.dart';
+import 'package:fluttershare/widgets/chat_bubble_video.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,7 +42,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
   VideoPlayerController _videoPlayerController;
   var videoURL;
   bool connetcting;
-  String isDoneButton=" انهيت الدرس";
+  String isDoneButton;
 
   var is_done = false;
   var num_q;
@@ -152,7 +155,10 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
 //print("lentof queston = ${dataQuestions.length}");
 //print("${dataQuestions[0].question}");
 //print("${dataQuestions[0]}");
+    print("url ${topic.videoURL}");
+
     // TODO: implement build
+    isDoneButton=getTranslated(context, "finish_lesson");
 
 //  print("topic id ${topic.topicId}");
     return Scaffold(
@@ -163,7 +169,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
           Row(
 
             children: <Widget>[
-              Text("ملاحظاتي",style: TextStyle(color: Colors.white),),
+              Text(getTranslated(context, "my_notes"),style: TextStyle(color: Colors.white),),
               IconButton(
                 icon: Icon(Icons.book),
                 onPressed: () => Navigator.push(
@@ -178,20 +184,23 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
           )
         ],
       ),
+
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
           child: Column(
             children: <Widget>[
-              _videoPlayerController.value.initialized
-                  ? AspectRatio(
-                aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: VideoPlayer(_videoPlayerController),
-              )
-                  : Container(),
+//              _videoPlayerController.value.initialized
+//                  ? AspectRatio(
+//                aspectRatio: _videoPlayerController.value.aspectRatio,
+//                child: VideoPlayer(_videoPlayerController),
+//              )
+//                  : Container(),
+              BubbleVideo(videoUrl: topic.videoURL,)
+            ,
               Visibility(
                 child: CarouselSlider(
-                    options: CarouselOptions(height: 300),
+                    options: CarouselOptions(height: 200),
                     items: topicImages
                         .map((item) => Container(
                       child: GestureDetector(
@@ -208,7 +217,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                                       ImageViewer(item)));
                         },
                       ),
-                      height: 400,
+                      height: 300,
                     ))
                         .toList()),
                 visible: vis,
@@ -243,12 +252,12 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                 child: Text(isDoneButton,style: (TextStyle(color: Colors.white)),),
                 color: Colors.teal,
                 onPressed:is_done?
-                (){
+                    (){
                   setState(() {
                     is_done = false;
                     done.remove(topic.topicId);
                     addDone(done);
-                    isDoneButton=" انهيت الدرس";
+                    isDoneButton=getTranslated(context, "finish_lesson");
                   });
                 }
                     :() {
@@ -256,7 +265,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                     is_done = true;
                     done.add(topic.topicId);
                     addDone(done);
-                    isDoneButton="مراجعة الدرس";
+                    isDoneButton=getTranslated(context, "rev_lesson");;
 
                   });
                 },
@@ -306,7 +315,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
             content: Text(text),
             actions: <Widget>[
               FlatButton(
-                child: Text('Ok'),
+                child: Text(getTranslated(context, "ok")),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

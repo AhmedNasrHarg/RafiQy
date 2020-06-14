@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/chill.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/chillInteractiveDetails.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/image_viewer.dart';
@@ -39,7 +40,7 @@ class _ChillGridState extends State<ChillGrid> {
   }
 
   getChill() async {
-    print('chiiiiiiil');
+//    print('chiiiiiiil');
     QuerySnapshot snapshot =
     await chillRef.orderBy("ch_id", descending: false).getDocuments();
     snapshot.documents.forEach((DocumentSnapshot doc) async {
@@ -75,7 +76,7 @@ class _ChillGridState extends State<ChillGrid> {
         .getDocuments()
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
-        print('${f.data}}');
+//        print('${f.data}}');
         if(mounted) {
           setState(() {
             favorites = new List<int>.from(f.data['favourite']);
@@ -96,7 +97,7 @@ class _ChillGridState extends State<ChillGrid> {
       snapshot.documents.forEach((f) {
         
         numberOfUsedItem.add(ChillUsed.fromDocument(f));
-        print("number used${f["num_used"]}");
+//        print("number used${f["num_used"]}");
         if(mounted) {
           setState(() {
             numberOfUsedItem = numberOfUsedItem;
@@ -204,21 +205,21 @@ class _ChillGridState extends State<ChillGrid> {
                           onPressed: () {
                             isFavorite =
                                 favorites.contains(chillItems[index].item_id);
-                            print(isFavorite);
+//                            print(isFavorite);
                             setState(() {
                               if (isFavorite) {
-                                print("ifffff");
+//                                print("ifffff");
                                 favorites.remove(chillItems[index].item_id);
                                 addFavorite(favorites);
-                                print(favorites.length);
+//                                print(favorites.length);
                                 setState(() {
                                   chillItems[index].isFavorite = false;
                                 });
                               } else {
-                                print("elssssssee");
+//                                print("elssssssee");
                                 favorites.add(chillItems[index].item_id);
                                 addFavorite(favorites);
-                                print(favorites.length);
+//                                print(favorites.length);
                                 setState(() {
                                   chillItems[index].isFavorite = true;
                                 });
@@ -235,7 +236,7 @@ class _ChillGridState extends State<ChillGrid> {
                     ),
                     Row(
                       children: <Widget>[
-                        Text("عدد الاستخدمات"),
+                        Text(getTranslated(context, "num_usage")),
                         Text(chillItems[index].numUsed.toString(), style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
@@ -284,7 +285,7 @@ class _ChillGridState extends State<ChillGrid> {
     {
       Alert(
           context: context,
-          title: "ليس لديك أية مفضلات",
+          title: getTranslated(context, "no_prefers"),
           content: Container(
             height: 300,
             width: 350,
@@ -305,7 +306,7 @@ class _ChillGridState extends State<ChillGrid> {
                 Navigator.pop(context);
                 //animate to the next
               },
-              child: Text("اظهر القائمة"),
+              child: Text(getTranslated(context, "show_menu")),
             )
           ]).show();
     }

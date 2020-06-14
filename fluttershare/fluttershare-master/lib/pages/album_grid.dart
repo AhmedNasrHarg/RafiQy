@@ -64,7 +64,8 @@ List<int>favorites=[];
         .collection("favourite_album")
         .getDocuments().then( (QuerySnapshot snapshot) {
       snapshot.documents.forEach((f)
-          {print('${f.data}}');
+          {
+//            print('${f.data}}');
           setState(() {
             favorites=new List<int>.from(f.data['favourite']);
 //                f.data['favourite'].cast<int>();
@@ -109,28 +110,28 @@ List<int>favorites=[];
                       IconButton(icon:isFavorite?Icon(Icons.favorite,color: Colors.red,):Icon(Icons.favorite_border),color: Colors.grey,
                         onPressed: () {
                           isFavorite=favorites.contains(images[index].image_id);
-                          print(isFavorite);
+//                          print(isFavorite);
 
                           setState(() {
                             if(isFavorite)
                             {
-                              print("ifffff");
+//                              print("ifffff");
                               favorites.remove(images[index].image_id);
 //                            for(int i;i<favorites.length;i++)
 //                              {
 //                                print(favorites[i]);
 //                              }
                               addFavorite(favorites);
-                              print(favorites.length);
+//                              print(favorites.length);
                               setState(() {
                                 images[index].isFavorite=false;
                               });
                             }
                             else{
-                              print("elssssssee");
+//                              print("elssssssee");
                               favorites.add(images[index].image_id);
                               addFavorite(favorites);
-                              print(favorites.length);
+//                              print(favorites.length);
                               setState(() {
                                 images[index].isFavorite=true;
                               });

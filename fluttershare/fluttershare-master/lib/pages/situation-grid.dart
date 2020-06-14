@@ -1,15 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttershare/pages/chillzone.dart';
+import 'package:fluttershare/pages/sheets_entery_page.dart';
 import 'package:fluttershare/pages/situation-details.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' as Intl;
+import 'package:rxdart/rxdart.dart';
 
 import '../main.dart';
 import 'home.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
+    BehaviorSubject<ReceivedNotification>();
+final BehaviorSubject<String> selectNotificationSubject =
+    BehaviorSubject<String>();
+NotificationAppLaunchDetails notificationAppLaunchDetails;
+GlobalKey _scaffold = GlobalKey();
+
+class ReceivedNotification {
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+
+  ReceivedNotification({
+    @required this.id,
+    @required this.title,
+    @required this.body,
+    @required this.payload,
+  });
+}
 
 class SituationGrid extends StatefulWidget {
   SituationGrid({Key key}) : super(key: key);
@@ -21,28 +47,29 @@ class SituationGrid extends StatefulWidget {
 class DateGridState extends State<SituationGrid> {
   TimeOfDay _time = TimeOfDay.now();
   TimeOfDay picked;
-
+  final MethodChannel platform =
+      MethodChannel('crossingthestreams.io/resourceResolver');
   selectTime(BuildContext context) async {
     picked = await showTimePicker(context: context, initialTime: _time);
     setState(() {
       _time = picked;
       print(picked);
-      //delete previous & add new
+      _showDailyAtTime();
       _requestIOSPermissions();
       _configureDidReceiveLocalNotificationSubject();
       _configureSelectNotificationSubject();
-      _showDailyAtTime();
-      //remember to delete previous
-      //note maybe same id means update
     });
   }
 
   List<int> situations = [];
+  BuildContext context2;
 
   @override
   void initState() {
     super.initState();
+    context2 = this.context;
     getdates();
+//    _configureSelectNotificationSubject();
   }
 
   void _requestIOSPermissions() {
@@ -61,7 +88,7 @@ class DateGridState extends State<SituationGrid> {
         .listen((ReceivedNotification receivedNotification) async {
       print('jkkjj');
       await showDialog(
-        context: context,
+        context: context2,
         builder: (BuildContext context) => CupertinoAlertDialog(
           title: receivedNotification.title != null
               ? Text(receivedNotification.title)
@@ -74,13 +101,14 @@ class DateGridState extends State<SituationGrid> {
               isDefaultAction: true,
               child: Text('Ok'),
               onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop();
+//                Navigator.of(context2, rootNavigator: true).pop();
                 await Navigator.push(
-                  context,
+                  context2,
                   MaterialPageRoute(
                     builder: (context) => MyHomePage(
                       title: 'logSheet',
                       sheetName: 'سِجِل الخواطر والمشاعر',
+                      deleteLast: true,
                     ),
                   ),
                 );
@@ -92,18 +120,23 @@ class DateGridState extends State<SituationGrid> {
     });
   }
 
-  void _configureSelectNotificationSubject() {
-    selectNotificationSubject.stream.listen((String payload) async {
+  Future<void> _configureSelectNotificationSubject() async {
+    await selectNotificationSubject.stream.listen((String payload) async {
       print('iii');
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MyHomePage(
-                  title: 'logSheet',
-                  sheetName: 'سِجِل الخواطر والمشاعر',
-                  deleteLast: true,
-                )),
-      );
+      print('iiitttpppp');
+      print('context $context');
+      print('context2 $context2');
+      print('context3 ${_scaffold.currentContext}');
+      if (context2 != null) ;
+//        Navigator.push(
+//          context2,
+//          MaterialPageRoute(
+//              builder: (context) => MyHomePage(
+//                    title: 'logSheet',
+//                    sheetName: 'سِجِل الخواطر والمشاعر',
+//                    deleteLast: true,
+//                  )),
+//        );
     });
   }
 
@@ -124,23 +157,6 @@ class DateGridState extends State<SituationGrid> {
         'Do not miss your sheet!',
         time,
         platformChannelSpecifics);
-  }
-
-  Future selectNotification(String payload) async {
-    if (payload != null) {
-      print('notification nasr payload: ' + payload);
-    }
-    print('hhh');
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => MyHomePage(
-                title: 'logSheet',
-                sheetName: 'سِجِل الخواطر والمشاعر',
-                deleteLast: true,
-              )),
-    );
-    print('pppppp');
   }
 
   getdates() async {
@@ -203,13 +219,15 @@ class DateGridState extends State<SituationGrid> {
   void dispose() {
     didReceiveLocalNotificationSubject.close();
     selectNotificationSubject.close();
-    print('dispose');
+//    print('dispose');
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    setState(() => context = this.context);
     return Scaffold(
+      key: _scaffold,
       appBar: AppBar(
         title: Text('جدول الرصد'),
         actions: <Widget>[

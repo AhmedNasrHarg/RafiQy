@@ -6,6 +6,7 @@ import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/post.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/edit_profile.dart';
+import 'package:fluttershare/pages/situation-grid.dart';
 import 'package:fluttershare/widgets/article.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/widgets/progress.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 
 import '../main.dart';
+import 'human_body.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
@@ -429,11 +431,10 @@ super.dispose();
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children:<Widget>[
-            Text(completedTopics==0?"هيا تشجع لاكمال الدرس الاول":"لقد انهيت $completedTopics من الدروس ",
+            Text(completedTopics==0?getTranslated(context,"first_lesson"):"${getTranslated(context, "finish")}$completedTopics ${getTranslated(context, "from_lesson")} ",
                 style: TextStyle(
-                  fontFamily: Localizations.localeOf(context).languageCode == "ar"
-                      ? "Tajwal"
-                      : "Signatra",
+                  fontFamily: "Tajwal"
+                      ,
 //        color: Colors.white
                 )),
             Lottie.asset(completedTopics==0?"assets/animations/muscle.json":"assets/animations/12833-planta-3.json",width: 100,height: 100)
@@ -449,11 +450,11 @@ super.dispose();
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children:<Widget>[
-              Text(completedSheets==0?"هيا تشجع لاكمال أول مهمة":"لقد انهيت $completedSheets من المهمات ",
+              Text(completedSheets==0?getTranslated(context,"first_sheet"):" ${getTranslated(context, "finish")} $completedSheets ${getTranslated(context, "from_sheet")} ",
                   style: TextStyle(
-                    fontFamily: Localizations.localeOf(context).languageCode == "ar"
-                        ? "Tajwal"
-                        : "Signatra",
+                    fontFamily:
+                         "Tajwal",
+
 //        color: Colors.white
                   )),
               Lottie.asset(completedSheets==0?"assets/animations/muscle.json":"assets/animations/bar.json",width: 100,height: 100)
@@ -469,11 +470,11 @@ super.dispose();
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children:<Widget>[
-              Text(numUsed==0?"لم تستخدم منطقة الاسترخاء بعد":"لقد استخدمت $numUsed من منطقة الاسترخاء ",
+              Text(numUsed==0?getTranslated(context,"never_used"):"${getTranslated(context, "use")} $numUsed ${getTranslated(context, "from_chill")} ",
                   style: TextStyle(
-                    fontFamily: Localizations.localeOf(context).languageCode == "ar"
-                        ? "Tajwal"
-                        : "Signatra",
+                    fontFamily:
+                         "Tajwal"
+                        ,
         color: Colors.white
                   )),
              numUsed==0? Image.asset("assets/images/sad_tree.png",width: 100,height: 100,):Lottie.asset("assets/animations/music.json",width: 100,height: 100)
@@ -483,6 +484,24 @@ super.dispose();
 
       )
       ,
+      Card(
+        color: Colors.indigo[700],
+        elevation: 10,
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children:<Widget>[
+              MaterialButton(child: Text("سجل الخواطر",style: TextStyle(color: Colors.white),),onPressed: ()
+                {
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>SituationGrid()));
+                },),
+              MaterialButton(child: Text(" الاستجابات وردود الافعال",style: TextStyle(color: Colors.white),),onPressed: ()
+              {
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>HumanBody()));
+              },)            ]
+        ),
+
+      )
 //      Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
 //    ,width: 200
 //    , height: 200
