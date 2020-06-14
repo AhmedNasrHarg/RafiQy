@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttershare/pages/chillzone.dart';
+import 'package:fluttershare/pages/situation-grid.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 
 import '../main.dart';
@@ -21,6 +22,15 @@ class _TestState extends State<Test> {
           badge: true,
           sound: true,
         );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _requestIOSPermissions();
+    _configureDidReceiveLocalNotificationSubject();
+    _configureSelectNotificationSubject();
   }
 
   void _configureDidReceiveLocalNotificationSubject() {
@@ -67,7 +77,7 @@ class _TestState extends State<Test> {
   }
 
   Future<void> _showDailyAtTime() async {
-    var time = Time(2, 5, 0);
+    var time = Time(3, 12, 0);
 
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'repeatDailyAtTime channel id',
@@ -96,11 +106,8 @@ class _TestState extends State<Test> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _requestIOSPermissions();
-          _configureDidReceiveLocalNotificationSubject();
-          _configureSelectNotificationSubject();
-          _showDailyAtTime();
+        onPressed: () async {
+          await _showDailyAtTime();
         },
       ),
     );
