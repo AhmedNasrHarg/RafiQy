@@ -80,9 +80,9 @@ Future<void> main() async {
 //    title: 'Navigation Basics',
 //    debugShowCheckedModeBanner: false,
 //    home:
-    MyApp()
+      MyApp()
 //  )
-  );
+      );
 }
 
 class MyApp extends StatefulWidget {
@@ -96,7 +96,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   Locale _locale;
   final MethodChannel platform =
       MethodChannel('crossingthestreams.io/resourceResolver');
@@ -106,101 +105,13 @@ class _MyAppState extends State<MyApp> {
     LearnHive();
 
 //    Firestore.instance.settings(persistenceEnabled: true);
-    _requestIOSPermissions();
-    _configureDidReceiveLocalNotificationSubject();
-    _configureSelectNotificationSubject();
-    showDailyNotification();
-  }
-
-  void _requestIOSPermissions() {
-    flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-  }
-
-  void _configureDidReceiveLocalNotificationSubject() {
-    didReceiveLocalNotificationSubject.stream
-        .listen((ReceivedNotification receivedNotification) async {
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) => CupertinoAlertDialog(
-          title: receivedNotification.title != null
-              ? Text(receivedNotification.title)
-              : null,
-          content: receivedNotification.body != null
-              ? Text(receivedNotification.body)
-              : null,
-          actions: [
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              child: Text('Ok'),
-              onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop();
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MyHomePage(
-                      title: 'Bot',
-                    ),
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      );
-    });
-  }
-
-  void _configureSelectNotificationSubject() {
-    selectNotificationSubject.stream.listen((String payload) async {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MyHomePage(
-                  title: 'Bot',
-                )),
-      );
-    });
   }
 
   @override
   void dispose() {
-    didReceiveLocalNotificationSubject.close();
-    selectNotificationSubject.close();
+//    didReceiveLocalNotificationSubject.close();
+//    selectNotificationSubject.close();
     super.dispose();
-  }
-
-  showDailyNotification() async {
-    var time = Time(21, 40, 0);
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'repeatDailyAtTime channel id',
-        'repeatDailyAtTime channel name',
-        'repeatDailyAtTime description');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(
-        0,
-        'show daily title',
-        'Daily notification shown at approximately ${(time.hour)}:${(time.minute)}:${(time.second)}',
-        time,
-        platformChannelSpecifics);
-  }
-
-  Future selectNotification(String payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: ' + payload);
-    }
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MyHomePage(title: 'Bot')),
-    );
   }
 
   void setLocal(Locale locale) {
