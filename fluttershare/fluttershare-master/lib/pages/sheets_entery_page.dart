@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/learn_bar.dart';
 import 'package:fluttershare/classes/sheet.dart';
 import 'package:fluttershare/classes/sheets_bar.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/flexible_sheets_bar.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:lottie/lottie.dart';
@@ -173,7 +174,7 @@ class _EnterySheetsState extends State<EnterySheets> {
                       } else {
                         Alert(
                             context: context,
-                            title: "لا يمكنك فتح تلك الصفحة دون اكمال السابقة",
+                            title: getTranslated(context, "no_open"),
                             content: Column(
                               children: <Widget>[
                                 Lottie.asset(
@@ -187,7 +188,7 @@ class _EnterySheetsState extends State<EnterySheets> {
                             buttons: [
                               DialogButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: Text("حسنا"),
+                                child: Text(getTranslated(context, "ok")),
                               )
                             ]).show();
                       }

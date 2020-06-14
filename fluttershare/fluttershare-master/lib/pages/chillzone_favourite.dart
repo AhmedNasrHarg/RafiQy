@@ -75,7 +75,7 @@ class _ChillFavouriteState extends State<ChillFavourite> {
         .getDocuments()
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
-        print('${f.data}}');
+//        print('${f.data}}');
         if(mounted) {
           setState(() {
             favorites = new List<int>.from(f.data['favourite']);
@@ -130,7 +130,7 @@ class _ChillFavouriteState extends State<ChillFavourite> {
                             setState(() {
                               favorites.remove(chillItems[index].item_id);
                               addFavorite(favorites);
-                              print(favorites.length);
+//                              print(favorites.length);
                               setState(() {
                                 chillItems[index].isFavorite = false;
                                 favourietItems.removeAt(index);

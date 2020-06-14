@@ -429,11 +429,10 @@ super.dispose();
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children:<Widget>[
-            Text(completedTopics==0?"هيا تشجع لاكمال الدرس الاول":"لقد انهيت $completedTopics من الدروس ",
+            Text(completedTopics==0?getTranslated(context,"first_lesson"):"${getTranslated(context, "finish")}$completedTopics ${getTranslated(context, "from_lesson")} ",
                 style: TextStyle(
-                  fontFamily: Localizations.localeOf(context).languageCode == "ar"
-                      ? "Tajwal"
-                      : "Signatra",
+                  fontFamily: "Tajwal"
+                      ,
 //        color: Colors.white
                 )),
             Lottie.asset(completedTopics==0?"assets/animations/muscle.json":"assets/animations/12833-planta-3.json",width: 100,height: 100)
@@ -449,11 +448,11 @@ super.dispose();
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children:<Widget>[
-              Text(completedSheets==0?"هيا تشجع لاكمال أول مهمة":"لقد انهيت $completedSheets من المهمات ",
+              Text(completedSheets==0?getTranslated(context,"first_sheet"):" ${getTranslated(context, "finish")} $completedSheets ${getTranslated(context, "from_sheet")} ",
                   style: TextStyle(
-                    fontFamily: Localizations.localeOf(context).languageCode == "ar"
-                        ? "Tajwal"
-                        : "Signatra",
+                    fontFamily:
+                         "Tajwal",
+
 //        color: Colors.white
                   )),
               Lottie.asset(completedSheets==0?"assets/animations/muscle.json":"assets/animations/bar.json",width: 100,height: 100)
@@ -469,11 +468,11 @@ super.dispose();
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children:<Widget>[
-              Text(numUsed==0?"لم تستخدم منطقة الاسترخاء بعد":"لقد استخدمت $numUsed من منطقة الاسترخاء ",
+              Text(numUsed==0?getTranslated(context,"never_used"):"${getTranslated(context, "use")} $numUsed ${getTranslated(context, "from_chill")} ",
                   style: TextStyle(
-                    fontFamily: Localizations.localeOf(context).languageCode == "ar"
-                        ? "Tajwal"
-                        : "Signatra",
+                    fontFamily:
+                         "Tajwal"
+                        ,
         color: Colors.white
                   )),
              numUsed==0? Image.asset("assets/images/sad_tree.png",width: 100,height: 100,):Lottie.asset("assets/animations/music.json",width: 100,height: 100)

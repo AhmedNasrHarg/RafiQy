@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttershare/classes/chill_interactive.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
@@ -33,7 +34,7 @@ class _ChillInteractiveUploadState extends State<ChillInteractiveUpload> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("اضف ما تحبه"),),
+      appBar: AppBar(title: Text(getTranslated(context, "add_what_you_love")),),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: <Widget>[
@@ -65,7 +66,7 @@ class _ChillInteractiveUploadState extends State<ChillInteractiveUpload> {
               controller: imageTitleController,
             decoration: InputDecoration(
             border: InputBorder.none,
-        hintText: 'ادخل عنوان للصورة'
+        hintText: getTranslated(context, "enter_image_title")
         ),
         )
           ],
@@ -80,7 +81,7 @@ class _ChillInteractiveUploadState extends State<ChillInteractiveUpload> {
         onPressed: () async {
         var url=await uploadImage(imageFile);
 
-        print("URL $url");
+//        print("URL $url");
         String imageId = Uuid().v4();
 
         Navigator.pop(context,url);
@@ -102,25 +103,3 @@ Future<String> uploadImage(imageFile) async {
 
 }
 
-//import 'dart:io';
-//
-//import 'package:flutter/cupertino.dart';
-//import 'package:image_picker/image_picker.dart';
-//
-//class ChillInteractiveUpload extends StatefulWidget {
-//  @override
-//  _ChillInteractiveUploadState createState() => _ChillInteractiveUploadState();
-//}
-//
-//class _ChillInteractiveUploadState extends State<ChillInteractiveUpload> {
-//  File imageFile;
-//  final imagePicker=ImagePicker();
-//  Future getImage()async
-//  {
-//    final imagePicked=await imagePicker.getImage();
-//  }
-//  @override
-//  Widget build(BuildContext context) {
-//    return Container();
-//  }
-//}

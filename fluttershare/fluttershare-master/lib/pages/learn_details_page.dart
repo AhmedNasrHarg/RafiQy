@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/learn_qa.dart';
 import 'package:fluttershare/classes/topic.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/note_page.dart';
 import 'package:video_player/video_player.dart';
@@ -39,7 +40,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
   VideoPlayerController _videoPlayerController;
   var videoURL;
   bool connetcting;
-  String isDoneButton=" انهيت الدرس";
+  String isDoneButton;
 
   var is_done = false;
   var num_q;
@@ -153,6 +154,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
 //print("${dataQuestions[0].question}");
 //print("${dataQuestions[0]}");
     // TODO: implement build
+    isDoneButton=getTranslated(context, "finish_lesson");
 
 //  print("topic id ${topic.topicId}");
     return Scaffold(
@@ -163,7 +165,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
           Row(
 
             children: <Widget>[
-              Text("ملاحظاتي",style: TextStyle(color: Colors.white),),
+              Text(getTranslated(context, "my_notes"),style: TextStyle(color: Colors.white),),
               IconButton(
                 icon: Icon(Icons.book),
                 onPressed: () => Navigator.push(
@@ -243,12 +245,12 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                 child: Text(isDoneButton,style: (TextStyle(color: Colors.white)),),
                 color: Colors.teal,
                 onPressed:is_done?
-                (){
+                    (){
                   setState(() {
                     is_done = false;
                     done.remove(topic.topicId);
                     addDone(done);
-                    isDoneButton=" انهيت الدرس";
+                    isDoneButton=getTranslated(context, "finish_lesson");
                   });
                 }
                     :() {
@@ -256,7 +258,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                     is_done = true;
                     done.add(topic.topicId);
                     addDone(done);
-                    isDoneButton="مراجعة الدرس";
+                    isDoneButton=getTranslated(context, "rev_lesson");;
 
                   });
                 },
@@ -306,7 +308,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
             content: Text(text),
             actions: <Widget>[
               FlatButton(
-                child: Text('Ok'),
+                child: Text(getTranslated(context, "ok")),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

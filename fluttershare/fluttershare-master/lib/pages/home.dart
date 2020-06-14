@@ -257,7 +257,7 @@ class _HomeState extends State<Home> {
                   child: Container(
                     margin: EdgeInsets.only(top: 5),
                     child: Text(
-                      "سوف نقوم باعطاء لك شجرة،عليك أن تراعيها حتي تكبر و تصبح جزء من حديقتنا",
+                      getTranslated(context, "sheets_message"),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       textDirection: TextDirection.rtl,
@@ -270,7 +270,7 @@ class _HomeState extends State<Home> {
                   child: Row(
                     children: <Widget>[
                       Text(
-                        "لا تظهر الرسالة مرة أخري",
+                        getTranslated(context, "no_show_msg"),
                         style: TextStyle(fontSize: 11, color: Colors.teal),
                       ),
                       Checkbox(
@@ -292,7 +292,7 @@ class _HomeState extends State<Home> {
           buttons: [
             DialogButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("أبدأ الآن"),
+              child: Text(getTranslated(context, "start_now")),
             )
           ]).show();
     } else {

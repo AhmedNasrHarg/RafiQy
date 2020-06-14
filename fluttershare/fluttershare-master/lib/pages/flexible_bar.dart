@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/routes/route_names.dart';
 import 'package:lottie/lottie.dart';
 
@@ -21,32 +22,30 @@ class FlexibleAppBarWidget extends StatelessWidget{
             children: <Widget>[
               Container(
                 color: Colors.teal[200],
-                child: FittedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(child: Padding(
-                        padding: const EdgeInsets.only(left:50),
-                        child: new Text(
-                            "معرض الصور",
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0
-                            )
-                        ),
-                      ),),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(child: Padding(
+                      padding: const EdgeInsets.only(left:50),
+                      child: new Text(
+                          getTranslated(context, "images_album"),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0
+                          )
+                      ),
+                    ),),
 
-                      Container(child: Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: IconButton(
-                           color: Colors.white,iconSize: 40.0, icon: Icon(Icons.arrow_right),
-                           onPressed:()=> Navigator.pushNamed(context, albumRoute),
-                            ),
+                    Container(child: Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: IconButton(
+                         color: Colors.white,iconSize: 40.0, icon: Icon(Icons.arrow_right),
+                         onPressed:()=> Navigator.pushNamed(context, albumRoute),
+                          ),
 
-                      ),),
+                    ),),
 
-                    ],),
-                ),
+                  ],),
               ),
               Container(
                 color: Colors.teal[400],
@@ -60,7 +59,7 @@ class FlexibleAppBarWidget extends StatelessWidget{
 
                           padding: const EdgeInsets.only(left:10),
                           child: new Text(
-                              "كل موضوع تنهيه يجعل معرفتك أفضل",
+                              getTranslated(context, "every_topic"),
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 15.0

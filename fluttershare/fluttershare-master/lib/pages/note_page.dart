@@ -44,7 +44,7 @@ class _NotePageState extends State<NotePage> {
         .getDocuments()
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
-        print('yarab');
+//        print('yarab');
         setState(() {
           notesTitles = new List<String>.from(f.data['notesTitles']);
           notesContents = new List<String>.from(f.data['notesContents']);
@@ -68,7 +68,7 @@ class _NotePageState extends State<NotePage> {
           onPressed: () {
             Alert(
                 context: context,
-                title: "New Note",
+                title: getTranslated(context, "new_note"),
                 content: Column(
                   children: <Widget>[
                     TextField(
@@ -76,7 +76,7 @@ class _NotePageState extends State<NotePage> {
                         curTitle = text;
                       },
                       decoration: InputDecoration(
-                        labelText: 'title',
+                        labelText: getTranslated(context, "note_title"),
                       ),
 //                    onSubmitted: (),
                     ),
@@ -87,7 +87,7 @@ class _NotePageState extends State<NotePage> {
                         },
                         maxLines: 15,
                         decoration: InputDecoration(
-                          labelText: 'content',
+                          labelText: getTranslated(context,"note_content"),
                         ),
                       ),
                       height: 300,
@@ -119,7 +119,7 @@ class _NotePageState extends State<NotePage> {
                       });
                     },
                     child: Text(
-                      "Add Note",
+                      getTranslated(context, "add_note"),
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   )
