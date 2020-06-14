@@ -101,6 +101,7 @@ class DateGridState extends State<SituationGrid> {
             builder: (context) => MyHomePage(
                   title: 'logSheet',
                   sheetName: 'سِجِل الخواطر والمشاعر',
+                  deleteLast: true,
                 )),
       );
     });
@@ -136,6 +137,7 @@ class DateGridState extends State<SituationGrid> {
           builder: (context) => MyHomePage(
                 title: 'logSheet',
                 sheetName: 'سِجِل الخواطر والمشاعر',
+                deleteLast: true,
               )),
     );
     print('pppppp');
