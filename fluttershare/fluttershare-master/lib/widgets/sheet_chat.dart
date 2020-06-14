@@ -167,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Alert(
         context: context,
         style: AlertStyle(isCloseButton: false),
-        title: "أنت تقوم بعمل جيد",
+        title: getTranslated(context,"good_job"),
         content: Column(
           children: <Widget>[
             Lottie.asset(
@@ -184,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.pop(context);
               Navigator.pop(context, true);
             },
-            child: Text("التالي"),
+            child: Text(getTranslated(context, "next")),
           )
         ]).show();
   }

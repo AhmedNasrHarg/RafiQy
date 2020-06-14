@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'chillzone_favourite.dart';
 import 'chillzone_grid.dart';
 
@@ -27,7 +28,7 @@ class _ChillZoneState extends State<ChillZone>
     return Scaffold(
       backgroundColor: Colors.deepPurple[50],
       appBar: AppBar(
-        title: Text('منطقة الاسترخاء'),
+        title: Text(getTranslated(context, "chill_zone")),
         backgroundColor: Colors.teal,
 //        actions: <Widget>[
 //        RaisedButton.icon(onPressed: null, icon: Icon(Icons.mood), label: Text("اثترح"))

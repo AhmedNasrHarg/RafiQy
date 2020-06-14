@@ -30,7 +30,7 @@ Locale _locale(String languageCode){
       _temp=Locale(languageCode,'SA');
       break;
     default:
-      _temp=Locale(ENGLISH,'US');
+      _temp=Locale(ARABIC,'SA');
 
   }
   return _temp;
@@ -39,6 +39,6 @@ Locale _locale(String languageCode){
 Future<Locale>getLocale() async
 {
   SharedPreferences _prefs=await SharedPreferences.getInstance();
-  String languageCode=_prefs.getString(LANGUAGE_CODE)??ENGLISH;
+  String languageCode=_prefs.getString(LANGUAGE_CODE)??ARABIC;
   return _locale(languageCode);
 }

@@ -22,7 +22,6 @@ List<Album>favoutiesImages=[];
   @override
   void initState() {
     // TODO: implement initState
-    showDialog();
 
     super.initState();
     getAll();
@@ -48,33 +47,9 @@ List<Album>favoutiesImages=[];
         }
     });
   }
-  showDialog()
-  {
-//    if(favorites.isEmpty)
-//      {
-        Alert(
-                     context: context,
-                     title:
-                         "ليس لديك أي مفضلات اذهب إلي قائمة الاسترخاء لاضافة مفضلاتك",
-                     content: Column(
-                       children: <Widget>[
-                         Lottie.asset(
-                           'assets/animations/yoga.json',
-                           width: 300,
-                           height: 300,
-                           fit: BoxFit.fill,
-                         ),
-                       ],
-                     ),
-                     buttons: [
-                       DialogButton(
-                         onPressed: () => Navigator.pop(context),
-                         child: Text("حسنا"),
-                       )
-                     ]).show();
 
-    //https://lottiefiles.com/22979-meditating-lady
-  }
+
+
 
 
   getAlbum() async {
@@ -83,16 +58,7 @@ List<Album>favoutiesImages=[];
         .getDocuments();
     snapshot.documents.forEach((DocumentSnapshot doc) async {
       Album album = Album.fromDocument(doc);
-//      DocumentSnapshot favoriteImages = await userRef
-//          .document(currentUser.id)
-//          .collection("favoriteImages")
-//          .document("${album.image_id}Log")
-//          .get();
-//      if (favoriteImages.exists) {
-//        album.isFavorite = favoriteImages["isFavorite"];
-//      } else {
-//        album.isFavorite = false;
-//      }
+
       images.add(album);
       setState(() {
         images = images;
@@ -114,7 +80,8 @@ List<Album>favoutiesImages=[];
         .collection("favourite_album")
         .getDocuments().then( (QuerySnapshot snapshot) {
       snapshot.documents.forEach((f)
-      {print('${f.data}}');
+      {
+//        print('${f.data}}');
       setState(() {
         favorites=new List<int>.from(f.data['favourite']);
 //                f.data['favourite'].cast<int>();
@@ -162,7 +129,7 @@ List<Album>favoutiesImages=[];
 
                               favorites.remove(images[index].image_id);
                               addFavorite(favorites);
-                              print(favorites.length);
+//                              print(favorites.length);
                               setState(() {
                                 images[index].isFavorite=false;
                                 favoutiesImages.removeAt(index);

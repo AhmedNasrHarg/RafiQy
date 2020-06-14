@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:lottie/lottie.dart';
 
 class FlexibleSheetsBar extends StatelessWidget{
@@ -29,7 +30,7 @@ class FlexibleSheetsBar extends StatelessWidget{
                         
                           padding: const EdgeInsets.only(left:10),
                           child: new Text(
-                              "كل مهمة تقوم بها تجعلك شجرتك تنمو أفضل",
+                              getTranslated(context, "every_sheet"),
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 15.0
