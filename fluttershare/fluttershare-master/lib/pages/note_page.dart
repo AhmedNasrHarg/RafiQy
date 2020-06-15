@@ -29,12 +29,15 @@ class _NotePageState extends State<NotePage> {
     getNotes();
   }
 
-  void saveNotes() {
-    notesRef
+  Future<void> saveNotes() async {
+   await notesRef
         .document(currentUser.id)
         .collection(topic_id) //setb2a
         .document(topic_id)
         .setData({'notesTitles': notesTitles, 'notesContents': notesContents});
+
+    curTitle = '';
+    curContent = '';
   }
 
   void getNotes() {
@@ -87,7 +90,7 @@ class _NotePageState extends State<NotePage> {
                         },
                         maxLines: 15,
                         decoration: InputDecoration(
-                          labelText: getTranslated(context,"note_content"),
+                          labelText: getTranslated(context, "note_content"),
                         ),
                       ),
                       height: 300,
@@ -99,13 +102,13 @@ class _NotePageState extends State<NotePage> {
                   DialogButton(
                     onPressed: () {
 //                    Navigator.pop(context);
-                      setState(() {
+                      setState(()  {
                         Navigator.of(context, rootNavigator: true).pop();
                         //check first if title & content is not empty
                         if (curTitle.length > 0 && curContent.length > 0) {
                           notesTitles.add(curTitle);
                           notesContents.add(curContent);
-                          saveNotes();
+                           saveNotes();
                         } else {
                           //show toast here
                           Fluttertoast.showToast(
@@ -129,7 +132,6 @@ class _NotePageState extends State<NotePage> {
             Icons.add,
           ),
         ),
-
         body: Card(
           child: ListView.builder(
               padding: const EdgeInsets.all(2),

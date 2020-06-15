@@ -72,7 +72,8 @@ class _SituationDetailsState extends State<SituationDetails> {
           height: 1000,
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: Localizations.localeOf(context).languageCode == "ar"
+                  ?CrossAxisAlignment.start:CrossAxisAlignment.end,
               children: <Widget>[
                 FutureBuilder(
                   future: dateToArabic(
