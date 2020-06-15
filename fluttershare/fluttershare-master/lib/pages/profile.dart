@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/language.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/post.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/edit_profile.dart';
+import 'package:fluttershare/pages/sheets_output.dart';
+import 'package:fluttershare/pages/situation-grid.dart';
 import 'package:fluttershare/widgets/article.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/widgets/progress.dart';
@@ -13,6 +16,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 
 import '../main.dart';
+import 'human_body.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
@@ -35,6 +39,7 @@ class _ProfileState extends State<Profile>with TickerProviderStateMixin {
   int completedSheets=0;
   int completedTopics=0;
   int numUsed=0;
+  var connecting=false;
   AnimationController controller;
   void _changeLanguage(Language language) async {
     Locale _temp = await setLocale(language.languageCode);
@@ -67,6 +72,7 @@ class _ProfileState extends State<Profile>with TickerProviderStateMixin {
     getDoneTopics();
     getCompletedDocs();
     getNumberUsed();
+    _checkInternetConnectivity();
   }
 
   @override
@@ -418,7 +424,9 @@ super.dispose();
 //      mainAxisAlignment: MainAxisAlignment.spaceAround,
 //    ),
 //  )
-//      :
+//
+//     :
+    connecting?
   Column(
 
     children: <Widget>[
@@ -448,13 +456,20 @@ super.dispose();
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children:<Widget>[
-              Text(completedSheets==0?getTranslated(context,"first_sheet"):" ${getTranslated(context, "finish")} $completedSheets ${getTranslated(context, "from_sheet")} ",
-                  style: TextStyle(
-                    fontFamily:
-                         "Tajwal",
+              Column(
+                children:<Widget>[ Text(completedSheets==0?getTranslated(context,"first_sheet"):" ${getTranslated(context, "finish")} $completedSheets ${getTranslated(context, "from_sheet")} ",
+                    style: TextStyle(
+                      fontFamily:
+                           "Tajwal",
 
 //        color: Colors.white
-                  )),
+                    )),
+                 completedSheets>=1? MaterialButton(child: Text("النتيجة",style: TextStyle(fontFamily: "Tajwal"),),onPressed: ()
+                 {
+                   Navigator.push(context,MaterialPageRoute(builder: (context)=>SheetsOutput()));
+                 },color: Colors.teal[200],):Container(color: Colors.teal[100],)
+                ]
+              ),
               Lottie.asset(completedSheets==0?"assets/animations/muscle.json":"assets/animations/bar.json",width: 100,height: 100)
 
             ]
@@ -482,6 +497,7 @@ super.dispose();
 
       )
       ,
+
 //      Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
 //    ,width: 200
 //    , height: 200
@@ -494,7 +510,7 @@ super.dispose();
 //    }
 //    )
     ],
-  );
+  ):circularProgress();
 
 
 
@@ -624,6 +640,21 @@ super.dispose();
 
 
 
+  }
+  _checkInternetConnectivity() async {
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+setState(() {
+  connecting = false;
+
+});
+    } else if (result == ConnectivityResult.wifi ||
+        result == ConnectivityResult.mobile) {
+      setState(() {
+        connecting = true;
+
+      });
+    }
   }
 
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/chill.dart';
@@ -7,6 +8,7 @@ import 'package:fluttershare/pages/chillInteractiveDetails.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/image_viewer.dart';
 import 'package:fluttershare/pages/video_details.dart';
+import 'package:fluttershare/widgets/progress.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -22,12 +24,13 @@ class _ChillGridState extends State<ChillGrid> {
   List<Chill> chillItems = [];
   List<int> favorites = [];
   List<ChillUsed>numberOfUsedItem=[];
-  
+  var connecting=false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _checkInternetConnectivity();
     getAll();
   }
   getAll()async
@@ -129,8 +132,9 @@ class _ChillGridState extends State<ChillGrid> {
     bool isFavorite;
 //    bool numUseId;
     // TODO: implement build
-    return Scaffold(
-      body: GridView.count(
+    return
+      Scaffold(
+      body:connecting? GridView.count(
           childAspectRatio: (70 / 50),
           crossAxisCount: 1,
           children: List.generate(
@@ -264,7 +268,7 @@ class _ChillGridState extends State<ChillGrid> {
                   ],
                 )
             );
-          })),
+          })):circularProgress(),
 //        floatingActionButton: FloatingActionButton(
 //          backgroundColor:Colors.teal,
 //          onPressed: () {
@@ -360,6 +364,42 @@ class _ChillGridState extends State<ChillGrid> {
 //            )
 //          ]).show();
     }
+  }
+  _checkInternetConnectivity() async {
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      _showDialog(
+          'No internet', "You're not connected to a network to view video");
+      setState(() {
+        connecting = false;
+
+      });
+    } else if (result == ConnectivityResult.wifi ||
+        result == ConnectivityResult.mobile) {
+      setState(() {
+        connecting = true;
+
+      });
+    }
+  }
+
+  _showDialog(title, text) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(text),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(getTranslated(context, "ok")),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
   }
 
 }

@@ -16,6 +16,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final StorageReference storageRef = FirebaseStorage.instance.ref();
@@ -64,9 +65,11 @@ class _HomeState extends State<Home> {
   handelSignIn(GoogleSignInAccount account) async {
     if (account != null) {
       await createUserInFirestore();
-      setState(() {
+      Future.delayed(Duration(milliseconds: 4000),(){
+        setState(() {
         isAuth = true;
-      });
+      }); 
+        });
     } else {
       setState(() {
         isAuth = false;
@@ -110,6 +113,7 @@ class _HomeState extends State<Home> {
   }
 
   login() {
+    
     googleSignIn.signIn();
   }
 
@@ -198,15 +202,19 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(
-                getTranslated(context, "project_name"),
-                style: TextStyle(
-                    fontFamily:
-                        Localizations.localeOf(context).languageCode == "ar"
-                            ? "Lemonada"
-                            : "Signatra",
-                    fontSize: 90.0,
-                    color: Colors.white),
+              Shimmer.fromColors(
+                baseColor: Colors.white,
+                highlightColor: Colors.amber,
+                              child: Text(
+                  getTranslated(context, "project_name"),
+                  style: TextStyle(
+                      fontFamily:
+                          Localizations.localeOf(context).languageCode == "ar"
+                              ? "Lemonada"
+                              : "Signatra",
+                      fontSize: 90.0,
+                      color: Colors.white),
+                ),
               ),
               GestureDetector(
                 onTap: login,
@@ -267,26 +275,37 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-                FittedBox(
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        getTranslated(context, "no_show_msg"),
-                        style: TextStyle(fontSize: 11, color: Colors.teal),
-                      ),
-                      Checkbox(
-                        value: noHelloSheet,
-//                      onChanged: savePrefs(),
-                        onChanged: (bool value) {
-                          setState(() {
-                            setHelloSheet(value);
-                            noHelloSheet = value;
-                          });
-                        },
-                      )
-                    ],
-                  ),
-                )
+MaterialButton(
+  child: Text(getTranslated(context, "no_show_msg"),style: TextStyle(color: Colors.white),),onPressed:
+        (){
+      setState(() {
+        setHelloSheet(true);
+        noHelloSheet = true;
+      });
+      Navigator.pop(context);
+    },
+  color: Colors.teal[300],
+)
+//                FittedBox(
+//                  child: Row(
+//                    children: <Widget>[
+//                      Text(
+//                        getTranslated(context, "no_show_msg"),
+//                        style: TextStyle(fontSize: 11, color: Colors.teal),
+//                      ),
+//                      Checkbox(
+//                        value: noHelloSheet,
+////                      onChanged: savePrefs(),
+//                        onChanged: (bool value) {
+//                          setState(() {
+//                            setHelloSheet(value);
+//                            noHelloSheet = value;
+//                          });
+//                        },
+//                      )
+//                    ],
+//                  ),
+//                )
               ],
             ),
           ),
@@ -294,7 +313,15 @@ class _HomeState extends State<Home> {
             DialogButton(
               onPressed: () => Navigator.pop(context),
               child: Text(getTranslated(context, "start_now")),
-            )
+            ),
+//            DialogButton(child: Text(getTranslated(context, "no_show_msg")),onPressed:
+//            (){
+//              setState(() {
+//                setHelloSheet(true);
+//                noHelloSheet = true;
+//              });
+//              Navigator.pop(context);
+//            },)
           ]).show();
     } else {
       print("elseee");
