@@ -140,7 +140,7 @@ class _NotePageState extends State<NotePage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                     child: Container(
-                      color: index % 2 == 0 ? Colors.amber[200] : Colors.teal,
+                      color: index % 2 == 0 ? Colors.amber : Colors.teal,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,

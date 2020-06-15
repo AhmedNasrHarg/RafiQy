@@ -154,21 +154,25 @@ setVideoUrl();
         title: Text(topic.topicName),
 //          (DemoLocalization.of(context).getTranslatedValues('home_page')),
         actions: <Widget>[
-          Row(
+          FlatButton(
+            color: Colors.deepPurple,
+            child: Row(
 
-            children: <Widget>[
-              Text(getTranslated(context, "my_notes"),style: TextStyle(color: Colors.white),),
-              IconButton(
-                icon: Icon(Icons.book),
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotePage(
-                          topic_id: topic.topicId,
-                        ))),
-              ),
-            ],
+              children: <Widget>[
+                Text(getTranslated(context, "my_notes"),style: TextStyle(color: Colors.white),),
+                Icon(
+Icons.book,
+color: Colors.white,
+                ),
+              ],
 
+            ),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NotePage(
+                      topic_id: topic.topicId,
+                    ))),
           )
         ],
       ),
@@ -208,13 +212,11 @@ setVideoUrl();
                 visible: vis,
               ),
 
-              Container(
-                child: Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (BuildContext context, int index) =>
-                        QAItem(dataQuestions[index]),
-                    itemCount: dataQuestions.length,
-                  ),
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) =>
+                      QAItem(dataQuestions[index]),
+                  itemCount: dataQuestions.length,
                 ),
               ),
 //

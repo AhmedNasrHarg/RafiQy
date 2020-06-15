@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/chill.dart';
+import 'package:fluttershare/pages/chillInteractiveDetails.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/image_viewer.dart';
+import 'package:fluttershare/pages/video_details.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+import 'chillLottie.dart';
 import 'chillzone_grid.dart';
 
 class ChillFavourite extends StatefulWidget {
@@ -109,14 +112,41 @@ class _ChillFavouriteState extends State<ChillFavourite> {
                           height: 170,
                         ),
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ImageViewer(
-                                  favourietItems[index].item_image,
-                                ),
-                              ));
-                        }),
+//                          Navigator.push(
+//                              context,
+//                              MaterialPageRoute(
+//                                builder: (context) => ImageViewer(
+//                                  shillItems[index].item_image,
+//                                ),
+//                              ));
+            if(favourietItems[index].item_id==0)
+            {
+            Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) => ChillLottie(
+            lottieUrl: favourietItems[index].lottie,
+            ),
+            ));
+            }
+            else if(favourietItems[index].item_id%2==0&&favourietItems[index].item_id!=0)
+            {
+            Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) =>VideoPlay(itemChill: favourietItems[index])
+            ));
+
+            }
+            else {
+            Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) => ChillInteractiveDetails(itemChill: favourietItems[index],)
+            ));
+            }
+
+            }),
                     Row(
                       children: <Widget>[
                         Text(favourietItems[index].item_title),
