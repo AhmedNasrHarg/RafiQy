@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttershare/classes/language.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
@@ -38,6 +39,7 @@ class _ProfileState extends State<Profile>with TickerProviderStateMixin {
   int completedSheets=0;
   int completedTopics=0;
   int numUsed=0;
+  var connecting=false;
   AnimationController controller;
   void _changeLanguage(Language language) async {
     Locale _temp = await setLocale(language.languageCode);
@@ -70,6 +72,7 @@ class _ProfileState extends State<Profile>with TickerProviderStateMixin {
     getDoneTopics();
     getCompletedDocs();
     getNumberUsed();
+    _checkInternetConnectivity();
   }
 
   @override
@@ -421,7 +424,9 @@ super.dispose();
 //      mainAxisAlignment: MainAxisAlignment.spaceAround,
 //    ),
 //  )
-//      :
+//
+//     :
+    connecting?
   Column(
 
     children: <Widget>[
@@ -505,7 +510,7 @@ super.dispose();
 //    }
 //    )
     ],
-  );
+  ):circularProgress();
 
 
 
@@ -635,6 +640,21 @@ super.dispose();
 
 
 
+  }
+  _checkInternetConnectivity() async {
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+setState(() {
+  connecting = false;
+
+});
+    } else if (result == ConnectivityResult.wifi ||
+        result == ConnectivityResult.mobile) {
+      setState(() {
+        connecting = true;
+
+      });
+    }
   }
 
 }

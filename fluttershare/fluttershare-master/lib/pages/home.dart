@@ -267,26 +267,37 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-                FittedBox(
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        getTranslated(context, "no_show_msg"),
-                        style: TextStyle(fontSize: 11, color: Colors.teal),
-                      ),
-                      Checkbox(
-                        value: noHelloSheet,
-//                      onChanged: savePrefs(),
-                        onChanged: (bool value) {
-                          setState(() {
-                            setHelloSheet(value);
-                            noHelloSheet = value;
-                          });
-                        },
-                      )
-                    ],
-                  ),
-                )
+MaterialButton(
+  child: Text(getTranslated(context, "no_show_msg"),style: TextStyle(color: Colors.white),),onPressed:
+        (){
+      setState(() {
+        setHelloSheet(true);
+        noHelloSheet = true;
+      });
+      Navigator.pop(context);
+    },
+  color: Colors.teal[300],
+)
+//                FittedBox(
+//                  child: Row(
+//                    children: <Widget>[
+//                      Text(
+//                        getTranslated(context, "no_show_msg"),
+//                        style: TextStyle(fontSize: 11, color: Colors.teal),
+//                      ),
+//                      Checkbox(
+//                        value: noHelloSheet,
+////                      onChanged: savePrefs(),
+//                        onChanged: (bool value) {
+//                          setState(() {
+//                            setHelloSheet(value);
+//                            noHelloSheet = value;
+//                          });
+//                        },
+//                      )
+//                    ],
+//                  ),
+//                )
               ],
             ),
           ),
@@ -294,7 +305,15 @@ class _HomeState extends State<Home> {
             DialogButton(
               onPressed: () => Navigator.pop(context),
               child: Text(getTranslated(context, "start_now")),
-            )
+            ),
+//            DialogButton(child: Text(getTranslated(context, "no_show_msg")),onPressed:
+//            (){
+//              setState(() {
+//                setHelloSheet(true);
+//                noHelloSheet = true;
+//              });
+//              Navigator.pop(context);
+//            },)
           ]).show();
     } else {
       print("elseee");

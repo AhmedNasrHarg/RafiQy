@@ -114,24 +114,3 @@ class _SheetsOutputState extends State<SheetsOutput> {
 
   }
 }
-/*
-Card(
-             color: Colors.teal[100],
-             elevation: 10,
-             child: Row(
-                 mainAxisSize: MainAxisSize.max,
-                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                 children:<Widget>[
-                   Text(completedSheets[i]=="logSheetLog"?"سجل الخواطر والمشاعر":"الاستجابات وردود الافعال",
-                       style: TextStyle(
-                         fontFamily: "Tajwal"
-                         ,
-//        color: Colors.white
-                       )),
-                   Lottie.asset("assets/animations/flower.json",width: 100,height: 100)
-
-                 ]
-             ),
-
-           ),
-* */
