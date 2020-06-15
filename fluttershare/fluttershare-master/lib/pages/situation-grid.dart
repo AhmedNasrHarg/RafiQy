@@ -64,12 +64,50 @@ class DateGridState extends State<SituationGrid> {
   List<int> situations = [];
   BuildContext context2;
 
+  Future<void> test() async {
+    notificationAppLaunchDetails =
+        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  }
+
   @override
   void initState() {
     super.initState();
     context2 = this.context;
     getdates();
+    test();
+
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('app_icon');
+    // Note: permissions aren't requested here just to demonstrate that can be done later using the `requestPermissions()` method
+    // of the `IOSFlutterLocalNotificationsPlugin` class
+    var initializationSettingsIOS = IOSInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+        onDidReceiveLocalNotification:
+            (int id, String title, String body, String payload) async {
+          didReceiveLocalNotificationSubject.add(ReceivedNotification(
+              id: id, title: title, body: body, payload: payload));
+        });
+    var initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
 //    _configureSelectNotificationSubject();
+  }
+
+  Future onSelectNotification(String payload) async {
+    print('jj');
+    Navigator.push(
+      context2,
+      MaterialPageRoute(
+          builder: (context) => MyHomePage(
+                title: 'logSheet',
+                sheetName: 'سِجِل الخواطر والمشاعر',
+                deleteLast: true,
+              )),
+    );
+    print('ppppp');
   }
 
   void _requestIOSPermissions() {
@@ -101,7 +139,7 @@ class DateGridState extends State<SituationGrid> {
               isDefaultAction: true,
               child: Text('Ok'),
               onPressed: () async {
-//                Navigator.of(context2, rootNavigator: true).pop();
+                Navigator.of(context2, rootNavigator: true).pop();
                 await Navigator.push(
                   context2,
                   MaterialPageRoute(
@@ -128,15 +166,15 @@ class DateGridState extends State<SituationGrid> {
       print('context2 $context2');
       print('context3 ${_scaffold.currentContext}');
       if (context2 != null) ;
-//        Navigator.push(
-//          context2,
-//          MaterialPageRoute(
-//              builder: (context) => MyHomePage(
-//                    title: 'logSheet',
-//                    sheetName: 'سِجِل الخواطر والمشاعر',
-//                    deleteLast: true,
-//                  )),
-//        );
+      Navigator.push(
+        context2,
+        MaterialPageRoute(
+            builder: (context) => MyHomePage(
+                  title: 'logSheet',
+                  sheetName: 'سِجِل الخواطر والمشاعر',
+                  deleteLast: true,
+                )),
+      );
     });
   }
 

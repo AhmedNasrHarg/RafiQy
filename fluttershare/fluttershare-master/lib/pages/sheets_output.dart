@@ -28,51 +28,47 @@ class _SheetsOutputState extends State<SheetsOutput> {
     getCompletedSheets();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
-   return Scaffold(
-     appBar: AppBar(
-       title: Text(getTranslated(context, "sheets_output")),backgroundColor: Colors.teal[300],
-     ),
-     body: ListView.builder(
-       itemCount: completedSheets.length,
-       itemBuilder: (context,i)
-       {
-         return ListTile(
-           title: Card(
-             color: Colors.teal[100],
-             elevation: 10,
-             child: Row(
-                 mainAxisSize: MainAxisSize.max,
-                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                 children:<Widget>[
-                   Text(completedSheets[i]=="logSheetLog"?"سجل الخواطر والمشاعر":"الاستجابات وردود الافعال",
-                       style: TextStyle(
-                         fontFamily: "Tajwal"
-                         ,
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(getTranslated(context, "sheets_output")),
+          backgroundColor: Colors.teal[300],
+        ),
+        body: ListView.builder(
+          itemCount: completedSheets.length,
+          itemBuilder: (context, i) {
+            return ListTile(
+                title: Card(
+                  color: Colors.teal[100],
+                  elevation: 10,
+                  child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                            completedSheets[i] == "logSheetLog"
+                                ? "سجل الخواطر والمشاعر"
+                                : "الاستجابات وردود الافعال",
+                            style: TextStyle(
+                              fontFamily: "Tajwal",
 //        color: Colors.white
-                       )),
-                   Lottie.asset("assets/animations/flower.json",width: 100,height: 100)
-
-                 ]
-             ),
-
-           ),
-
-             onTap: ()
-             {
-               completedSheets[i]=="logSheetLog"? Navigator.push(context, MaterialPageRoute(builder: (context)=>SituationGrid()))
-                   :Navigator.push(context, MaterialPageRoute(builder: (context)=>HumanBody()))
-               ;
-             }
-         );
-       },
-
-     )
-    );
+                            )),
+                        Lottie.asset("assets/animations/flower.json",
+                            width: 100, height: 100)
+                      ]),
+                ),
+                onTap: () {
+                  completedSheets[i] == "logSheetLog"
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SituationGrid()))
+                      : Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HumanBody()));
+                });
+          },
+        ));
   }
 
   @override
@@ -80,37 +76,33 @@ class _SheetsOutputState extends State<SheetsOutput> {
     super.didChangeDependencies();
   }
 
+  getCompletedSheets() async {
+    CollectionReference logSheet =
+        userRef.document(currentUser.id).collection("logSheetOutput");
 
+    if (logSheet != null) {
+      logSheet.getDocuments().then((value) {
+        if (value.documents.length > 0) {
+          setState(() {
+            completedSheets.add("logSheetLog");
+          });
+        }
+      });
+    }
 
-  getCompletedSheets()async
-  {
-
-
-
-    DocumentReference LogSheet= await userRef.document(currentUser.id)
-        .collection("completedSheets").document("logSheetLog");
-
-    LogSheet.get().then((value) {
-      if(value.exists) {
-       setState(() {
-         completedSheets.add("logSheetLog");
-       });
-      }
-    });
-
-
-    DocumentReference bodySheet= await userRef.document(currentUser.id)
-        .collection("completedSheets").document("bodyResponseSheetLog");
+    DocumentReference bodySheet = userRef
+        .document(currentUser.id)
+        .collection("completedSheets")
+        .document("bodyResponseSheetLog");
 
     bodySheet.get().then((value) {
-      if(value.exists) {
-        if(mounted)
-          {
-        setState(() {
-          completedSheets.add("bodyResponseSheetLog");
-        });}
+      if (value.exists) {
+        if (mounted) {
+          setState(() {
+            completedSheets.add("bodyResponseSheetLog");
+          });
+        }
       }
     });
-
   }
 }
