@@ -254,12 +254,6 @@ class _MyHomePageState extends State<MyHomePage> {
           context,
           MaterialPageRoute(builder: (context) => HumanBody()),
         );
-      } else if (isDone && widget.title == 'logSheet') {
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SituationGrid()),
-        );
       } else {
         getOldChat(documentSnapshot);
         print("Exist");

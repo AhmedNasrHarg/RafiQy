@@ -16,6 +16,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final StorageReference storageRef = FirebaseStorage.instance.ref();
@@ -64,9 +65,11 @@ class _HomeState extends State<Home> {
   handelSignIn(GoogleSignInAccount account) async {
     if (account != null) {
       await createUserInFirestore();
-      setState(() {
+      Future.delayed(Duration(milliseconds: 4000),(){
+        setState(() {
         isAuth = true;
-      });
+      }); 
+        });
     } else {
       setState(() {
         isAuth = false;
@@ -110,6 +113,7 @@ class _HomeState extends State<Home> {
   }
 
   login() {
+    
     googleSignIn.signIn();
   }
 
@@ -198,15 +202,19 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(
-                getTranslated(context, "project_name"),
-                style: TextStyle(
-                    fontFamily:
-                        Localizations.localeOf(context).languageCode == "ar"
-                            ? "Lemonada"
-                            : "Signatra",
-                    fontSize: 90.0,
-                    color: Colors.white),
+              Shimmer.fromColors(
+                baseColor: Colors.white,
+                highlightColor: Colors.amber,
+                              child: Text(
+                  getTranslated(context, "project_name"),
+                  style: TextStyle(
+                      fontFamily:
+                          Localizations.localeOf(context).languageCode == "ar"
+                              ? "Lemonada"
+                              : "Signatra",
+                      fontSize: 90.0,
+                      color: Colors.white),
+                ),
               ),
               GestureDetector(
                 onTap: login,
