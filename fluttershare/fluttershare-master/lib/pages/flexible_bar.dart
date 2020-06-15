@@ -22,30 +22,36 @@ class FlexibleAppBarWidget extends StatelessWidget{
             children: <Widget>[
               Container(
                 color: Colors.teal[200],
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(child: Padding(
-                      padding: const EdgeInsets.only(left:50),
-                      child: new Text(
-                          getTranslated(context, "images_album"),
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0
-                          )
-                      ),
-                    ),),
-
-                    Container(child: Padding(
-                      padding: const EdgeInsets.only(right: 20.0),
-                      child: IconButton(
-                         color: Colors.white,iconSize: 40.0, icon: Icon(Icons.arrow_right),
-                         onPressed:()=> Navigator.pushNamed(context, albumRoute),
+                child: Padding(
+                  padding: EdgeInsets.all(4),
+                  child: FlatButton(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal:50),
+                          child: new Text(
+                              getTranslated(context, "images_album"),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0
+                              )
                           ),
+                        ),),
 
-                    ),),
+                        Container(child: Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: Icon(Icons.arrow_right,
+                             color: Colors.white,
+                              ),
 
-                  ],),
+                        ),),
+
+                      ],),
+                    onPressed:()=> Navigator.pushNamed(context, albumRoute),
+
+                  ),
+                ),
               ),
               Container(
                 color: Colors.teal[300],

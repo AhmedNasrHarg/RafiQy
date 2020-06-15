@@ -464,7 +464,7 @@ super.dispose();
 
 //        color: Colors.white
                     )),
-                 completedSheets>=1? MaterialButton(child: Text("النتيجة",style: TextStyle(fontFamily: "Tajwal"),),onPressed: ()
+                 completedSheets>=1? MaterialButton(child: Text(getTranslated(context, "result"),style: TextStyle(fontFamily: "Tajwal"),),onPressed: ()
                  {
                    Navigator.push(context,MaterialPageRoute(builder: (context)=>SheetsOutput()));
                  },color: Colors.teal[200],):Container(color: Colors.teal[100],)

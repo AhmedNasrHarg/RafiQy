@@ -57,26 +57,22 @@ class _ChillInteractiveUploadState extends State<ChillInteractiveUpload> {
     SingleChildScrollView(
       child: Container(
         height: MediaQuery.of(context).size.height,
-        child: Column(
-          children: <Widget>[
-            Center(
-              child:  imageFile==null?Text("No Selected Image"):Image.file(imageFile),
-            ),
-            TextField(
-              controller: imageTitleController,
-            decoration: InputDecoration(
-            border: InputBorder.none,
-        hintText: getTranslated(context, "enter_image_title")
-        ),
-        )
-          ],
+        child: Center(
+          child:  imageFile==null?Text("No Selected Image"):Image.file(imageFile),
+//            TextField(
+//              controller: imageTitleController,
+//              decoration: InputDecoration(
+//                  border: InputBorder.none,
+//                  hintText: getTranslated(context, "enter_image_title")
+//              ),
+//            )
         ),
       ),
     )
       ,
       floatingActionButton:imageFile==null? null:
       FloatingActionButton(child:
-      Icon(Icons.play_arrow,color: Colors.white,),
+      Icon(Icons.file_upload,color: Colors.white,),
         backgroundColor: Colors.teal,
         onPressed: () async {
         var url=await uploadImage(imageFile);
