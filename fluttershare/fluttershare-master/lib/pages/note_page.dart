@@ -152,7 +152,7 @@ class _NotePageState extends State<NotePage> {
                             materialTapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
                             color: index % 2 == 0
-                                ? Colors.amber[200]
+                                ? Colors.amber
                                 : Colors.teal,
                             onPressed: () {
                               setState(() {
@@ -163,7 +163,7 @@ class _NotePageState extends State<NotePage> {
                             },
                             icon: Icon(
                               Icons.delete,
-                              color: Colors.red[200],
+                              color: Colors.grey[700],
                             ),
                             label: Text(''),
                           )
