@@ -83,5 +83,6 @@
   "ok": "OK",
   "no_open": "You can't open this page before a previous page",
   "good_job": "You are doing well",
-  "next": "Next"
+  "next": "Next",
+  "sheets_output": "Sheets Output"
 }

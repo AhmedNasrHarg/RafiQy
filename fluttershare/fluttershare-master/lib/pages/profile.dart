@@ -6,6 +6,7 @@ import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/post.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/edit_profile.dart';
+import 'package:fluttershare/pages/sheets_output.dart';
 import 'package:fluttershare/pages/situation-grid.dart';
 import 'package:fluttershare/widgets/article.dart';
 import 'package:fluttershare/pages/home.dart';
@@ -450,13 +451,20 @@ super.dispose();
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children:<Widget>[
-              Text(completedSheets==0?getTranslated(context,"first_sheet"):" ${getTranslated(context, "finish")} $completedSheets ${getTranslated(context, "from_sheet")} ",
-                  style: TextStyle(
-                    fontFamily:
-                         "Tajwal",
+              Column(
+                children:<Widget>[ Text(completedSheets==0?getTranslated(context,"first_sheet"):" ${getTranslated(context, "finish")} $completedSheets ${getTranslated(context, "from_sheet")} ",
+                    style: TextStyle(
+                      fontFamily:
+                           "Tajwal",
 
 //        color: Colors.white
-                  )),
+                    )),
+                 completedSheets>=1? MaterialButton(child: Text("النتيجة",style: TextStyle(fontFamily: "Tajwal"),),onPressed: ()
+                 {
+                   Navigator.push(context,MaterialPageRoute(builder: (context)=>SheetsOutput()));
+                 },color: Colors.teal[200],):Container(color: Colors.teal[100],)
+                ]
+              ),
               Lottie.asset(completedSheets==0?"assets/animations/muscle.json":"assets/animations/bar.json",width: 100,height: 100)
 
             ]
@@ -484,24 +492,7 @@ super.dispose();
 
       )
       ,
-      Card(
-        color: Colors.indigo[700],
-        elevation: 10,
-        child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children:<Widget>[
-              MaterialButton(child: Text("سجل الخواطر",style: TextStyle(color: Colors.white),),onPressed: ()
-                {
-                  Navigator.push(context,MaterialPageRoute(builder: (context)=>SituationGrid()));
-                },),
-              MaterialButton(child: Text(" الاستجابات وردود الافعال",style: TextStyle(color: Colors.white),),onPressed: ()
-              {
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>HumanBody()));
-              },)            ]
-        ),
 
-      )
 //      Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
 //    ,width: 200
 //    , height: 200
