@@ -4,14 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/home.dart';
+import 'package:fluttershare/pages/root_page.dart';
+import 'package:fluttershare/services/authentication.dart';
 import 'package:fluttershare/widgets/header.dart';
 import 'package:fluttershare/widgets/progress.dart';
 
 class EditProfile extends StatefulWidget {
-
   final String currentUserId;
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
 
-  EditProfile({this.currentUserId});
+  const EditProfile(
+      {Key key, this.currentUserId, this.auth, this.logoutCallback})
+      : super(key: key);
 
   @override
   _EditProfileState createState() => _EditProfileState();
@@ -27,18 +32,21 @@ class _EditProfileState extends State<EditProfile> {
   bool _bioValid = true;
   bool isUpdated = false;
 
+  
   @override
   void initState() {
     super.initState();
     getUser();
   }
 
+
+
   getUser() async {
     setState(() {
       isLoading = true;
     });
-    DocumentSnapshot doc =  await userRef.document(widget.currentUserId).get();
-    user =  User.fromDocument(doc);
+    DocumentSnapshot doc = await userRef.document(widget.currentUserId).get();
+    user = User.fromDocument(doc);
     userNameController.text = user.username;
     bioController.text = user.bio;
     setState(() {
@@ -46,144 +54,163 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  Column buildDisplayNameField(){
+  signOut() async{
+    try {
+      await widget.auth.signOut();
+      widget.logoutCallback();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => RootPage(auth: new Auth(),)));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Column buildDisplayNameField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(top:12.0),
+          padding: EdgeInsets.only(top: 12.0),
           child: Text(
-            getTranslated(context,"user_name"),
-            style: TextStyle(
-              color: Colors.grey
-            ),
+            getTranslated(context, "user_name"),
+            style: TextStyle(color: Colors.grey),
           ),
         ),
         TextField(
           controller: userNameController,
           decoration: InputDecoration(
-            hintText: getTranslated(context,"update_username"),
-            errorText: _userNameValid ? null : userNameController.text.trim().length < 15 ? getTranslated(context, "user_short") : getTranslated(context, "user_long")
-          ),
+              hintText: getTranslated(context, "update_username"),
+              errorText: _userNameValid
+                  ? null
+                  : userNameController.text.trim().length < 15
+                      ? getTranslated(context, "user_short")
+                      : getTranslated(context, "user_long")),
         ),
       ],
     );
   }
 
- Column buildBioField(){
+  Column buildBioField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(top:12.0),
+          padding: EdgeInsets.only(top: 12.0),
           child: Text(
             getTranslated(context, "bio"),
-            style: TextStyle(
-              color: Colors.grey
-            ),
+            style: TextStyle(color: Colors.grey),
           ),
         ),
         TextField(
           controller: bioController,
           decoration: InputDecoration(
-            hintText: getTranslated(context, "update_bio"),
-            errorText: _bioValid ? null : getTranslated(context, "bio_long")
-
-          ),
+              hintText: getTranslated(context, "update_bio"),
+              errorText: _bioValid ? null : getTranslated(context, "bio_long")),
         ),
       ],
     );
   }
 
-  updateProfileData() async{
+  updateProfileData() async {
     setState(() {
-      userNameController.text.trim().length < 3 || userNameController.text.isEmpty || userNameController.text.trim().length > 15 ?
-      _userNameValid = false : _userNameValid = true ;
-      bioController.text.trim().length > 100 ? _bioValid = false : _bioValid = true;
+      userNameController.text.trim().length < 3 ||
+              userNameController.text.isEmpty ||
+              userNameController.text.trim().length > 15
+          ? _userNameValid = false
+          : _userNameValid = true;
+      bioController.text.trim().length > 100
+          ? _bioValid = false
+          : _bioValid = true;
     });
 
-    if(_userNameValid && _bioValid){
-      userRef.document(widget.currentUserId).updateData({
-        "username" : userNameController.text,
-        "bio": bioController.text
-      });
-      if(user.isAdmin)
-      {
-        QuerySnapshot postsIds = await userRef.document(widget.currentUserId).collection("userPosts").getDocuments();
-        postsIds.documents.forEach((article)  {
-        postRef.document(article["postId"]).updateData({
-          "author" : userNameController.text,
+    if (_userNameValid && _bioValid) {
+      userRef.document(widget.currentUserId).updateData(
+          {"username": userNameController.text, "bio": bioController.text});
+      if (user.isAdmin) {
+        QuerySnapshot postsIds = await userRef
+            .document(widget.currentUserId)
+            .collection("userPosts")
+            .getDocuments();
+        postsIds.documents.forEach((article) {
+          postRef.document(article["postId"]).updateData({
+            "author": userNameController.text,
+          });
         });
-       });
       }
-      SnackBar snackbar = SnackBar(content: Text(getTranslated(context, "profile_updated")));
+      SnackBar snackbar =
+          SnackBar(content: Text(getTranslated(context, "profile_updated")));
       _scaffoldKey.currentState.showSnackBar(snackbar);
       isUpdated = true;
     }
-  }
-
-  logout() async{
-   await googleSignIn.signOut();
-   Navigator.push(context, MaterialPageRoute(builder:(context) => Home()));
   }
 
 
   @override
   Widget build(context) {
     return Scaffold(
-      key : _scaffoldKey,
-      appBar: header(context,isAppTitle: false,titleText: getTranslated(context, "edit_profile"), removeBackButton: true, hasAction: true, isIcon: true,actionIcon: Icons.done, actionFunction: ()=> Navigator.pop(context, isUpdated),),
-      body: isLoading ? circularProgress() : ListView(
-        children: <Widget>[
-          Container(
-            child: Column(
+      key: _scaffoldKey,
+      appBar: header(
+        context,
+        isAppTitle: false,
+        titleText: getTranslated(context, "edit_profile"),
+        removeBackButton: true,
+        hasAction: true,
+        isIcon: true,
+        actionIcon: Icons.done,
+        actionFunction: () => Navigator.pop(context, isUpdated),
+      ),
+      body: isLoading
+          ? circularProgress()
+          : ListView(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-                  child: CircleAvatar(
-                    backgroundImage: CachedNetworkImageProvider(user.photoUrl),
-                    radius: 50.0,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(16.0),
+                Container(
                   child: Column(
                     children: <Widget>[
-                      buildDisplayNameField(),
-                      buildBioField(),
-                    ],
-                  ),
-                ),
-                RaisedButton(
-                  onPressed: updateProfileData,
-                  child: Text(
-                    getTranslated(context, "update_profile"),
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: FlatButton.icon(
-                    onPressed: logout,
-                    icon: Icon(Icons.cancel, color: Colors.red,),
-                    label: Text(
-                      getTranslated(context, "log_out"),
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 20.0
+                      Padding(
+                        padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
+                        child: CircleAvatar(
+                          backgroundImage:
+                              CachedNetworkImageProvider(user.photoUrl),
+                          radius: 50.0,
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Column(
+                          children: <Widget>[
+                            buildDisplayNameField(),
+                            buildBioField(),
+                          ],
+                        ),
+                      ),
+                      RaisedButton(
+                        onPressed: updateProfileData,
+                        child: Text(
+                          getTranslated(context, "update_profile"),
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: FlatButton.icon(
+                          onPressed: signOut,
+                          icon: Icon(
+                            Icons.cancel,
+                            color: Colors.red,
+                          ),
+                          label: Text(
+                            getTranslated(context, "log_out"),
+                            style: TextStyle(color: Colors.red, fontSize: 20.0),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 )
               ],
             ),
-          )
-        ],
-      ),
     );
   }
 }

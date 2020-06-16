@@ -1,28 +1,37 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
+
 import 'package:fluttershare/classes/language.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/models/post.dart';
 import 'package:fluttershare/models/user.dart';
 import 'package:fluttershare/pages/edit_profile.dart';
-import 'package:fluttershare/widgets/article.dart';
 import 'package:fluttershare/pages/home.dart';
+import 'package:fluttershare/services/authentication.dart';
+import 'package:fluttershare/widgets/article.dart';
 import 'package:fluttershare/widgets/progress.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:lottie/lottie.dart';
 
 import '../main.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
-  Profile({this.profileId});
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
+  Profile({
+    Key key,
+    this.profileId,
+    this.auth,
+    this.logoutCallback,
+  }) : super(key: key);
 
   @override
   _ProfileState createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile>with TickerProviderStateMixin {
+class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   String currentUserId = currentUser.id;
   bool isFollowing = false;
   bool isLoading = false;
@@ -32,9 +41,9 @@ class _ProfileState extends State<Profile>with TickerProviderStateMixin {
   List<Article> posts = [];
   List<Article> temp;
   bool isProfileOwner;
-  int completedSheets=0;
-  int completedTopics=0;
-  int numUsed=0;
+  int completedSheets = 0;
+  int completedTopics = 0;
+  int numUsed = 0;
   AnimationController controller;
   void _changeLanguage(Language language) async {
     Locale _temp = await setLocale(language.languageCode);
@@ -50,7 +59,8 @@ class _ProfileState extends State<Profile>with TickerProviderStateMixin {
     if (currentUser.isAdmin || !isProfileOwner) {
       getAdminPosts();
       chechIfFollowing();
-    } if (currentUser.isAdmin) {
+    }
+    if (currentUser.isAdmin) {
       getFollowers();
     } else if (!currentUser.isAdmin) {
       getFollowing();
@@ -71,8 +81,8 @@ class _ProfileState extends State<Profile>with TickerProviderStateMixin {
 
   @override
   void dispose() {
-controller.dispose();
-super.dispose();
+    controller.dispose();
+    super.dispose();
   }
 
   chechIfFollowing() async {
@@ -88,10 +98,10 @@ super.dispose();
   }
 
   getFollowers() async {
-    QuerySnapshot snapshot =  await followerRef
-    .document(widget.profileId)
-    .collection("userFollowers")
-    .getDocuments();
+    QuerySnapshot snapshot = await followerRef
+        .document(widget.profileId)
+        .collection("userFollowers")
+        .getDocuments();
 
     setState(() {
       followerCount = snapshot.documents.length;
@@ -100,9 +110,9 @@ super.dispose();
 
   getFollowing() async {
     QuerySnapshot snapshot = await followingRef
-    .document(widget.profileId)
-    .collection("userFollowing")
-    .getDocuments();
+        .document(widget.profileId)
+        .collection("userFollowing")
+        .getDocuments();
 
     setState(() {
       followingCount = snapshot.documents.length;
@@ -190,7 +200,7 @@ super.dispose();
     final isUpdated = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => EditProfile(currentUserId: currentUserId)));
+            builder: (context) => EditProfile(currentUserId: currentUserId,auth: widget.auth,logoutCallback: widget.logoutCallback,)));
     if (isUpdated) {
       setState(() {
         currentUserId = currentUser.id;
@@ -327,39 +337,35 @@ super.dispose();
                 // alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(top: 12.0),
                 child: Center(
-                  child:
-                  Row(children: <Widget>[
-                    Text(
-                      user.username,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.0,
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        user.username,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22.0,
+                        ),
                       ),
-                    ),
-
-                    Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
-                        ,width: 30
-                        , height: 30
-                        ,controller: controller,
-                        onLoaded: (composition)
-                        {
-                          setState(() {
-                            controller.duration=composition.duration*2;
-                          });
-                        }
-                    ),
-                    Container(
-                      // alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(top: 2.0),
-                      child: Text(
-                        user.bio,
+                      Lottie.network(
+                          "https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json",
+                          width: 30,
+                          height: 30,
+                          controller: controller, onLoaded: (composition) {
+                        setState(() {
+                          controller.duration = composition.duration * 2;
+                        });
+                      }),
+                      Container(
+                        // alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(top: 2.0),
+                        child: Text(
+                          user.bio,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
                   ),
                 ),
               ),
-
             ],
           ),
         );
@@ -397,8 +403,7 @@ super.dispose();
   }
 
   buildUserProfile() {
-
-  return
+    return
 //    completed==0?
 //  Card(
 //
@@ -419,69 +424,77 @@ super.dispose();
 //    ),
 //  )
 //      :
-  Column(
-
-    children: <Widget>[
-      Card(
-        color: Colors.teal[100],
-    elevation: 10,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children:<Widget>[
-            Text(completedTopics==0?getTranslated(context,"first_lesson"):"${getTranslated(context, "finish")}$completedTopics ${getTranslated(context, "from_lesson")} ",
-                style: TextStyle(
-                  fontFamily: "Tajwal"
-                      ,
+        Column(
+      children: <Widget>[
+        Card(
+          color: Colors.teal[100],
+          elevation: 10,
+          child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Text(
+                    completedTopics == 0
+                        ? getTranslated(context, "first_lesson")
+                        : "${getTranslated(context, "finish")}$completedTopics ${getTranslated(context, "from_lesson")} ",
+                    style: TextStyle(
+                      fontFamily: "Tajwal",
 //        color: Colors.white
-                )),
-            Lottie.asset(completedTopics==0?"assets/animations/muscle.json":"assets/animations/12833-planta-3.json",width: 100,height: 100)
-
-          ]
+                    )),
+                Lottie.asset(
+                    completedTopics == 0
+                        ? "assets/animations/muscle.json"
+                        : "assets/animations/12833-planta-3.json",
+                    width: 100,
+                    height: 100)
+              ]),
         ),
-
-      ),
-      Card(
-        color: Colors.teal[100],
-        elevation: 10,
-        child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children:<Widget>[
-              Text(completedSheets==0?getTranslated(context,"first_sheet"):" ${getTranslated(context, "finish")} $completedSheets ${getTranslated(context, "from_sheet")} ",
-                  style: TextStyle(
-                    fontFamily:
-                         "Tajwal",
-
+        Card(
+          color: Colors.teal[100],
+          elevation: 10,
+          child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Text(
+                    completedSheets == 0
+                        ? getTranslated(context, "first_sheet")
+                        : " ${getTranslated(context, "finish")} $completedSheets ${getTranslated(context, "from_sheet")} ",
+                    style: TextStyle(
+                      fontFamily: "Tajwal",
 //        color: Colors.white
-                  )),
-              Lottie.asset(completedSheets==0?"assets/animations/muscle.json":"assets/animations/bar.json",width: 100,height: 100)
-
-            ]
+                    )),
+                Lottie.asset(
+                    completedSheets == 0
+                        ? "assets/animations/muscle.json"
+                        : "assets/animations/bar.json",
+                    width: 100,
+                    height: 100)
+              ]),
         ),
-
-      ),
-      Card(
-        color: Colors.indigo[700],
-        elevation: 10,
-        child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children:<Widget>[
-              Text(numUsed==0?getTranslated(context,"never_used"):"${getTranslated(context, "use")} $numUsed ${getTranslated(context, "from_chill")} ",
-                  style: TextStyle(
-                    fontFamily:
-                         "Tajwal"
-                        ,
-        color: Colors.white
-                  )),
-             numUsed==0? Image.asset("assets/images/sad_tree.png",width: 100,height: 100,):Lottie.asset("assets/animations/music.json",width: 100,height: 100)
-
-            ]
+        Card(
+          color: Colors.indigo[700],
+          elevation: 10,
+          child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Text(
+                    numUsed == 0
+                        ? getTranslated(context, "never_used")
+                        : "${getTranslated(context, "use")} $numUsed ${getTranslated(context, "from_chill")} ",
+                    style:
+                        TextStyle(fontFamily: "Tajwal", color: Colors.white)),
+                numUsed == 0
+                    ? Image.asset(
+                        "assets/images/sad_tree.png",
+                        width: 100,
+                        height: 100,
+                      )
+                    : Lottie.asset("assets/animations/music.json",
+                        width: 100, height: 100)
+              ]),
         ),
-
-      )
-      ,
 //      Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
 //    ,width: 200
 //    , height: 200
@@ -493,12 +506,8 @@ super.dispose();
 //    });
 //    }
 //    )
-    ],
-  );
-
-
-
-
+      ],
+    );
   }
 
   ListView buildProfile() {
@@ -567,26 +576,22 @@ super.dispose();
         ),
         body: buildProfile());
   }
-  getCompletedDocs()async
-  {
 
+  getCompletedDocs() async {
     await userRef
-            .document(currentUser.id)
-            .collection("completedSheets").getDocuments()
-         .then((QuerySnapshot snapshot) {
-       snapshot.documents.forEach((f) {
-         setState(() {
-           completedSheets=completedSheets+1;
-           print("Completed $completedSheets");
-           controller.value +=(1/6);
-
-         });
-       });
-       ;
-     });
-
-
-
+        .document(currentUser.id)
+        .collection("completedSheets")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        setState(() {
+          completedSheets = completedSheets + 1;
+          print("Completed $completedSheets");
+          controller.value += (1 / 6);
+        });
+      });
+      ;
+    });
   }
 
   Future<void> getDoneTopics() async {
@@ -598,17 +603,16 @@ super.dispose();
       snapshot.documents.forEach((f) {
         setState(() {
           var c = new List<String>.from(f.data['done']);
-        completedTopics=completedTopics+c.length;
-        controller.value+=(1/6);
-        print("Completed $completedTopics");
+          completedTopics = completedTopics + c.length;
+          controller.value += (1 / 6);
+          print("Completed $completedTopics");
         });
       });
       ;
     });
   }
 
-  getNumberUsed()async
-  {
+  getNumberUsed() async {
     await userRef
         .document(currentUser.id)
         .collection("number_used_chill")
@@ -616,14 +620,10 @@ super.dispose();
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
         setState(() {
-          numUsed=numUsed+1;
+          numUsed = numUsed + 1;
         });
       });
       ;
     });
-
-
-
   }
-
 }

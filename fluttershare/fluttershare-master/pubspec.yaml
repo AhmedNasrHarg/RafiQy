@@ -19,18 +19,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^0.9.7+2
+  cloud_firestore: ^0.13.6
   image_picker: ^0.6.0+2
-  firebase_storage: ^2.1.0+1
-  firebase_auth: ^0.8.3
-  google_sign_in: ^4.0.1+1
+  firebase_storage: ^3.1.6
+  firebase_auth: ^0.16.1
+  google_sign_in: ^4.5.1
   geolocator: 5.0.1
   uuid: ^2.0.0
   image: ^2.0.7
   animator: ^2.0.1
   cupertino_icons: ^0.1.2
   path_provider: ^1.6.9
-  firebase_messaging: ^4.0.0+1
+  firebase_messaging: ^6.0.16
   timeago: 2.0.17
   fluttertoast: ^4.0.1
   flutter_easyloading: ^1.1.4
@@ -42,12 +42,15 @@ dependencies:
   provider: ^4.1.2
   auto_size_text: ^2.1.0
   carousel_slider: ^2.1.0
+  firebase_database: ^3.1.6
+  firebase_core: ^0.4.5
+  shimmer: ^1.1.1
 
   shared_preferences: 0.5.7+2
   youtube_player_flutter: 6.1.1
   flutter_local_notifications: ^1.4.3
   rxdart: ^0.24.1
-  lottie:
+  lottie: ^0.4.0+1
   dartx: ^0.4.1
   characters:
   connectivity: 0.4.8+6
@@ -81,35 +84,37 @@ flutter:
       fonts:
        - asset: assets/fonts/Tajwal.ttf
   assets:
-    - assets/images/google_signin_button.png
+    - assets/images/
+    - assets/animations/
     - lib/lang/en.json
     - lib/lang/ar.json
-    - assets/images/search.svg
-    - assets/images/upload.svg
-    - assets/images/pencil.png
-    - assets/images/title.png
-    - assets/animations/12833-planta-3.json
-    - assets/images/reward.png
-    - assets/images/lock.png
-    - assets/images/flower.png
-    - assets/images/hero.png
-    - assets/animations/12833-planta-3.json
-    - assets/animations/bar.json
-    - assets/animations/doing_well.json
-    - assets/animations/first_message.json
-    - assets/animations/first.json
-    - assets/animations/cant.json
-    - assets/animations/hero_bar.json
-    - assets/animations/hero_message.json
-    - assets/images/body1.png
-    - assets/images/body.png
-    - assets/images/brain.png
-    - assets/images/lungs.png
-    - assets/images/eyes1.png
-    - assets/images/heart.png
-    - assets/images/stomach.png
-    - assets/images/contact.png
-    - assets/animations/music.json
-    - assets/animations/flower.json
-    - assets/animations/muscle.json
-    - assets/images/sad_tree.png
+    # - assets/images/search.svg
+    # - assets/images/upload.svg
+    # - assets/images/pencil.png
+    # - assets/images/title.png
+    # - assets/animations/12833-planta-3.json
+    # - assets/images/reward.png
+    # - assets/images/lock.png
+    # - assets/images/flower.png
+    # - assets/images/hero.png
+    # - assets/animations/12833-planta-3.json
+    # - assets/animations/bar.json
+    # - assets/animations/doing_well.json
+    # - assets/animations/first_message.json
+    # - assets/animations/first.json
+    # - assets/animations/cant.json
+    # - assets/animations/hero_bar.json
+    # - assets/animations/hero_message.json
+    # - assets/images/body1.png
+    # - assets/images/body.png
+    # - assets/images/brain.png
+    # - assets/images/lungs.png
+    # - assets/images/eyes1.png
+    # - assets/images/heart.png
+    # - assets/images/stomach.png
+    # - assets/images/contact.png
+    # - assets/animations/music.json
+    # - assets/animations/flower.json
+    # - assets/animations/muscle.json
+    # - assets/images/sad_tree.png
+    # - assets/images/logo.png
