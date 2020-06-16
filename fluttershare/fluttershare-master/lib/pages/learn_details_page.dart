@@ -8,6 +8,9 @@ import 'package:fluttershare/classes/topic.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/home.dart';
 import 'package:fluttershare/pages/note_page.dart';
+import 'package:fluttershare/widgets/chat_bubble.dart';
+import 'package:fluttershare/widgets/chat_bubble_video.dart';
+import 'package:fluttershare/widgets/progress.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,8 +42,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
   _LearnDetailsPageState(this.topic);
   VideoPlayerController _videoPlayerController;
   var videoURL;
-  bool connetcting;
-  String isDoneButton;
+  bool connetcting=false;
 
   var is_done = false;
   var num_q;
@@ -59,7 +61,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
         .getDocuments()
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
-        print('${f.data}}');
+//        print('${f.data}}');
         setState(() {
           done = new List<String>.from(f.data['done']);
 //                f.data['favourite'].cast<int>();
@@ -97,21 +99,15 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
   @override
   void initState() {
     _checkInternetConnectivity();
-    videoURL = topic.videoURL;
     getQuestions();
     checkIsDone();
-
-    _videoPlayerController = VideoPlayerController.network(videoURL)
-      ..initialize().then((_) {
-        setState(() {});
-      });
+setVideoUrl();
     super.initState();
   }
 
   getQuestions() async {
     final questionRef =
     Firestore.instance.collection("topic/${topic.topicId}/topic_qa");
-//    print("hereeeeee topic/${topic.topicId}/topic_qa");
     await questionRef.getDocuments().then((element) {
       topicImages.clear();
       element.documents.forEach((f) async {
@@ -123,14 +119,12 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
         var images;
         if (hasImage) {
           images = await f.data['images'];
-//           print("imageslength ${images.length}");
         }
 
         setState(() {
           if (hasImage) {
             for (int i = 0; i < images.length; i++) {
               topicImages.add(images[i]);
-//      print("imagessss ${images[i]}");
             }
             hasImage = false;
             vis = true;
@@ -140,8 +134,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
             learnAnswr.add(new LearnQuestionAnswer(answer[i]));
           }
           answers.add(answer);
-//  print("questionsss $question");
-//  print("answers$answer");
+
           dataQuestions.add(new LearnQuestionAnswer(question, learnAnswr));
         });
       });
@@ -150,11 +143,10 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-//print("lentof queston = ${dataQuestions.length}");
-//print("${dataQuestions[0].question}");
-//print("${dataQuestions[0]}");
+
+//    print("url ${topic.videoURL}");
+
     // TODO: implement build
-    isDoneButton=getTranslated(context, "finish_lesson");
 
 //  print("topic id ${topic.topicId}");
     return Scaffold(
@@ -162,35 +154,39 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
         title: Text(topic.topicName),
 //          (DemoLocalization.of(context).getTranslatedValues('home_page')),
         actions: <Widget>[
-          Row(
+          FlatButton(
+            color: Colors.deepPurple,
+            child: Row(
 
-            children: <Widget>[
-              Text(getTranslated(context, "my_notes"),style: TextStyle(color: Colors.white),),
-              IconButton(
-                icon: Icon(Icons.book),
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotePage(
-                          topic_id: topic.topicId,
-                        ))),
-              ),
-            ],
+              children: <Widget>[
+                Text(getTranslated(context, "my_notes"),style: TextStyle(color: Colors.white),),
+                Icon(
+Icons.book,
+color: Colors.white,
+                ),
+              ],
 
+            ),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NotePage(
+                      topic_id: topic.topicId,
+                    ))),
           )
         ],
       ),
-      body: SingleChildScrollView(
+
+      body:connetcting? SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height,
+          height:
+//          MediaQuery.of(context).size.height,
+          1000,
           child: Column(
             children: <Widget>[
-              _videoPlayerController.value.initialized
-                  ? AspectRatio(
-                aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: VideoPlayer(_videoPlayerController),
-              )
-                  : Container(),
+
+             videoURL!=null? BubbleVideo(videoUrl: videoURL,):circularProgress()
+            ,
               Visibility(
                 child: CarouselSlider(
                     options: CarouselOptions(height: 200),
@@ -215,24 +211,7 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                         .toList()),
                 visible: vis,
               ),
-//              CheckboxListTile(
-//                title: Text("is Topic Done"),
-//                value: is_done,
-//                onChanged: (newValue) {
-//                  setState(() async {
-//                    is_done = !is_done;
-//                    if (is_done) {
-//                      done.add(topic.topicId);
-//                      await addDone(done);
-//                    } else {
-//                      done.remove(topic.topicId);
-//                      await addDone(done);
-//                    }
-//                  });
-//                },
-//                controlAffinity:
-//                ListTileControlAffinity.leading, //  <-- leading Checkbox
-//              ),
+
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index) =>
@@ -240,49 +219,33 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
                   itemCount: dataQuestions.length,
                 ),
               ),
-              MaterialButton(
-
-                child: Text(isDoneButton,style: (TextStyle(color: Colors.white)),),
-                color: Colors.teal,
-                onPressed:is_done?
-                    (){
-                  setState(() {
-                    is_done = false;
-                    done.remove(topic.topicId);
-                    addDone(done);
-                    isDoneButton=getTranslated(context, "finish_lesson");
-                  });
-                }
-                    :() {
-                  setState(() {
-                    is_done = true;
-                    done.add(topic.topicId);
-                    addDone(done);
-                    isDoneButton=getTranslated(context, "rev_lesson");;
-
-                  });
-                },
-
-
-              ),
-              // , Text("Test")
+//
             ],
           ),
         ),
-      ),
+      ):circularProgress(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(() {
-            _videoPlayerController.value.isPlaying
-                ? _videoPlayerController.pause()
-                : _videoPlayerController.play();
-          });
+          if(is_done)
+            {
+              setState(() {
+                is_done=false;
+                done.remove(topic.topicId);
+                addDone(done);
+              });
+            }
+          else
+            {
+              setState(() {
+                is_done = true;
+                done.add(topic.topicId);
+                addDone(done);
+              });
+
+            }
         },
-        child: Icon(
-          _videoPlayerController.value.isPlaying
-              ? Icons.pause
-              : Icons.play_arrow,
-        ),
+        child:is_done? Icon(Icons.bookmark,color: Colors.amberAccent,):Icon(Icons.bookmark_border,color: Colors.white,),
+        backgroundColor: Colors.teal[300],
       ),
     );
   }
@@ -292,10 +255,16 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
     if (result == ConnectivityResult.none) {
       _showDialog(
           'No internet', "You're not connected to a network to view video");
-      connetcting = false;
+      setState(() {
+        connetcting = false;
+
+      });
     } else if (result == ConnectivityResult.wifi ||
         result == ConnectivityResult.mobile) {
-      connetcting = true;
+      setState(() {
+        connetcting = true;
+
+      });
     }
   }
 
@@ -317,6 +286,10 @@ class _LearnDetailsPageState extends State<LearnDetailsPage> {
           );
         });
   }
+
+  setVideoUrl()async{
+     videoURL=await topic.videoURL;
+    }
 }
 
 class QAItem extends StatelessWidget {

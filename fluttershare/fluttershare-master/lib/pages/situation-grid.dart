@@ -3,15 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttershare/pages/chillzone.dart';
-import 'package:fluttershare/pages/sheets_entery_page.dart';
 import 'package:fluttershare/pages/situation-details.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' as Intl;
 import 'package:rxdart/rxdart.dart';
-
-import '../main.dart';
 import 'home.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -45,119 +41,158 @@ class SituationGrid extends StatefulWidget {
 }
 
 class DateGridState extends State<SituationGrid> {
-  TimeOfDay _time = TimeOfDay.now();
-  TimeOfDay picked;
-  final MethodChannel platform =
-      MethodChannel('crossingthestreams.io/resourceResolver');
-  selectTime(BuildContext context) async {
-    picked = await showTimePicker(context: context, initialTime: _time);
-    setState(() {
-      _time = picked;
-      print(picked);
-      _showDailyAtTime();
-      _requestIOSPermissions();
-      _configureDidReceiveLocalNotificationSubject();
-      _configureSelectNotificationSubject();
-    });
-  }
+    // TimeOfDay _time = TimeOfDay.now();
+    // TimeOfDay picked;
+    // final MethodChannel platform =
+    //     MethodChannel('crossingthestreams.io/resourceResolver');
+    // selectTime(BuildContext context) async {
+    //   picked = await showTimePicker(context: context, initialTime: _time);
+    //   setState(() {
+    //     _time = picked;
+    //     print(picked);
+    //     // _showDailyAtTime();
+    //     // _requestIOSPermissions();
+    //     // _configureDidReceiveLocalNotificationSubject();
+    //     // _configureSelectNotificationSubject();
+    //   });
+    // }
 
   List<int> situations = [];
-  BuildContext context2;
+  // BuildContext context2;
+
+  // Future<void> test() async {
+  //   notificationAppLaunchDetails =
+  //       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  // }
 
   @override
   void initState() {
     super.initState();
-    context2 = this.context;
+    // context2 = this.context;
     getdates();
+    // test();
+
+    // var initializationSettingsAndroid =
+    //     AndroidInitializationSettings('app_icon');
+    // // Note: permissions aren't requested here just to demonstrate that can be done later using the `requestPermissions()` method
+    // // of the `IOSFlutterLocalNotificationsPlugin` class
+    // var initializationSettingsIOS = IOSInitializationSettings(
+    //     requestAlertPermission: false,
+    //     requestBadgePermission: false,
+    //     requestSoundPermission: false,
+    //     onDidReceiveLocalNotification:
+    //         (int id, String title, String body, String payload) async {
+    //       didReceiveLocalNotificationSubject.add(ReceivedNotification(
+    //           id: id, title: title, body: body, payload: payload));
+    //     });
+    // var initializationSettings = InitializationSettings(
+    //     initializationSettingsAndroid, initializationSettingsIOS);
+    // flutterLocalNotificationsPlugin.initialize(initializationSettings,
+    //     onSelectNotification: onSelectNotification);
 //    _configureSelectNotificationSubject();
   }
 
-  void _requestIOSPermissions() {
-    flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-  }
+  // Future onSelectNotification(String payload) async {
+  //   print('Payload for grid: ' +payload);
+  //   print('jj');
+  //   if(payload.compareTo("mynotificationfromsituation") == 0)
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //         builder: (context) => Home()),
+  //   );
+  //   print('ppppp');
+  // }
 
-  void _configureDidReceiveLocalNotificationSubject() {
-    didReceiveLocalNotificationSubject.stream
-        .listen((ReceivedNotification receivedNotification) async {
-      print('jkkjj');
-      await showDialog(
-        context: context2,
-        builder: (BuildContext context) => CupertinoAlertDialog(
-          title: receivedNotification.title != null
-              ? Text(receivedNotification.title)
-              : null,
-          content: receivedNotification.body != null
-              ? Text(receivedNotification.body)
-              : null,
-          actions: [
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              child: Text('Ok'),
-              onPressed: () async {
-//                Navigator.of(context2, rootNavigator: true).pop();
-                await Navigator.push(
-                  context2,
-                  MaterialPageRoute(
-                    builder: (context) => MyHomePage(
-                      title: 'logSheet',
-                      sheetName: 'سِجِل الخواطر والمشاعر',
-                      deleteLast: true,
-                    ),
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      );
-    });
-  }
+  // void _requestIOSPermissions() {
+  //   flutterLocalNotificationsPlugin
+  //       .resolvePlatformSpecificImplementation<
+  //           IOSFlutterLocalNotificationsPlugin>()
+  //       ?.requestPermissions(
+  //         alert: true,
+  //         badge: true,
+  //         sound: true,
+  //       );
+  // }
 
-  Future<void> _configureSelectNotificationSubject() async {
-    await selectNotificationSubject.stream.listen((String payload) async {
-      print('iii');
-      print('iiitttpppp');
-      print('context $context');
-      print('context2 $context2');
-      print('context3 ${_scaffold.currentContext}');
-      if (context2 != null) ;
-//        Navigator.push(
-//          context2,
-//          MaterialPageRoute(
-//              builder: (context) => MyHomePage(
-//                    title: 'logSheet',
-//                    sheetName: 'سِجِل الخواطر والمشاعر',
-//                    deleteLast: true,
-//                  )),
-//        );
-    });
-  }
+  // void _configureDidReceiveLocalNotificationSubject() {
+  //   didReceiveLocalNotificationSubject.stream
+  //       .listen((ReceivedNotification receivedNotification) async {
+  //     print('jkkjj');
+  //     await showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) => CupertinoAlertDialog(
+  //         title: receivedNotification.title != null
+  //             ? Text(receivedNotification.title)
+  //             : null,
+  //         content: receivedNotification.body != null
+  //             ? Text(receivedNotification.body)
+  //             : null,
+  //         actions: [
+  //           CupertinoDialogAction(
+  //             isDefaultAction: true,
+  //             child: Text('Ok'),
+  //             onPressed: () async {
+  //               Navigator.of(context, rootNavigator: true).pop();
+  //               await Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                   builder: (context) => MyHomePage(
+  //                     title: 'logSheet',
+  //                     sheetName: 'سِجِل الخواطر والمشاعر',
+  //                     deleteLast: true,
+  //                   ),
+  //                 ),
+  //               );
+  //             },
+  //           )
+  //         ],
+  //       ),
+  //     );
+  //   });
+  // }
 
-  Future<void> _showDailyAtTime() async {
-    var time = Time(picked.hour, picked.minute, 0);
-    print(picked.hour);
-    print(picked.minute);
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'repeatDailyAtTime channel id',
-        'repeatDailyAtTime channel name',
-        'repeatDailyAtTime description');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(
-        0,
-        'Log Sheet Remainder',
-        'Do not miss your sheet!',
-        time,
-        platformChannelSpecifics);
-  }
+  // Future<void> _configureSelectNotificationSubject() async {
+  //   await selectNotificationSubject.stream.listen((String payload) async {
+  //     print('iii');
+  //     print('iiitttpppp');
+  //     print('context $context');
+  //     print('context2 $context');
+  //     print('context3 ${_scaffold.currentContext}');
+  //     if (context != null) 
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) => MyHomePage(
+  //                 title: 'logSheet',
+  //                 sheetName: 'سِجِل الخواطر والمشاعر',
+  //                 deleteLast: true,
+  //               )),
+  //     );
+  //   });
+  // }
+
+  // Future<void> _showDailyAtTime() async {
+  //   var time = Time(picked.hour, picked.minute, 0);
+  //   print(picked.hour);
+  //   print(picked.minute);
+  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  //       'repeatDailyAtTime channel id',
+  //       'repeatDailyAtTime channel name',
+  //       'repeatDailyAtTime description'
+  //       );
+  //   var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+  //   var platformChannelSpecifics = NotificationDetails(
+  //       androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  //   await flutterLocalNotificationsPlugin.showDailyAtTime(
+    
+  //       0,
+  //       'Log Sheet Remainder',
+  //       'Do not miss your sheet!',
+  //       time,
+  //       platformChannelSpecifics,
+  //       payload: "mynotificationfromsituation");
+  // }
 
   getdates() async {
     QuerySnapshot querySnapshot = await userRef
@@ -304,17 +339,17 @@ class DateGridState extends State<SituationGrid> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          "كتابة الحدث بشكل مفصل و ما ارتبط به من مشاعر سلبية و إدراك ما وراءها من أفكار و ما نتج عن ذلك كله من سلوك و هي الطريق الممهد للأستبصار (gaining insight)، بها تعرف أثر مشاعرك السلبية (مثال: القلق)، المطلوب منك رصد كل حدث شعرت فيه بالقلق، شدته، و ما الأفكار التي كانت تدور في رأسك، و ما نتج عن ذلك القلق (السلوكيات التجنبية).\nاعتر جدول الرصد هو دفتر يومياتك تكتب فيه الاحداث التي تراها سيئة، كي تستطيع التعامل معاها او تعيد النظر فيها بعدما تتعلم (معرفيا و سلوكيا) كيفية التعامل مع القلق.\nملحوظة: هذه المهمة مفتوحة كدفتر يومياتك و يطلب منك الالتزام بجدول الرصد لمدة اسبوع ع الأقل قبل أن تفتح المهمة التالية.\nرفيقي يرغب في مساعدتك .. حدد لي من فضلك ساعة انبهك فيها لتكتب معي جدول اليوم.",
+                          "كتابة الحدث بشكل مفصل و ما ارتبط به من مشاعر سلبية و إدراك ما وراءها من أفكار و ما نتج عن ذلك كله من سلوك و هي الطريق الممهد للأستبصار (gaining insight)، بها تعرف أثر مشاعرك السلبية (مثال: القلق)، المطلوب منك رصد كل حدث شعرت فيه بالقلق، شدته، و ما الأفكار التي كانت تدور في رأسك، و ما نتج عن ذلك القلق (السلوكيات التجنبية).\nاعتر جدول الرصد هو دفتر يومياتك تكتب فيه الاحداث التي تراها سيئة، كي تستطيع التعامل معاها او تعيد النظر فيها بعدما تتعلم (معرفيا و سلوكيا) كيفية التعامل مع القلق.\nملحوظة: هذه المهمة مفتوحة كدفتر يومياتك و يطلب منك الالتزام بجدول الرصد لمدة اسبوع ع الأقل قبل أن تفتح المهمة التالية.",
                           textDirection: TextDirection.rtl,
                           style: TextStyle(
                             fontSize: 18,
                           ),
                         ),
-                        IconButton(
-                            icon: Icon(Icons.access_alarm),
-                            onPressed: () {
-                              selectTime(context);
-                            }),
+                        // IconButton(
+                        //     icon: Icon(Icons.access_alarm),
+                        //     onPressed: () {
+                        //       selectTime(context);
+                        //     }),
                       ],
                     ),
                     padding: EdgeInsets.all(8),

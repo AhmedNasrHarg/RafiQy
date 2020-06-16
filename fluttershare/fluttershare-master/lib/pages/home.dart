@@ -13,6 +13,14 @@ import 'package:fluttershare/pages/learn_page.dart';
 import 'package:fluttershare/pages/profile.dart';
 import 'package:fluttershare/pages/sheets_entery_page.dart';
 import 'package:fluttershare/services/authentication.dart';
+import 'package:fluttershare/pages/testNotification.dart';
+import 'package:fluttershare/pages/video_details.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:lottie/lottie.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final userRef = Firestore.instance.collection("users");
@@ -55,6 +63,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     pageController = PageController();
+
   }
   
 
@@ -64,6 +73,7 @@ class _HomeState extends State<Home> {
     pageController.dispose();
     super.dispose();
   }
+
 
 
   onPageChanged(int pageIndex) {
@@ -125,7 +135,7 @@ class _HomeState extends State<Home> {
       ),
     );
 
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +208,15 @@ class _HomeState extends State<Home> {
             DialogButton(
               onPressed: () => Navigator.pop(context),
               child: Text(getTranslated(context, "start_now")),
-            )
+            ),
+//            DialogButton(child: Text(getTranslated(context, "no_show_msg")),onPressed:
+//            (){
+//              setState(() {
+//                setHelloSheet(true);
+//                noHelloSheet = true;
+//              });
+//              Navigator.pop(context);
+//            },)
           ]).show();
     } else {
       print("elseee");
