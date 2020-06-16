@@ -136,7 +136,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  _showWellcomeDialog() async {
+ _showWellcomeDialog() async {
     bool checkBox;
     await getSharedPref().then((value) {
       print("i am in share pref");
@@ -152,50 +152,62 @@ class _HomeState extends State<Home> {
           content: Container(
             height: 350,
             width: 350,
-            child: FittedBox(
-                          child: Column(
-                  children: <Widget>[
-                    Lottie.asset(
-                      'assets/animations/first.json',
-                      width: 300,
-                      height: 250,
-                      fit: BoxFit.fill,
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(top: 5),
-                        child: Text(
-                          getTranslated(context, "sheets_message"),
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          textDirection: TextDirection.rtl,
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                    ),
-                    FittedBox(
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-              getTranslated(context, "no_show_msg"),
-              style: TextStyle(fontSize: 11, color: Colors.teal),
-                          ),
-                          Checkbox(
-              value: noHelloSheet,
-//                      onChanged: savePrefs(),
-              onChanged: (bool value) {
-                setState(() {
-                  setHelloSheet(value);
-                  noHelloSheet = value;
-                });
-              },
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+            child: Column(
+              children: <Widget>[
+                Lottie.asset(
+                  'assets/animations/first.json',
+                  width: 300,
+                  height: 250,
+                  fit: BoxFit.fill,
                 ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: Text(
+                      getTranslated(context, "sheets_message"),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ),
+                MaterialButton(
+                  child: Text(
+                    getTranslated(context, "no_show_msg"),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      setHelloSheet(true);
+                      noHelloSheet = true;
+                    });
+                    Navigator.pop(context);
+                  },
+                  color: Colors.teal[300],
+                )
+//                FittedBox(
+//                  child: Row(
+//                    children: <Widget>[
+//                      Text(
+//                        getTranslated(context, "no_show_msg"),
+//                        style: TextStyle(fontSize: 11, color: Colors.teal),
+//                      ),
+//                      Checkbox(
+//                        value: noHelloSheet,
+////                      onChanged: savePrefs(),
+//                        onChanged: (bool value) {
+//                          setState(() {
+//                            setHelloSheet(value);
+//                            noHelloSheet = value;
+//                          });
+//                        },
+//                      )
+//                    ],
+//                  ),
+//                )
+              ],
             ),
           ),
           buttons: [
