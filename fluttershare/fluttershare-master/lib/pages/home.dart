@@ -134,12 +134,6 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return  buildAuthScreen();
   }
 
   _showWellcomeDialog() async {
@@ -299,4 +293,13 @@ class _HomeState extends State<Home> {
       noHelloSheet = currentHelloSheet;
     });
   }
+
+   @override
+  Widget build(BuildContext context) {
+    return buildAuthScreen();
+  }
 }
+
+ 
+
+

@@ -457,8 +457,6 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                     height: 100)
               ]),
         ),
-
-      ),
       Card(
         color: Colors.teal[100],
         elevation: 10,
@@ -483,7 +481,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
               Lottie.asset(completedSheets==0?"assets/animations/muscle.json":"assets/animations/bar.json",width: 100,height: 100)
 
             ]
-        ),
+        )),
         Card(
           color: Colors.indigo[700],
           elevation: 10,
@@ -508,8 +506,6 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
               ]),
         ),
 
-      )
-      ,
 
 //      Lottie.network("https://assets9.lottiefiles.com/packages/lf20_aDxvEq.json"
 //    ,width: 200
