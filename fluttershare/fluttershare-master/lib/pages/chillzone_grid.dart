@@ -22,9 +22,11 @@ class ChillGrid extends StatefulWidget {
 
 class _ChillGridState extends State<ChillGrid> {
   List<Chill> chillItems = [];
+  List <Chill>favourietItems=[];
   List<int> favorites = [];
   List<ChillUsed>numberOfUsedItem=[];
   var connecting=false;
+  int item=0;
 
   @override
   void initState() {
@@ -269,17 +271,17 @@ class _ChillGridState extends State<ChillGrid> {
                 )
             );
           })):circularProgress(),
-//        floatingActionButton: FloatingActionButton(
-//          backgroundColor:Colors.teal,
-//          onPressed: () {
-//            showSuggestionsDialog();
-//
-//          },
-//          child: Column(children:<Widget>[
-//            Icon(Icons.mood,color: Colors.white,)
-//            ,Text("اقترح",style: TextStyle(color: Colors.white),)
-//          ],),
-//        )
+        floatingActionButton: FloatingActionButton(
+          backgroundColor:Colors.teal,
+          onPressed: () {
+            showSuggestionsDialog();
+
+          },
+          child: Column(children:<Widget>[
+            Icon(Icons.mood,color: Colors.white,)
+            ,Text("اقترح",style: TextStyle(color: Colors.white),)
+          ],),
+        )
     );
   }
 
@@ -317,52 +319,52 @@ class _ChillGridState extends State<ChillGrid> {
     else
     {
 
-//      Alert(
-//          context: context,
-//          title: "مقترحات ",
-//          content: Container(
-//            height: 300,
-//            width: 350,
-//            child: Column(
-//              children: <Widget>[
-//                Image.network(
-//                  favorites[item].item_image,
-//                  width: 300,
-//                  height: 300,
-//                  fit: BoxFit.fill,
-//                ),
-//              ],
-//            ),
-//          ),
-//          buttons: [
-//            DialogButton(
-//              onPressed: () {
-//                Navigator.pop(context);
-//                //animate to the next
-//              },
-//              child: Text("سأختر بنفسي"),
-//            ),
-//            DialogButton(
-//              onPressed: ()
-//              {
-//
-////                setState(() {
-////                  item+1;
-////                });
-//                Navigator.pop(context);
-//                showSuggestionsDialog();
-//              },
-//              child: Text(" شيء آخر"),
-//            ),
-//            DialogButton(
-//              onPressed: ()
-//              {
-//                Navigator.pop(context);
-//
-//              },
-//              child: Text("حسنا"),
-//            )
-//          ]).show();
+      Alert(
+          context: context,
+          title: "مقترحات ",
+          content: Container(
+            height: 300,
+            width: 350,
+            child: Column(
+              children: <Widget>[
+                Image.network(
+                  chillItems[item].item_image,
+                  width: 300,
+                  height: 300,
+                  fit: BoxFit.fill,
+                ),
+              ],
+            ),
+          ),
+          buttons: [
+            DialogButton(
+              onPressed: () {
+                Navigator.pop(context);
+                //animate to the next
+              },
+              child: Text("سأختر بنفسي"),
+            ),
+            DialogButton(
+              onPressed: ()
+              {
+
+                setState(() {
+                  item=item+1;
+                });
+                Navigator.pop(context);
+                showSuggestionsDialog();
+              },
+              child: Text(" شيء آخر"),
+            ),
+            DialogButton(
+              onPressed: ()
+              {
+                Navigator.pop(context);
+
+              },
+              child: Text("حسنا"),
+            )
+          ]).show();
     }
   }
   _checkInternetConnectivity() async {
@@ -400,6 +402,17 @@ class _ChillGridState extends State<ChillGrid> {
             ],
           );
         });
+  }
+  getChillFavourites() {
+    if(mounted) {
+      setState(() {
+        for (int i = 0; i < chillItems.length; i++) {
+          if (favorites.contains(chillItems[i].item_id)) {
+            favourietItems.add(chillItems[i]);
+          }
+        }
+      });
+    }
   }
 
 }

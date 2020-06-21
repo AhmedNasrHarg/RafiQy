@@ -5,8 +5,10 @@ import 'package:fluttershare/classes/learn_bar.dart';
 import 'package:fluttershare/classes/sheet.dart';
 import 'package:fluttershare/classes/sheets_bar.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
+import 'package:fluttershare/models/quiz.dart';
 import 'package:fluttershare/pages/flexible_sheets_bar.dart';
 import 'package:fluttershare/pages/human_body.dart';
+import 'package:fluttershare/pages/quiz_page.dart';
 import 'package:fluttershare/pages/situation-grid.dart';
 import 'package:fluttershare/widgets/sheet_chat.dart';
 import 'package:lottie/lottie.dart';
@@ -34,6 +36,11 @@ class _SheetsOutputState extends State<SheetsOutput> {
         appBar: AppBar(
           title: Text(getTranslated(context, "sheets_output")),
           backgroundColor: Colors.teal[300],
+          actions: <Widget>[
+            IconButton(
+              icon:Icon(Icons.book) ,onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>QuziPage())),
+            )
+          ],
         ),
         body: ListView.builder(
           itemCount: completedSheets.length,
