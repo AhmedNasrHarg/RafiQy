@@ -7,10 +7,6 @@ import 'package:fluttershare/classes/learn_hive.dart';
 import 'package:fluttershare/localization/demo_localiztion.dart';
 import 'package:fluttershare/localization/localization_constants.dart';
 import 'package:fluttershare/pages/root_page.dart';
-
-
-import 'package:fluttershare/pages/situation-grid.dart';
-
 import 'package:fluttershare/routes/custom_router.dart';
 import 'package:fluttershare/services/authentication.dart';
 
