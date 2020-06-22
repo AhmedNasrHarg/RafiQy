@@ -13,6 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fluttershare/models/message.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title, this.sheetName, this.deleteLast})
@@ -31,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var childList = <Widget>[];
   var chatLog = [];
   var oldChat = <List<dynamic>>[];
-  bool isLoading = false;
+  bool isLoading = true;
   var _scrollController = ScrollController();
   String message = '';
   List sheet = [];
@@ -167,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Alert(
         context: context,
         style: AlertStyle(isCloseButton: false),
-        title: getTranslated(context,"good_job"),
+        title: getTranslated(context, "good_job"),
         content: Column(
           children: <Widget>[
             Lottie.asset(
@@ -329,6 +330,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   saveChat({isDone = false}) async {
+   
     DocumentSnapshot sheetlog = await userRef
         .document(currentUser.id)
         .collection('completedSheets')
@@ -434,7 +436,7 @@ class _MyHomePageState extends State<MyHomePage> {
         question: Question(isTyping: true),
       ));
       Future.delayed(
-        Duration(seconds: 4),
+        Duration(seconds: 1),
         () => setState(() {
           childList.removeLast();
           var m = bodyResponseSheet[i];
@@ -501,6 +503,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          Container(
+                            height: 15,
+                            color: Colors.transparent,
+                            child: isLoading
+                                ? LinearProgressIndicator()
+                                : StepProgressIndicator(
+                                    totalSteps: bodyResponseSheet.length,
+                                    currentStep: (i+1),
+                                    selectedSize: 8,
+                                    selectedColor: Colors.green,
+                                    // unselectedColor: Colors.amber,
+                                  ),
+                          ),
                           Flexible(
                             fit: FlexFit.tight,
                             child: Container(
