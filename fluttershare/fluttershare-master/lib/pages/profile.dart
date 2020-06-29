@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttershare/pages/quiz_page.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:fluttershare/classes/language.dart';
@@ -19,6 +20,7 @@ import 'package:fluttershare/widgets/article.dart';
 import 'package:fluttershare/widgets/progress.dart';
 
 import '../main.dart';
+import 'all_quiz_page.dart';
 import 'human_body.dart';
 
 class Profile extends StatefulWidget {
@@ -585,7 +587,9 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                         ))
                     .toList(),
               ),
-            )
+            ),
+    IconButton(
+    icon:Icon(Icons.book) ,onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>QuziPage())))
           ],
           centerTitle: true,
           backgroundColor: Theme.of(context).accentColor,

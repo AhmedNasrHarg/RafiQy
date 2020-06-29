@@ -125,7 +125,8 @@ class _EnterySheetsState extends State<EnterySheets> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                return (Ink(
+                return (
+                    Ink(
                   color: Color(sheets[index].sheetColor),
                   child: ListTile(
                     leading: Container(
@@ -178,7 +179,7 @@ class _EnterySheetsState extends State<EnterySheets> {
                             content: Column(
                               children: <Widget>[
                                 Lottie.asset(
-                                  'assets/animations/cant.json',
+                                  'assets/animations/level_closed.json',
                                   width: 300,
                                   height: 300,
                                   fit: BoxFit.fill,

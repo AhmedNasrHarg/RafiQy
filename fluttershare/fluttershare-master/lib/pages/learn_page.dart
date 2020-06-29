@@ -100,7 +100,26 @@ class _LearnPageState extends State<LearnPage> {
 
   @override
   Widget build(BuildContext context) {
+//    print("color1 ${Colors.cyan[200].value}");
+//    print("color2 ${Colors.indigo[200].value}");
+//    print("color3 ${Colors.deepPurple[200].value}");
+//    print("color4 ${Colors.purple[200].value}");
+//    print("color5 ${Colors.green[200].value}");
+//    print("color6 ${Colors.teal[200].value}");
+//    print("color7 ${Colors.orange[200].value}");
+//    print("color8 ${Colors.blue[200].value}");
+//    print("color9 ${Colors.pink[200].value}");
+//    print("color10 ${Colors.red[200].value}");
+//    print("color11 ${Colors.yellow[200].value}");
+//    print("color12 ${Colors.pinkAccent[100].value}");
+//    print("color13 ${Colors.indigoAccent[100].value}");
+//    print("color14 ${Colors.purpleAccent[100].value}");
+//    print("color15 ${Colors.amberAccent[100].value}");
+
+
+
     return Scaffold(
+
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(

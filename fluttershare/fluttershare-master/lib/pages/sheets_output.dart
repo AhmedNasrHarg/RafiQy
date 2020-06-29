@@ -36,11 +36,7 @@ class _SheetsOutputState extends State<SheetsOutput> {
         appBar: AppBar(
           title: Text(getTranslated(context, "sheets_output")),
           backgroundColor: Colors.teal[300],
-          actions: <Widget>[
-            IconButton(
-              icon:Icon(Icons.book) ,onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>QuziPage())),
-            )
-          ],
+
         ),
         body: ListView.builder(
           itemCount: completedSheets.length,

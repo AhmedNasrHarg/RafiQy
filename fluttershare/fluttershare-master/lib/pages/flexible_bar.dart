@@ -23,7 +23,7 @@ class FlexibleAppBarWidget extends StatelessWidget{
               Container(
                 color: Colors.teal[200],
                 child: Padding(
-                  padding: EdgeInsets.all(4),
+                  padding: EdgeInsets.symmetric(horizontal: 5),
                   child: FlatButton(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,30 +56,28 @@ class FlexibleAppBarWidget extends StatelessWidget{
               Container(
                 color: Colors.teal[300],
               child:
-              FittedBox(
-                child: Row(
+              Row(
 
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
 
-                          padding: const EdgeInsets.only(left:10),
-                          child: new Text(
-                              getTranslated(context, "every_topic"),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15.0
-                              )
-                          ),
+                        padding: const EdgeInsets.symmetric(horizontal:10),
+                        child: new Text(
+                            getTranslated(context, "every_topic"),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 15.0
+                            )
                         ),
-                            Lottie.asset(
-                          'assets/animations/12833-planta-3.json',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.fill,
-                      )
-                    ]
-                ),
+                      ),
+                          Lottie.asset(
+                        'assets/animations/12833-planta-3.json',
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.fill,
+                    )
+                  ]
               )
               )
 
